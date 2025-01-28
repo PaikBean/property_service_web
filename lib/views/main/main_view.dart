@@ -64,7 +64,7 @@ class _MainViewState extends State<MainView> {
                 children: [
                   // 메뉴 영역
                   Container(
-                    width: 220,
+                    width: 224,
                     color: Colors.white,
                     child: ListView(
                       children: [
@@ -158,7 +158,7 @@ class _MainViewState extends State<MainView> {
                     child: Container(
                       margin: EdgeInsets.all(8),
                       child: Container(
-                        width: size.width - 236,
+                        width: size.width - 240,
                         height: size.height - 80,
                         color: Colors.white.withAlpha(196),
                         child: activeScreen.screen, // 현재 활성화된 화면 출력
