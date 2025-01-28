@@ -7,7 +7,7 @@ class MainLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery.of(context).size;
     final ScrollController horizontalController = ScrollController();
     final ScrollController verticalController = ScrollController();
     return Scaffold(
@@ -18,8 +18,8 @@ class MainLayout extends StatelessWidget {
           controller: horizontalController,
           scrollDirection: Axis.horizontal,
           child: SizedBox(
-            width: 1704,
-            height: 976,
+            width: 1440,
+            height: 900,
             child: child,
           ),
         ),
