@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:property_service_web/views/auth/mobile_view.dart';
 import 'package:provider/provider.dart';
 import 'viewmodels/login_view_model.dart';
 import 'views/auth/login_view.dart';
+import 'dart:html' as html;
 
 void main() {
   runApp(
@@ -15,6 +17,15 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+
+  bool isMobileBrowser() {
+    final userAgent = html.window.navigator.userAgent.toLowerCase();
+    return userAgent.contains('mobile') ||
+        userAgent.contains('android') ||
+        userAgent.contains('iphone') ||
+        userAgent.contains('ipad');
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -33,7 +44,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       // home: LoginView(),
-      home: LoginView(),
+      home: isMobileBrowser() ? MobileView() : LoginView(),
     );
   }
 }
