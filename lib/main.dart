@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:property_service_web/views/main/main_page.dart';
 import 'package:provider/provider.dart';
 import 'viewmodels/login_view_model.dart';
 import 'views/auth/login_view.dart';
@@ -24,7 +23,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.white, // 모든 Scaffold에 흰 배경 설정
       ),
       // home: LoginView(),
-      home: MainPage(),
+      home: LoginView(),
     );
   }
 }

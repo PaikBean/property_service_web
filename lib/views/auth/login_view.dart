@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:property_service_web/views/main/main_page.dart';
+import 'package:property_service_web/views/main/main_view.dart';
 import 'package:provider/provider.dart';
 import '../../viewmodels/login_view_model.dart';
 
@@ -95,7 +95,7 @@ class LoginView extends StatelessWidget {
                                     Animation<double> animation1,
                                     Animation<double> animation2,
                                     ) {
-                                  return MainPage(); // 변경 필요
+                                  return MainView(); // 변경 필요
                                 },
                                 transitionDuration: Duration.zero,
                                 reverseTransitionDuration: Duration.zero,
