@@ -29,16 +29,16 @@ class _MobileViewState extends State<MobileView> {
             Text(
               "모바일 화면은 현재 개발 중 입니다.",
               style: TextStyle(
-                fontSize: 24,
+                fontSize: 16,
                 fontWeight: FontWeight.w700,
                 color: Color(0xFF9baaa6),
               ),
             ),
             SizedBox(height: 24),
             Text(
-              "기타 문의사항은 관리자에게 연락해 주세요.",
+              "기타 문의사항은 관리자에게 문의해 주세요.",
               style: TextStyle(
-                fontSize: 24,
+                fontSize: 16,
                 fontWeight: FontWeight.w700,
                 color: Color(0xFF9baaa6),
               ),
