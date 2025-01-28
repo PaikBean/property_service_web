@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      title: "Property Service",
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white, // 모든 Scaffold에 흰 배경 설정
         fontFamily: 'NotoSansKR', // pubspec.yaml에 정의한 family 이름 사용
