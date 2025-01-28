@@ -1,0 +1,27 @@
+├── widgets/
+│   ├── custom_button.dart        # 재사용 가능한 버튼
+│   ├── custom_card.dart          # 재사용 가능한 카드
+│   └── ...                       # 기타 공통 위젯
+
+7. widgets/
+재사용 가능한 UI 컴포넌트를 정의.
+버튼, 카드, 다이얼로그 등의 공통 요소를 작성.
+dart
+복사
+편집
+import 'package:flutter/material.dart';
+
+class CustomButton extends StatelessWidget {
+  final String label;
+  final VoidCallback onPressed;
+
+  CustomButton({required this.label, required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      child: Text(label),
+    );
+  }
+}

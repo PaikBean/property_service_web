@@ -1,0 +1,25 @@
+viewmodels/
+│   ├── user_view_model.dart      # 사용자 관련 상태 관리
+│   ├── property_view_model.dart  # 매물 관련 상태 관리
+│   └── ...                       # 기타 도메인 상태 관리
+
+
+3. viewmodels/
+상태 관리 및 로직 처리.
+View와 Model 사이의 중재자 역할.
+ChangeNotifier를 상속받아 notifyListeners로 UI를 업데이트.
+dart
+복사
+편집
+import 'package:flutter/material.dart';
+
+class UserViewModel extends ChangeNotifier {
+  String _userName = "Guest";
+
+  String get userName => _userName;
+
+  void updateUserName(String name) {
+    _userName = name;
+    notifyListeners();
+  }
+}

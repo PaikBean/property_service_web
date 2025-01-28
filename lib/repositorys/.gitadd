@@ -1,0 +1,20 @@
+repositories/
+│   ├── user_repository.dart      # 사용자 데이터 처리
+│   ├── property_repository.dart  # 매물 데이터 처리
+│   └── ...                       # 기타 저장소
+
+6. repositories/
+데이터를 가져오거나 저장하는 역할.
+API 호출과 ViewModel 간의 중간 계층.
+dart
+복사
+편집
+import 'api_service.dart';
+
+class UserRepository {
+  final ApiService _apiService = ApiService();
+
+  Future<List<dynamic>> getUsers() {
+    return _apiService.fetchUsers();
+  }
+}

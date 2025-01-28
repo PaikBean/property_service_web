@@ -1,0 +1,45 @@
+─ views/
+│   ├── home/
+│   │   ├── home_view.dart        # 홈 화면 UI
+│   │   └── home_details_view.dart # 홈 상세 화면 UI
+│   ├── user/
+│   │   ├── user_view.dart        # 사용자 화면 UI
+│   │   └── user_details_view.dart # 사용자 상세 화면 UI
+│   ├── property/
+│   │   ├── property_view.dart    # 매물 화면 UI
+│   │   └── property_details_view.dart # 매물 상세 화면 UI
+│   └── ...                       # 기타 화면
+
+4. views/
+UI 레이아웃과 디자인을 정의.
+ViewModel에서 데이터를 받아 화면에 표시.
+Provider 또는 Consumer를 사용하여 ViewModel을 구독.
+dart
+복사
+편집
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../viewmodels/user_view_model.dart';
+
+class UserView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final userViewModel = Provider.of<UserViewModel>(context);
+
+    return Scaffold(
+      appBar: AppBar(title: Text("User View")),
+      body: Column(
+        children: [
+          Text("Hello, ${userViewModel.userName}"),
+          ElevatedButton(
+            onPressed: () {
+              userViewModel.updateUserName("New Name");
+            },
+            child: Text("Update Name"),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
