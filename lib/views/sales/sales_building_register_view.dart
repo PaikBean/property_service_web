@@ -81,7 +81,7 @@ class _SalesBuildingRegisterViewState extends State<SalesBuildingRegisterView> {
                     const SizedBox(width: 16),
                     Flexible(
                       flex:1,
-                      child: _buildTextField("준공 년도", constructionYearController, keyboardType: TextInputType.number),
+                      child: _buildTextField("준공 년도", constructionYearController, keyboardType: TextInputType.number),    // todo 캘린더 위젯 사용
                     ),
                   ],
                 ),
