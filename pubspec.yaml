@@ -37,6 +37,7 @@ dependencies:
   http: ^1.3.0
   provider: ^6.1.2
   flutter_native_splash: ^2.4.4
+  kpostal: ^1.1.0
 
 dev_dependencies:
   flutter_test:

@@ -13,9 +13,18 @@ class _MyInfoViewState extends State<MyInfoView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Center(
-        child: Text(MainScreenType.MyInfo.name),
-      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                MainScreenType.MyInfo.name,
+              ),
+            ],
+          )
+        ],
+      )
     );
   }
 }

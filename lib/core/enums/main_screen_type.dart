@@ -40,13 +40,13 @@ extension MainScreenTypeExtension on MainScreenType {
       case MainScreenType.RevenueRegsiter:
         return "매출 등록";
       case MainScreenType.SalesBuildingList:
-        return "빌딩/임대인 · 매물 목록";
+        return "매물 목록";
       case MainScreenType.SalesPropertyDetail:
         return "매물 상세";
       case MainScreenType.SalesPropertyRegister:
         return "매물 등록";
       case MainScreenType.SalesBuildingRegister:
-        return "빌딩/임대인 등록";
+        return "건물 등록";
       case MainScreenType.ClientList:
         return "고객 목록";
       case MainScreenType.ClientRegister:
@@ -69,13 +69,13 @@ extension MainScreenTypeExtension on MainScreenType {
       case MainScreenType.RevenueRegsiter:
         return "매출 등록";
       case MainScreenType.SalesBuildingList:
-        return "빌딩/임대인 · 매물 목록";
+        return "매물 목록";
       case MainScreenType.SalesPropertyDetail:
         return "매물 상세";
       case MainScreenType.SalesPropertyRegister:
         return "매물 등록";
       case MainScreenType.SalesBuildingRegister:
-        return "빌딩/임대인 등록";
+        return "건물 등록";
       case MainScreenType.ClientList:
         return "고객 목록";
       case MainScreenType.ClientRegister:
@@ -88,7 +88,7 @@ extension MainScreenTypeExtension on MainScreenType {
   Widget get screen {
     switch (this) {
       case MainScreenType.DashBoard:
-        return Placeholder();
+        return Container();
       case MainScreenType.MyInfo:
         return MyInfoView();
       case MainScreenType.CompanyInfo:
