@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:property_service_web/core/enums/main_screen_type.dart';
+import 'package:property_service_web/models/image_file_list_model.dart';
 import 'package:property_service_web/widgets/custom_radio_group.dart';
 import 'package:property_service_web/widgets/custom_text_field.dart';
 import 'package:property_service_web/widgets/photo_upload.dart';
@@ -27,17 +28,20 @@ class _SalesBuildingRegisterViewState extends State<SalesBuildingRegisterView> {
   TextEditingController constructionYearController = TextEditingController();
   TextEditingController remark = TextEditingController();
 
-  final List<Uint8List> buildingImageList = [];
-
   String? buildingUsage;
   String? elevatorAvailable;
   String? violationStatus;
   String? mainPassword;
 
+  ImageFileListModel buildingImageList = ImageFileListModel(imageFileModelList: []);
 
   void _submitForm() async {
     // 폼 제출 로직
     print("폼 제출");
+    print(buildingImageList.representativeImageIndex);
+    print(buildingImageList.imageFileModelList.first.imageBytes);
+    print(buildingImageList.imageFileModelList.first.fileSize);
+    print(buildingImageList.imageFileModelList.first.fileName);
   }
 
   @override
@@ -143,12 +147,9 @@ class _SalesBuildingRegisterViewState extends State<SalesBuildingRegisterView> {
             width: 800,
             child: PhotoUpload(
               label: "건물 사진 등록",
-              onImagesSelected: (images){
-                setState(() {
-                  buildingImageList.clear();
-                  buildingImageList.addAll(images);
-                });
-              },
+              imageFileListModel: buildingImageList,
+              maxUploadCount: 3,
+              toolTipMessage: "건물 사진은 최대 3개까지 등록 가능합니다.",
             ),
           ),
         ],

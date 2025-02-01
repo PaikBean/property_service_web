@@ -2,15 +2,21 @@ import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:property_service_web/core/constants/app_colors.dart';
+import 'package:property_service_web/models/image_file_list_model.dart';
+import 'package:property_service_web/models/image_file_model.dart';
 
 class PhotoUpload extends StatefulWidget {
   final String label;
-  final Function(List<Uint8List>) onImagesSelected; // 부모에게 데이터 전달
+  final ImageFileListModel imageFileListModel;
+  final int maxUploadCount;
+  final String? toolTipMessage;
 
   const PhotoUpload({
     super.key,
     required this.label,
-    required this.onImagesSelected,
+    required this.imageFileListModel,
+    required this.maxUploadCount,
+    this.toolTipMessage,
   });
 
   @override
@@ -18,15 +24,15 @@ class PhotoUpload extends StatefulWidget {
 }
 
 class _PhotoUploadState extends State<PhotoUpload> {
-  final List<Uint8List> _images = []; // 업로드된 이미지의 바이트 데이터 저장
-  final List<String> _fileNames = []; // 업로드된 파일 이름 저장
-  final List<int> _fileSizes = []; // 업로드된 파일 크기 저장
-  int _selectedImageIndex = 0; // 대표 이미지 인덱스 (기본값은 첫 번째 이미지)
+  // final List<Uint8List> _images = []; // 업로드된 이미지의 바이트 데이터 저장
+  // final List<String> _fileNames = []; // 업로드된 파일 이름 저장
+  // final List<int> _fileSizes = []; // 업로드된 파일 크기 저장
+  // int _selectedImageIndex = 0; // 대표 이미지 인덱스 (기본값은 첫 번째 이미지)
 
   Future<void> _pickImages() async {
-    if (_images.length >= 5) {
+    if (widget.imageFileListModel.imageFileModelList.length > widget.maxUploadCount) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("최대 5장의 사진만 업로드할 수 있습니다.")),
+        SnackBar(content: Text("최대 ${widget.maxUploadCount}장의 사진만 업로드할 수 있습니다.")),
       );
       return;
     }
@@ -41,15 +47,14 @@ class _PhotoUploadState extends State<PhotoUpload> {
 
       setState(() {
         for (var file in selectedFiles) {
-          if (_images.length >= 5) break; // 최대 5장 제한
-          _images.add(file.bytes!);
-          _fileNames.add(file.name);
-          _fileSizes.add(file.size);
+          if (widget.imageFileListModel.imageFileModelList.length >= widget.maxUploadCount) break; // 최대 5장 제한
+          widget.imageFileListModel.imageFileModelList.add(
+            ImageFileModel(imageBytes: file.bytes!, fileName: file.name, fileSize: file.size)
+          );
         }
-        widget.onImagesSelected(_images);
-
-        if (_images.isNotEmpty && _selectedImageIndex >= _images.length) {
-          _selectedImageIndex = 0;
+        if (widget.imageFileListModel.imageFileModelList.isNotEmpty &&
+            widget.imageFileListModel.representativeImageIndex == -1) {
+          widget.imageFileListModel.representativeImageIndex = 0;
         }
       });
     }
@@ -57,23 +62,19 @@ class _PhotoUploadState extends State<PhotoUpload> {
 
   void _removeImage(int index) {
     setState(() {
-      _images.removeAt(index);
-      _fileNames.removeAt(index);
-      _fileSizes.removeAt(index);
+      widget.imageFileListModel.imageFileModelList.removeAt(index);
 
-      if (_images.isEmpty) {
-        _selectedImageIndex = 0;
-      } else if (_selectedImageIndex == index) {
-        _selectedImageIndex = 0;
-      } else if (_selectedImageIndex > index) {
-        _selectedImageIndex--;
+      if (widget.imageFileListModel.imageFileModelList.isEmpty) {
+        widget.imageFileListModel.representativeImageIndex = -1;
+      } else {
+        widget.imageFileListModel.representativeImageIndex = 0;
       }
     });
   }
 
   void _setRepresentativeImage(int index) {
     setState(() {
-      _selectedImageIndex = index;
+      widget.imageFileListModel.representativeImageIndex = index;
     });
   }
 
@@ -85,17 +86,37 @@ class _PhotoUploadState extends State<PhotoUpload> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // 상단 텍스트 및 버튼
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                widget.label,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        widget.label,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      if(widget.toolTipMessage != null)
+                        Tooltip(
+                          message: widget.toolTipMessage,
+                          child: Icon(
+                            Icons.info_outline, // 툴팁 아이콘
+                            size: 20,
+                            color: Colors.grey[400],
+                          ),
+                        ),
+                    ],
+                  ),
+                  _PhotoAddButton(onPressed: _pickImages),
+                ],
               ),
-              _PhotoAddButton(onPressed: _pickImages),
             ],
           ),
           const SizedBox(height: 16),
@@ -108,7 +129,7 @@ class _PhotoUploadState extends State<PhotoUpload> {
               borderRadius: BorderRadius.circular(8),
               color: Colors.grey[200],
             ),
-            child: _images.isEmpty
+            child: widget.imageFileListModel.imageFileModelList.isEmpty
                 ? const Center(
               child: Text(
                 "사진을 업로드하세요.",
@@ -117,12 +138,12 @@ class _PhotoUploadState extends State<PhotoUpload> {
             )
                 : ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: _images.length,
+              itemCount: widget.imageFileListModel.imageFileModelList.length,
               itemBuilder: (context, index) {
-                final fileName = _fileNames[index];
-                final fileSize =
-                (_fileSizes[index] / (1024 * 1024)).toStringAsFixed(2); // MB로 변환
-                final isRepresentative = _selectedImageIndex == index;
+                final ImageFileModel image = widget.imageFileListModel.imageFileModelList[index];
+                final fileName = image.fileName;
+                final fileSize = (image.fileSize / (1024 * 1024)).toStringAsFixed(2); // MB로 변환
+                final isRepresentative = widget.imageFileListModel.representativeImageIndex == index;
 
                 return GestureDetector(
                   onTap: () => _setRepresentativeImage(index),
@@ -135,7 +156,7 @@ class _PhotoUploadState extends State<PhotoUpload> {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(8),
                               child: Image.memory(
-                                _images[index],
+                                image.imageBytes,
                                 width: 150,
                                 height: 150,
                                 fit: BoxFit.cover,
