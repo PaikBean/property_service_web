@@ -2,12 +2,12 @@ import 'dart:typed_data';
 
 class ImageFileModel {
   final Uint8List imageBytes;
-  final String fileName;
-  final int fileSize;
+  final String imageName;
+  final int imageSize;
 
   ImageFileModel({
     required this.imageBytes,
-    required this.fileName,
-    required this.fileSize,
+    required this.imageName,
+    required this.imageSize,
   });
 }

@@ -38,10 +38,6 @@ class _SalesBuildingRegisterViewState extends State<SalesBuildingRegisterView> {
   void _submitForm() async {
     // 폼 제출 로직
     print("폼 제출");
-    print(buildingImageList.representativeImageIndex);
-    print(buildingImageList.imageFileModelList.first.imageBytes);
-    print(buildingImageList.imageFileModelList.first.fileSize);
-    print(buildingImageList.imageFileModelList.first.fileName);
   }
 
   @override

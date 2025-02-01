@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:property_service_web/core/constants/app_colors.dart';
+import 'package:property_service_web/core/utils/dialog_utils.dart';
 import 'package:property_service_web/models/image_file_list_model.dart';
 import 'package:property_service_web/models/image_file_model.dart';
 
@@ -24,16 +25,10 @@ class PhotoUpload extends StatefulWidget {
 }
 
 class _PhotoUploadState extends State<PhotoUpload> {
-  // final List<Uint8List> _images = []; // 업로드된 이미지의 바이트 데이터 저장
-  // final List<String> _fileNames = []; // 업로드된 파일 이름 저장
-  // final List<int> _fileSizes = []; // 업로드된 파일 크기 저장
-  // int _selectedImageIndex = 0; // 대표 이미지 인덱스 (기본값은 첫 번째 이미지)
 
   Future<void> _pickImages() async {
-    if (widget.imageFileListModel.imageFileModelList.length > widget.maxUploadCount) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("최대 ${widget.maxUploadCount}장의 사진만 업로드할 수 있습니다.")),
-      );
+    if (widget.imageFileListModel.imageFileModelList.length >= widget.maxUploadCount) {
+      DialogUtils.showAlertDialog(context: context, title: "업로드 제한", content: "최대 ${widget.maxUploadCount}장의 사진만 업로드 할 수 있습니다.");
       return;
     }
 
@@ -47,9 +42,12 @@ class _PhotoUploadState extends State<PhotoUpload> {
 
       setState(() {
         for (var file in selectedFiles) {
-          if (widget.imageFileListModel.imageFileModelList.length >= widget.maxUploadCount) break; // 최대 5장 제한
+          if (widget.imageFileListModel.imageFileModelList.length >= widget.maxUploadCount) {
+            DialogUtils.showAlertDialog(context: context, title: "업로드 제한", content: "최대 ${widget.maxUploadCount}장의 사진만 업로드 할 수 있습니다.");
+            break;
+          }
           widget.imageFileListModel.imageFileModelList.add(
-            ImageFileModel(imageBytes: file.bytes!, fileName: file.name, fileSize: file.size)
+            ImageFileModel(imageBytes: file.bytes!, imageName: file.name, imageSize: file.size)
           );
         }
         if (widget.imageFileListModel.imageFileModelList.isNotEmpty &&
@@ -141,8 +139,8 @@ class _PhotoUploadState extends State<PhotoUpload> {
               itemCount: widget.imageFileListModel.imageFileModelList.length,
               itemBuilder: (context, index) {
                 final ImageFileModel image = widget.imageFileListModel.imageFileModelList[index];
-                final fileName = image.fileName;
-                final fileSize = (image.fileSize / (1024 * 1024)).toStringAsFixed(2); // MB로 변환
+                final fileName = image.imageName;
+                final fileSize = (image.imageSize / (1024 * 1024)).toStringAsFixed(2); // MB로 변환
                 final isRepresentative = widget.imageFileListModel.representativeImageIndex == index;
 
                 return GestureDetector(
