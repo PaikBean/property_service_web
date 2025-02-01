@@ -3,12 +3,14 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:property_service_web/core/enums/main_screen_type.dart';
 import 'package:property_service_web/models/image_file_list_model.dart';
+import 'package:property_service_web/widgets/custom_datepicker.dart';
 import 'package:property_service_web/widgets/custom_radio_group.dart';
 import 'package:property_service_web/widgets/custom_text_field.dart';
 import 'package:property_service_web/widgets/photo_upload.dart';
 import 'package:property_service_web/widgets/sub_layout.dart';
 
 import '../../core/enums/button_type.dart';
+import '../../core/enums/datepicker_type.dart';
 
 class SalesBuildingRegisterView extends StatefulWidget {
   const SalesBuildingRegisterView({super.key});
@@ -25,7 +27,7 @@ class _SalesBuildingRegisterViewState extends State<SalesBuildingRegisterView> {
   TextEditingController floorsController = TextEditingController();
   TextEditingController gatePasswordController = TextEditingController();
   TextEditingController directionController = TextEditingController();
-  TextEditingController constructionYearController = TextEditingController();
+  DateTime constructionYear = DateTime.now();
   TextEditingController remark = TextEditingController();
 
   String? buildingUsage;
@@ -75,7 +77,7 @@ class _SalesBuildingRegisterViewState extends State<SalesBuildingRegisterView> {
                 ),
                 Flexible(
                   flex: 1,
-                  child: CustomTextField(label: "준공 연도", controller: constructionYearController),    // todo 캘린더 위젯 사용
+                  child: CustomDatePicker(datePickerType: DatePickerType.date, label: "년월일 선택기", selectedDateTime: constructionYear),
                 ),
               ],
             ),

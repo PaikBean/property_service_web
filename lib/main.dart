@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'viewmodels/login_view_model.dart';
 import 'views/auth/login_view.dart';
 import 'dart:html' as html;
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   runApp(
@@ -31,6 +32,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('ko', 'KR'), // 한국어 지원
+      ],
+      locale: const Locale('ko', 'KR'), // 기본 언어를 한국어로 설정
       title: "Property Service",
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white, // 모든 Scaffold에 흰 배경 설정
