@@ -97,7 +97,7 @@ class _SalesPropertyListViewState extends State<SalesPropertyListView> {
           id: 1,
           representativeImage: null,
           buildingName: "건물1",
-          buildingAddress: "서울 특별시 강남구 역삼동 123-1",
+          buildingAddress: "부산광역시 강서구 녹산산단382로14번가길 10~29번지(송정동) 101호",
           buildingPostCode: '12345',
           propertyRoomNumber: "201호",
           propertySellType: "월세",
@@ -144,7 +144,7 @@ class _SalesPropertyListViewState extends State<SalesPropertyListView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            width: 360,
+            width: 400,
             height: 800,
             child: SideSearchGrid(
               searchWord: propertySearchWord,
@@ -455,228 +455,219 @@ class _SalesPropertyListViewState extends State<SalesPropertyListView> {
                   ],
                 ),
               ),
-              Container(
-                width: 1000,
-                padding: EdgeInsets.only(right: 8),
+              SizedBox(
+                width: 800,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    SubTitle(title: "임대인 정보"),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        SubTitle(title: "매물 정보"),
-                        SizedBox(
-                          width: 160,
-                          height: 36,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.color5, // 버튼 배경색 초록색
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8), // 둥근 테두리
-                                side: BorderSide(color: AppColors.color5),
-                              ),
-                            ),
-                            onPressed: (){},
-                            child: Text(
-                              "매물 상세 조회",
-                              style: TextStyle(
-                                fontSize: 16, // 텍스트 크기 키우기
-                                fontWeight: FontWeight.w400, // 텍스트 두껍게
-                                color: Colors.white, // 텍스트 색상 흰색
-                              ),
+                        Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Text(
+                            "임대인1 사장님 ::  010 - 1234 - 1234",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: 400,
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    "건물 이름",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  SizedBox(width: 8),
-                                  Text(
-                                    "제일 긴 주소 건물 이름",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              width: 600,
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    "매물 주소",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  SizedBox(width: 8),
-                                  Text(
-                                    "(13494) 부산광역시 강서구 녹산산단382로14번가길 10~29번지(송정동) 101호",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                    maxLines: 2,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              width: 400,
-                              child: Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Container(
-                                        width: 200,
-                                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                                        child: Row(
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Text(
-                                                  "월세",
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w700,
-                                                  ),
-                                                ),
-                                                SizedBox(width: 8),
-                                                Text(
-                                                  "300/30 만원",
-                                                  style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w400,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Container(
-                                        width: 200,
-                                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                                        child: Row(
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Text(
-                                                  "단기",
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w700,
-                                                  ),
-                                                ),
-                                                SizedBox(width: 8),
-                                                Text(
-                                                  "1000/50 만원",
-                                                  style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w400,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Container(
-                                        width: 200,
-                                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                                        child: Row(
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Text(
-                                                  "전세",
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w700,
-                                                    color: Colors.grey[400],
-                                                  ),
-                                                ),
-                                                SizedBox(width: 8),
-                                                Text(
-                                                  "",
-                                                  style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w400,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Container(
-                                        width: 200,
-                                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                                        child: Row(
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Text(
-                                                  "매매",
-                                                  style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight: FontWeight.w700,
-                                                      color: Colors.grey[400]
-                                                  ),
-                                                ),
-                                                SizedBox(width: 8),
-                                                Text(
-                                                  "",
-                                                  style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w400,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
                         ),
-                        Column(
-                          children: [
-                            Container(
-                              width: 320,
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                              child: Row(
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(
+                width: 1200,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SubTitle(title: "매물 정보"),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: 400,
+                          padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
+                          child: Row(
+                            children: [
+                              Text(
+                                "호 수",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              SizedBox(width: 8),
+                              Text(
+                                "302 호",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          width: 400,
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          child: Row(
+                            children: [
+                              Text(
+                                "매물 형태",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              SizedBox(width: 8),
+                              Text(
+                                "원룸",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                                maxLines: 2,
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          width: 400,
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Container(
+                                    width: 200,
+                                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                    child: Row(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(
+                                              "월세",
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                            ),
+                                            SizedBox(width: 8),
+                                            Text(
+                                              "300/30 만원",
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    width: 200,
+                                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                    child: Row(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(
+                                              "단기",
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                            ),
+                                            SizedBox(width: 8),
+                                            Text(
+                                              "1000/50 만원",
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Container(
+                                    width: 200,
+                                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                    child: Row(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(
+                                              "전세",
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w700,
+                                                color: Colors.grey[400],
+                                              ),
+                                            ),
+                                            SizedBox(width: 8),
+                                            Text(
+                                              "",
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    width: 200,
+                                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                    child: Row(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(
+                                              "매매",
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w700,
+                                                  color: Colors.grey[400]
+                                              ),
+                                            ),
+                                            SizedBox(width: 8),
+                                            Text(
+                                              "",
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          width: 400,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
                                 children: [
                                   Text(
-                                    "매물 상태",
+                                    "관리비",
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w700,
@@ -684,7 +675,7 @@ class _SalesPropertyListViewState extends State<SalesPropertyListView> {
                                   ),
                                   SizedBox(width: 8),
                                   Text(
-                                    "상태1",
+                                    "100,000 만원",
                                     style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w400,
@@ -693,70 +684,29 @@ class _SalesPropertyListViewState extends State<SalesPropertyListView> {
                                   ),
                                 ],
                               ),
-                            ),
-                            Container(
-                              width: 320,
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    "임대인",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  SizedBox(width: 28),
-                                  Text(
-                                    "임대인1",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                    maxLines: 2,
-                                  ),
-                                ],
+                              Text(
+                                "수도, 전기, 인터넷, 난방, 조식, 룸 서비스",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
-                            ),
-                            Container(
-                              width: 320,
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    "담당자",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  SizedBox(width: 28),
-                                  Text(
-                                    "담당자1",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                    maxLines: 2,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        )
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ],
                 ),
               ),
-              SizedBox(
-                width: 1000,
-                height: 480,
-                child: PropertyGrid(
-                    propertyItemList: propertyItemList,
-                    onDelete: (_){},
-                ),
-              )
+              // SizedBox(
+              //   width: 1000,
+              //   height: 480,
+              //   child: PropertyGrid(
+              //       propertyItemList: propertyItemList,
+              //       onDelete: (_){},
+              //   ),
+              // )
             ],
           ),
         ],
@@ -782,14 +732,14 @@ class _SalesPropertyListViewState extends State<SalesPropertyListView> {
               borderRadius: BorderRadius.circular(8),
               child: Image.memory(
                 propertySummary.representativeImage!,
-                width: 150,
-                height: 150,
+                width: 120,
+                height: 120,
                 fit: BoxFit.cover,
               ),
             )
                 : Container(
-              width: 80,
-              height: 80,
+              width: 120,
+              height: 120,
               color: Colors.grey.shade300,
               child: Center(
                   child: Text(
@@ -811,8 +761,13 @@ class _SalesPropertyListViewState extends State<SalesPropertyListView> {
                 Text(
                   "(${propertySummary.buildingPostCode}) ${propertySummary.buildingAddress} ${propertySummary.propertyRoomNumber}",
                   style: TextStyle(fontSize: 14, color: Colors.grey.shade700),
-                  maxLines: 2,
+                  maxLines: 3,
                   overflow: TextOverflow.ellipsis,
+                ),
+                SizedBox(height: 4),
+                Text(
+                  "${propertySummary.propertySellType} ${propertySummary.propertyPrice}",
+                  style: TextStyle(fontSize: 14, color: Colors.grey[800]),
                 ),
               ],
             ),

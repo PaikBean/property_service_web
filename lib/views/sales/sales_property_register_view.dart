@@ -349,7 +349,7 @@ class _SalesPropertyRegisterViewState extends State<SalesPropertyRegisterView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            width: 360,
+            width: 400,
             height: 800,
             child: SideSearchGrid(
               searchWord: buildingSearchWord,
@@ -678,7 +678,7 @@ class _SalesPropertyRegisterViewState extends State<SalesPropertyRegisterView> {
                 width: 800,
                 child: CustomRadioGroup(
                     title: "관계",
-                    options: ["사장", "사모", "기타"],
+                    options: ["사장님", "사모님", "기타"],
                     groupValue: propertyOwnerRelation,
                     onChanged: (value) =>
                         setState(() => propertyOwnerRelation = value),
@@ -838,14 +838,14 @@ class _SalesPropertyRegisterViewState extends State<SalesPropertyRegisterView> {
                     borderRadius: BorderRadius.circular(8),
                     child: Image.memory(
                       buildingSummary.representativeImage!,
-                      width: 150,
-                      height: 150,
+                      width: 120,
+                      height: 120,
                       fit: BoxFit.cover,
                     ),
                   )
                 : Container(
-                    width: 80,
-                    height: 80,
+                    width: 120,
+                    height: 120,
                     color: Colors.grey.shade300,
                     child: Center(
                         child: Text(
@@ -867,7 +867,7 @@ class _SalesPropertyRegisterViewState extends State<SalesPropertyRegisterView> {
                 Text(
                   "(${buildingSummary.buildingPostCode}) ${buildingSummary.buildingAddress}",
                   style: TextStyle(fontSize: 14, color: Colors.grey.shade700),
-                  maxLines: 2,
+                  maxLines: 3,
                   overflow: TextOverflow.ellipsis,
                 ),
               ],
