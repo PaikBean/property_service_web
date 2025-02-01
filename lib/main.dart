@@ -56,7 +56,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       // home: LoginView(),
-      home: isMobileBrowser() ? MobileView() : MainView(),
+      home: isMobileBrowser() ? MobileView() : LoginView(),
     );
   }
 }

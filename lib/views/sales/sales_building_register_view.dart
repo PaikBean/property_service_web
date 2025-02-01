@@ -1,8 +1,7 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:property_service_web/core/enums/main_screen_type.dart';
 import 'package:property_service_web/models/image_file_list_model.dart';
+import 'package:property_service_web/widgets/custom_address_field.dart';
 import 'package:property_service_web/widgets/custom_datepicker.dart';
 import 'package:property_service_web/widgets/custom_radio_group.dart';
 import 'package:property_service_web/widgets/custom_text_field.dart';
@@ -22,7 +21,9 @@ class SalesBuildingRegisterView extends StatefulWidget {
 class _SalesBuildingRegisterViewState extends State<SalesBuildingRegisterView> {
 
   TextEditingController buildingName = TextEditingController();
-  TextEditingController addressController = TextEditingController();
+  // TextEditingController addressController = TextEditingController();
+  String? zipCode;
+  String? address;
   TextEditingController parkingSpacesController = TextEditingController();
   TextEditingController floorsController = TextEditingController();
   TextEditingController gatePasswordController = TextEditingController();
@@ -57,7 +58,7 @@ class _SalesBuildingRegisterViewState extends State<SalesBuildingRegisterView> {
           ),
           SizedBox(
             width: 800,
-            child: CustomTextField(label: "주소", controller: addressController, readOnly: true),
+            child: CustomAddressField(label: "주소", zipCode: zipCode, address: address),
           ),
           SizedBox(
             width: 800,
@@ -77,7 +78,7 @@ class _SalesBuildingRegisterViewState extends State<SalesBuildingRegisterView> {
                 ),
                 Flexible(
                   flex: 1,
-                  child: CustomDatePicker(datePickerType: DatePickerType.date, label: "년월일 선택기", selectedDateTime: constructionYear),
+                  child: CustomDatePicker(datePickerType: DatePickerType.date, label: "준공 연도", selectedDateTime: constructionYear),
                 ),
               ],
             ),
