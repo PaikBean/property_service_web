@@ -412,7 +412,7 @@ class _SalesPropertyListViewState extends State<SalesPropertyListView> {
                           SizedBox(height: 16),
                           SizedBox(
                             width: 800,
-                            height: 120,
+                            height: 180,
                             child: PhotoList(photoList: photoModelList),
                           ),
                         ],
@@ -460,7 +460,13 @@ class _SalesPropertyListViewState extends State<SalesPropertyListView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SubTitle(title: "임대인 정보"),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SubTitle(title: "임대인 정보"),
+                        CRUDButton(buttonType: ButtonType.update, onPressed: (){})
+                      ],
+                    ),
                     Row(
                       children: [
                         Padding(
@@ -479,7 +485,7 @@ class _SalesPropertyListViewState extends State<SalesPropertyListView> {
                 ),
               ),
               SizedBox(
-                width: 1200,
+                width: 800,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -487,28 +493,73 @@ class _SalesPropertyListViewState extends State<SalesPropertyListView> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          width: 400,
-                          padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
-                          child: Row(
-                            children: [
-                              Text(
-                                "호 수",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
-                                ),
+                        Row(
+                          children: [
+                            Container(
+                              width: 400,
+                              padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "호 수",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  SizedBox(width: 8),
+                                  Text(
+                                    "302 호",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              SizedBox(width: 8),
-                              Text(
-                                "302 호",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
-                                ),
+                            ),
+                            Container(
+                              width: 400,
+                              padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    "담당자",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  SizedBox(width: 8),
+                                  Text(
+                                    "담당자 1",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  SizedBox(width: 64),
+                                  Text(
+                                    "상태",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  SizedBox(width: 8),
+                                  Text(
+                                    "상태 1",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  SizedBox(width: 80),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                         Container(
                           width: 400,
@@ -659,8 +710,9 @@ class _SalesPropertyListViewState extends State<SalesPropertyListView> {
                             ],
                           ),
                         ),
-                        SizedBox(
+                        Container(
                           width: 400,
+                          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -684,15 +736,273 @@ class _SalesPropertyListViewState extends State<SalesPropertyListView> {
                                   ),
                                 ],
                               ),
-                              Text(
-                                "수도, 전기, 인터넷, 난방, 조식, 룸 서비스",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
+                              Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: Text(
+                                  "수도, 전기, 인터넷, 난방, 조식, 룸 서비스",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                  ),
                                 ),
                               ),
                             ],
                           ),
+                        ),
+                        Container(
+                          width: 720,
+                          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: 200,
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      "헤딩 층/전체 층",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    SizedBox(width: 8),
+                                    Text(
+                                      "B1/4",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                      maxLines: 2,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(width: 24),
+                              SizedBox(
+                                width: 200,
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      "방/욕실 개수",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    SizedBox(width: 8),
+                                    Text(
+                                      "1/1",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                      maxLines: 2,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(width: 24),
+                              SizedBox(
+                                width: 200,
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      "주실 기준 방향",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    SizedBox(width: 8),
+                                    Text(
+                                      "남동향",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                      maxLines: 2,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          width: 720,
+                          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: 200,
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      "전용/공급 면적",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    SizedBox(width: 8),
+                                    Text(
+                                      "모르겠어요오...",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                      maxLines: 2,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(width: 24),
+                              SizedBox(
+                                width: 200,
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      "사용 승인 일",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    SizedBox(width: 8),
+                                    Text(
+                                      "2025.01.01",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                      maxLines: 2,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(width: 24),
+                              SizedBox(
+                                width: 200,
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      "입주 가능 일",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    SizedBox(width: 8),
+                                    Text(
+                                      "2025.01.01",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                      maxLines: 2,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          width: 800,
+                          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: 200,
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      "주차 가능 대수",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    SizedBox(width: 8),
+                                    Text(
+                                      "1 대",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                      maxLines: 2,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(width: 24),
+                              SizedBox(
+                                width: 200,
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      "난방 방식",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    SizedBox(width: 8),
+                                    Text(
+                                      "개별",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                      maxLines: 2,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(width: 24),
+                              SizedBox(
+                                width: 280,
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      "옵션",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    SizedBox(width: 8),
+                                    Text(
+                                      "세탁기, 전자레인지, 냉장고, 에어컨, 침대",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                      maxLines: 2,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                            width: 800,
+                            height: 280,
+                            padding: EdgeInsets.all(16),
+                            child: RemarkGrid(
+                              remarkModel: remarkModelList,
+                              onDelete: (id) {
+                                print(id);
+                              },
+                              onAddRemark: () {},
+                            ),
+                        ),
+                        Container(
+                          width: 800,
+                          height: 216,
+                          padding: EdgeInsets.all(16),
+                          child: PhotoList(photoList: photoModelList),
                         ),
                       ],
                     ),
