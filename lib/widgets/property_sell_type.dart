@@ -55,9 +55,7 @@ class _PropertySellTypeState extends State<PropertySellType> {
 
   void _changeInput() {
     setState(() {}); // 상태 변경으로 UI 갱신
-    print("왜 입력이 안먹혀");
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -71,12 +69,11 @@ class _PropertySellTypeState extends State<PropertySellType> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Text(
-                  "판매 유형 및 가격",
+                  "매물 판매 유형 및 가격",
                   style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                 ),
               ),
-              SizedBox(height: 30),
-              if(widget.monthlyDepositAmountController.text.isNotEmpty && widget.monthlyAmountController.text.isNotEmpty)
+              // SizedBox(height: 16),
                 Padding(
                   padding: const EdgeInsets.only(left: 24, top: 4, bottom: 4),
                   child: Row(
@@ -86,11 +83,14 @@ class _PropertySellTypeState extends State<PropertySellType> {
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w700,
+                          color: widget.monthlyDepositAmountController.text.isNotEmpty && widget.monthlyAmountController.text.isNotEmpty ? Colors.grey[800] : Colors.grey[400],
                         ),
                       ),
                       SizedBox(width: 8),
                       Text(
-                        "${widget.monthlyDepositAmountController.text}/${widget.monthlyAmountController.text} 원",
+                        widget.monthlyDepositAmountController.text.isNotEmpty && widget.monthlyAmountController.text.isNotEmpty
+                            ? "${widget.monthlyDepositAmountController.text}/${widget.monthlyAmountController.text} 원"
+                            : "",
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w400,
@@ -99,7 +99,6 @@ class _PropertySellTypeState extends State<PropertySellType> {
                     ],
                   ),
                 ),
-              if(widget.jeonseAmountController.text.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.only(left: 24, top: 4, bottom: 4),
                   child: Row(
@@ -109,11 +108,14 @@ class _PropertySellTypeState extends State<PropertySellType> {
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w700,
+                          color: widget.jeonseAmountController.text.isNotEmpty ? Colors.grey[800] : Colors.grey[400]
                         ),
                       ),
                       SizedBox(width: 8),
                       Text(
-                        "${widget.jeonseAmountController.text} 원",
+                        widget.jeonseAmountController.text.isNotEmpty
+                          ? "${widget.jeonseAmountController.text} 원"
+                          : "",
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w400,
@@ -122,7 +124,6 @@ class _PropertySellTypeState extends State<PropertySellType> {
                     ],
                   ),
                 ),
-              if(widget.saleAmountController.text.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.only(left: 24, top: 4, bottom: 4),
                   child: Row(
@@ -132,11 +133,14 @@ class _PropertySellTypeState extends State<PropertySellType> {
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w700,
+                          color: widget.saleAmountController.text.isNotEmpty ? Colors.grey[800] : Colors.grey[400],
                         ),
                       ),
                       SizedBox(width: 8),
                       Text(
-                        "${widget.saleAmountController.text} 원",
+                        widget.saleAmountController.text.isNotEmpty
+                        ? "${widget.saleAmountController.text} 원"
+                        : "",
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w400,
@@ -145,7 +149,6 @@ class _PropertySellTypeState extends State<PropertySellType> {
                     ],
                   ),
                 ),
-              if(widget.shortTermDepositAmountController.text.isNotEmpty && widget.shortTermMonthlyAmountController.text.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.only(left: 24, top: 4, bottom: 4),
                   child: Row(
@@ -155,11 +158,14 @@ class _PropertySellTypeState extends State<PropertySellType> {
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w700,
+                          color: widget.shortTermDepositAmountController.text.isNotEmpty && widget.shortTermMonthlyAmountController.text.isNotEmpty ? Colors.grey[800] : Colors.grey[400],
                         ),
                       ),
                       SizedBox(width: 8),
                       Text(
-                        "${widget.shortTermDepositAmountController.text}/${widget.shortTermMonthlyAmountController.text} 원",
+                        widget.shortTermDepositAmountController.text.isNotEmpty && widget.shortTermMonthlyAmountController.text.isNotEmpty
+                          ? "${widget.shortTermDepositAmountController.text}/${widget.shortTermMonthlyAmountController.text} 원"
+                          : "",
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w400,

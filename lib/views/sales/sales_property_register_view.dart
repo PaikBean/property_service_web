@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:property_service_web/core/enums/button_type.dart';
 import 'package:property_service_web/core/enums/main_screen_type.dart';
 import 'package:property_service_web/models/building_summary.dart';
+import 'package:property_service_web/models/maintenance_form.dart';
 import 'package:property_service_web/models/photo_item_model.dart';
 import 'package:property_service_web/models/remark_model.dart';
 import 'package:property_service_web/widgets/crud_button.dart';
 import 'package:property_service_web/widgets/custom_radio_group.dart';
 import 'package:property_service_web/widgets/custom_text_field.dart';
+import 'package:property_service_web/widgets/maintenance_cost_form.dart';
 import 'package:property_service_web/widgets/photo_list.dart';
 import 'package:property_service_web/widgets/property_sell_type.dart';
 import 'package:property_service_web/widgets/remark_grid.dart';
@@ -53,6 +55,8 @@ class _SalesPropertyRegisterViewState extends State<SalesPropertyRegisterView> {
 
   ImageFileListModel buildingImageList = ImageFileListModel(imageFileModelList: []);
 
+  MaintenanceFormModel maintenanceFormModel = MaintenanceFormModel(maintenanceFee: 0, isWaterSelected: false, isElectricitySelected: false, isInternetSelected: false, isHeatingSelected: false, others: "");
+
   late List<String> searchConditionList;
   late List<Widget> gridItemList;
   late String selectedSearchCondition;
@@ -92,6 +96,199 @@ class _SalesPropertyRegisterViewState extends State<SalesPropertyRegisterView> {
           buildingName: "건물4",
           buildingAddress: "서울 특별시 강동구 둔촌동 123-1",
           buildingPostCode: '45645'),
+      BuildingSummary(
+          id: 1,
+          representativeImage: null,
+          buildingName: "건물1",
+          buildingAddress: "서울 특별시 강남구 역삼동 123-1",
+          buildingPostCode: '12345'),
+      BuildingSummary(
+          id: 2,
+          representativeImage: null,
+          buildingName: "건물2",
+          buildingAddress: "서울 특별시 강남구 삼성동 123-1",
+          buildingPostCode: '23456'),
+      BuildingSummary(
+          id: 3,
+          representativeImage: null,
+          buildingName: "건물3",
+          buildingAddress: "서울 특별시 서초구 개포동 123-1",
+          buildingPostCode: '34567'),
+      BuildingSummary(
+          id: 4,
+          representativeImage: null,
+          buildingName: "건물4",
+          buildingAddress: "서울 특별시 강동구 둔촌동 123-1",
+          buildingPostCode: '45645'),      BuildingSummary(
+          id: 1,
+          representativeImage: null,
+          buildingName: "건물1",
+          buildingAddress: "서울 특별시 강남구 역삼동 123-1",
+          buildingPostCode: '12345'),
+      BuildingSummary(
+          id: 2,
+          representativeImage: null,
+          buildingName: "건물2",
+          buildingAddress: "서울 특별시 강남구 삼성동 123-1",
+          buildingPostCode: '23456'),
+      BuildingSummary(
+          id: 3,
+          representativeImage: null,
+          buildingName: "건물3",
+          buildingAddress: "서울 특별시 서초구 개포동 123-1",
+          buildingPostCode: '34567'),
+      BuildingSummary(
+          id: 4,
+          representativeImage: null,
+          buildingName: "건물4",
+          buildingAddress: "서울 특별시 강동구 둔촌동 123-1",
+          buildingPostCode: '45645'),      BuildingSummary(
+          id: 1,
+          representativeImage: null,
+          buildingName: "건물1",
+          buildingAddress: "서울 특별시 강남구 역삼동 123-1",
+          buildingPostCode: '12345'),
+      BuildingSummary(
+          id: 2,
+          representativeImage: null,
+          buildingName: "건물2",
+          buildingAddress: "서울 특별시 강남구 삼성동 123-1",
+          buildingPostCode: '23456'),
+      BuildingSummary(
+          id: 3,
+          representativeImage: null,
+          buildingName: "건물3",
+          buildingAddress: "서울 특별시 서초구 개포동 123-1",
+          buildingPostCode: '34567'),
+      BuildingSummary(
+          id: 4,
+          representativeImage: null,
+          buildingName: "건물4",
+          buildingAddress: "서울 특별시 강동구 둔촌동 123-1",
+          buildingPostCode: '45645'),      BuildingSummary(
+          id: 1,
+          representativeImage: null,
+          buildingName: "건물1",
+          buildingAddress: "서울 특별시 강남구 역삼동 123-1",
+          buildingPostCode: '12345'),
+      BuildingSummary(
+          id: 2,
+          representativeImage: null,
+          buildingName: "건물2",
+          buildingAddress: "서울 특별시 강남구 삼성동 123-1",
+          buildingPostCode: '23456'),
+      BuildingSummary(
+          id: 3,
+          representativeImage: null,
+          buildingName: "건물3",
+          buildingAddress: "서울 특별시 서초구 개포동 123-1",
+          buildingPostCode: '34567'),
+      BuildingSummary(
+          id: 4,
+          representativeImage: null,
+          buildingName: "건물4",
+          buildingAddress: "서울 특별시 강동구 둔촌동 123-1",
+          buildingPostCode: '45645'),      BuildingSummary(
+          id: 1,
+          representativeImage: null,
+          buildingName: "건물1",
+          buildingAddress: "서울 특별시 강남구 역삼동 123-1",
+          buildingPostCode: '12345'),
+      BuildingSummary(
+          id: 2,
+          representativeImage: null,
+          buildingName: "건물2",
+          buildingAddress: "서울 특별시 강남구 삼성동 123-1",
+          buildingPostCode: '23456'),
+      BuildingSummary(
+          id: 3,
+          representativeImage: null,
+          buildingName: "건물3",
+          buildingAddress: "서울 특별시 서초구 개포동 123-1",
+          buildingPostCode: '34567'),
+      BuildingSummary(
+          id: 4,
+          representativeImage: null,
+          buildingName: "건물4",
+          buildingAddress: "서울 특별시 강동구 둔촌동 123-1",
+          buildingPostCode: '45645'),      BuildingSummary(
+          id: 1,
+          representativeImage: null,
+          buildingName: "건물1",
+          buildingAddress: "서울 특별시 강남구 역삼동 123-1",
+          buildingPostCode: '12345'),
+      BuildingSummary(
+          id: 2,
+          representativeImage: null,
+          buildingName: "건물2",
+          buildingAddress: "서울 특별시 강남구 삼성동 123-1",
+          buildingPostCode: '23456'),
+      BuildingSummary(
+          id: 3,
+          representativeImage: null,
+          buildingName: "건물3",
+          buildingAddress: "서울 특별시 서초구 개포동 123-1",
+          buildingPostCode: '34567'),
+      BuildingSummary(
+          id: 4,
+          representativeImage: null,
+          buildingName: "건물4",
+          buildingAddress: "서울 특별시 강동구 둔촌동 123-1",
+          buildingPostCode: '45645'),      BuildingSummary(
+          id: 1,
+          representativeImage: null,
+          buildingName: "건물1",
+          buildingAddress: "서울 특별시 강남구 역삼동 123-1",
+          buildingPostCode: '12345'),
+      BuildingSummary(
+          id: 2,
+          representativeImage: null,
+          buildingName: "건물2",
+          buildingAddress: "서울 특별시 강남구 삼성동 123-1",
+          buildingPostCode: '23456'),
+      BuildingSummary(
+          id: 3,
+          representativeImage: null,
+          buildingName: "건물3",
+          buildingAddress: "서울 특별시 서초구 개포동 123-1",
+          buildingPostCode: '34567'),
+      BuildingSummary(
+          id: 4,
+          representativeImage: null,
+          buildingName: "건물4",
+          buildingAddress: "서울 특별시 강동구 둔촌동 123-1",
+          buildingPostCode: '45645'),      BuildingSummary(
+          id: 1,
+          representativeImage: null,
+          buildingName: "건물1",
+          buildingAddress: "서울 특별시 강남구 역삼동 123-1",
+          buildingPostCode: '12345'),
+      BuildingSummary(
+          id: 2,
+          representativeImage: null,
+          buildingName: "건물2",
+          buildingAddress: "서울 특별시 강남구 삼성동 123-1",
+          buildingPostCode: '23456'),
+      BuildingSummary(
+          id: 3,
+          representativeImage: null,
+          buildingName: "건물3",
+          buildingAddress: "서울 특별시 서초구 개포동 123-1",
+          buildingPostCode: '34567'),
+      BuildingSummary(
+          id: 4,
+          representativeImage: null,
+          buildingName: "건물4",
+          buildingAddress: "서울 특별시 강동구 둔촌동 123-1",
+          buildingPostCode: '45645'),
+
+
+
+
+
+
+
+
     ];
     selectedSearchCondition = searchConditionList[0];
     super.initState();
@@ -514,19 +711,6 @@ class _SalesPropertyRegisterViewState extends State<SalesPropertyRegisterView> {
                 ),
               ),
               SizedBox(
-                width: 800,
-                height: 240,
-                  child: PropertySellType(
-                      monthlyDepositAmountController: monthlyDepositAmountController,
-                      monthlyAmountController: monthlyAmountController,
-                      jeonseAmountController: jeonseAmountController,
-                      saleAmountController: saleAmountController,
-                      shortTermDepositAmountController: shortTermDepositAmountController,
-                      shortTermMonthlyAmountController: shortTermMonthlyAmountController,
-                  ),
-              ),
-              Text("관리비 형태 및 가격"),
-              SizedBox(
                 width: 600,
                 child: Row(
                   children: [
@@ -536,7 +720,6 @@ class _SalesPropertyRegisterViewState extends State<SalesPropertyRegisterView> {
                   ],
                 ),
               ),
-              // 주차 가능 여부
               SizedBox(
                 width: 600,
                 child: Row(
@@ -553,6 +736,23 @@ class _SalesPropertyRegisterViewState extends State<SalesPropertyRegisterView> {
                     Flexible(child: CustomDatePicker(datePickerType: DatePickerType.date, label: "입주 가능일", selectedDateTime: DateTime.now())),
                   ],
                 ),
+              ),
+              SizedBox(
+                width: 800,
+                height: 200,
+                  child: PropertySellType(
+                      monthlyDepositAmountController: monthlyDepositAmountController,
+                      monthlyAmountController: monthlyAmountController,
+                      jeonseAmountController: jeonseAmountController,
+                      saleAmountController: saleAmountController,
+                      shortTermDepositAmountController: shortTermDepositAmountController,
+                      shortTermMonthlyAmountController: shortTermMonthlyAmountController,
+                  ),
+              ),
+              SizedBox(
+                width: 800,
+                height: 136,
+                child: MaintenanceCostForm(maintenanceFormModel: maintenanceFormModel),
               ),
               SizedBox(
                 width: 1000,

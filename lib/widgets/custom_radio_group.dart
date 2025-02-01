@@ -50,7 +50,7 @@ class CustomRadioGroup extends StatelessWidget {
                           value: option,
                           groupValue: groupValue,
                           onChanged: onChanged,
-                          activeColor: Colors.black,
+                          activeColor: Colors.grey[800],
                           overlayColor: WidgetStateProperty.all(Colors.transparent),
                         ),
                         Text(option),
