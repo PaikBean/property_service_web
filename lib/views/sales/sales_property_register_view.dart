@@ -36,6 +36,7 @@ class SalesPropertyRegisterView extends StatefulWidget {
 
 class _SalesPropertyRegisterViewState extends State<SalesPropertyRegisterView> {
   TextEditingController buildingSearchWord = TextEditingController();
+
   TextEditingController propertyOwnerName = TextEditingController();
   TextEditingController propertyOwnerPhoneNumber = TextEditingController();
   // TextEditingController propertyType = TextEditingController()
@@ -864,7 +865,7 @@ class _SalesPropertyRegisterViewState extends State<SalesPropertyRegisterView> {
                 ),
                 SizedBox(height: 4),
                 Text(
-                  buildingSummary.buildingAddress,
+                  "(${buildingSummary.buildingPostCode}) ${buildingSummary.buildingAddress}",
                   style: TextStyle(fontSize: 14, color: Colors.grey.shade700),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,

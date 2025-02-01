@@ -41,7 +41,7 @@ class _SideSearchGridState extends State<SideSearchGrid> {
                   : Row(
                 children: [
                   SizedBox(
-                    width: 120,
+                    width: 136,
                     child: CustomDropdown(
                       items: widget.searchConditionList,
                       onChanged: widget.onSearchChanged,

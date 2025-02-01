@@ -6,9 +6,8 @@ import 'package:property_service_web/views/company/company_info_view.dart';
 import 'package:property_service_web/views/myinfo/my_info_view.dart';
 import 'package:property_service_web/views/revenue/revenue_list_view.dart';
 import 'package:property_service_web/views/revenue/revenue_register_view.dart';
-import 'package:property_service_web/views/sales/sales_building_list_view.dart';
+import 'package:property_service_web/views/sales/sales_property_list_view.dart';
 import 'package:property_service_web/views/sales/sales_building_register_view.dart';
-import 'package:property_service_web/views/sales/sales_property_detail_view.dart';
 import 'package:property_service_web/views/sales/sales_property_register_view.dart';
 
 enum MainScreenType {
@@ -17,8 +16,7 @@ enum MainScreenType {
   CompanyInfo,
   RevenueList,
   RevenueRegsiter,
-  SalesBuildingList,
-  SalesPropertyDetail,
+  SalesPropertyList,
   SalesPropertyRegister,
   SalesBuildingRegister,
   ClientList,
@@ -39,10 +37,8 @@ extension MainScreenTypeExtension on MainScreenType {
         return "매출 목록";
       case MainScreenType.RevenueRegsiter:
         return "매출 등록";
-      case MainScreenType.SalesBuildingList:
+      case MainScreenType.SalesPropertyList:
         return "매물 목록";
-      case MainScreenType.SalesPropertyDetail:
-        return "매물 상세";
       case MainScreenType.SalesPropertyRegister:
         return "매물 등록";
       case MainScreenType.SalesBuildingRegister:
@@ -68,10 +64,8 @@ extension MainScreenTypeExtension on MainScreenType {
         return "매출 목록";
       case MainScreenType.RevenueRegsiter:
         return "매출 등록";
-      case MainScreenType.SalesBuildingList:
+      case MainScreenType.SalesPropertyList:
         return "매물 목록";
-      case MainScreenType.SalesPropertyDetail:
-        return "매물 상세";
       case MainScreenType.SalesPropertyRegister:
         return "매물 등록";
       case MainScreenType.SalesBuildingRegister:
@@ -97,10 +91,8 @@ extension MainScreenTypeExtension on MainScreenType {
         return RevenueListView();
       case MainScreenType.RevenueRegsiter:
         return RevenueRegisterView();
-      case MainScreenType.SalesBuildingList:
-        return SalesBuildingListView();
-      case MainScreenType.SalesPropertyDetail:
-        return SalesPropertyDetailView();
+      case MainScreenType.SalesPropertyList:
+        return SalesPropertyListView();
       case MainScreenType.SalesPropertyRegister:
         return SalesPropertyRegisterView();
       case MainScreenType.SalesBuildingRegister:
