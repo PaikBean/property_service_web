@@ -17,8 +17,8 @@ class SubLayout extends StatelessWidget {
 
   SubLayout({
     super.key,
-    required this.child,
     required this.mainScreenType,
+    required this.child,
     this.buttonTypeList,
     this.onSavePressed,
     this.onSubmitPressed,

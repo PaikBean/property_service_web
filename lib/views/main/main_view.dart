@@ -10,7 +10,7 @@ class MainView extends StatefulWidget {
 
 class _MainViewState extends State<MainView> {
   // 현재 활성화된 화면의 상태를 저장
-  MainScreenType activeScreen = MainScreenType.DashBoard;
+  MainScreenType activeScreen = MainScreenType.ClientList;
 
   // 상태 변경을 관리하는 함수
   void updateActiveScreen(MainScreenType screen) {

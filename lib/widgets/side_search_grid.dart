@@ -10,6 +10,8 @@ class SideSearchGrid extends StatefulWidget {
   final List<Widget> gridItemList;
   final Function(String) onSearchChanged;
   final VoidCallback onSearchPressed;
+  final String? hintText;
+  final double? searchConditionListWidth;
 
   const SideSearchGrid({
     super.key,
@@ -18,6 +20,8 @@ class SideSearchGrid extends StatefulWidget {
     required this.searchConditionList,
     required this.onSearchChanged,
     required this.onSearchPressed,
+    this.hintText,
+    this.searchConditionListWidth,
   });
 
   @override
@@ -41,7 +45,7 @@ class _SideSearchGridState extends State<SideSearchGrid> {
                   : Row(
                 children: [
                   SizedBox(
-                    width: 136,
+                    width: widget.searchConditionListWidth ?? 136,
                     child: CustomDropdown(
                       items: widget.searchConditionList,
                       onChanged: widget.onSearchChanged,
@@ -54,7 +58,7 @@ class _SideSearchGridState extends State<SideSearchGrid> {
                 child: TextField(
                   controller: widget.searchWord,
                   decoration: InputDecoration(
-                    hintText: "예) 판교역로 166, 분당 주공, 백현동 532",
+                    hintText: widget.hintText ?? "예) 판교역로 166, 분당 주공, 백현동 532",
                     hintStyle: TextStyle(
                       color: Colors.grey,
                     ),
