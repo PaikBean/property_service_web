@@ -15,7 +15,7 @@ enum MainScreenType {
   MyInfo,
   CompanyInfo,
   RevenueList,
-  RevenueRegsiter,
+  // RevenueRegsiter,   // todo 영업 매출 실적 탭으로 대체
   SalesPropertyList,
   SalesPropertyRegister,
   SalesBuildingRegister,
@@ -35,8 +35,8 @@ extension MainScreenTypeExtension on MainScreenType {
         return "조직 정보";
       case MainScreenType.RevenueList:
         return "매출 목록";
-      case MainScreenType.RevenueRegsiter:
-        return "매출 등록";
+      // case MainScreenType.RevenueRegsiter:   // todo 영업 매출 실적 탭으로 대체
+      //   return "매출 등록";
       case MainScreenType.SalesPropertyList:
         return "매물 목록";
       case MainScreenType.SalesPropertyRegister:
@@ -62,8 +62,8 @@ extension MainScreenTypeExtension on MainScreenType {
         return "조직 정보";
       case MainScreenType.RevenueList:
         return "매출 목록";
-      case MainScreenType.RevenueRegsiter:
-        return "매출 등록";
+      // case MainScreenType.RevenueRegsiter:   // todo 영업 매출 실적 탭으로 대체
+      //   return "매출 등록";
       case MainScreenType.SalesPropertyList:
         return "매물 목록";
       case MainScreenType.SalesPropertyRegister:
@@ -89,8 +89,8 @@ extension MainScreenTypeExtension on MainScreenType {
         return CompanyInfoView();
       case MainScreenType.RevenueList:
         return RevenueListView();
-      case MainScreenType.RevenueRegsiter:
-        return RevenueRegisterView();
+      // case MainScreenType.RevenueRegsiter:   // todo 영업 매출 실적 탭으로 대체
+      //   return RevenueRegisterView();
       case MainScreenType.SalesPropertyList:
         return SalesPropertyListView();
       case MainScreenType.SalesPropertyRegister:
