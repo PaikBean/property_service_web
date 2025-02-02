@@ -201,7 +201,7 @@ class _CalendarViewState extends State<CalendarView> {
             children: [
               Container(
                 width: 680,
-                color: Colors.grey,
+                // color: Colors.grey,
                 child: SubTitle(title: "${_selectedDay.year.toString()}년 ${_selectedDay.month}월 ${_selectedDay.day}일 일정"),
               ),
               SizedBox(
