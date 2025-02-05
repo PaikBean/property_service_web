@@ -7,12 +7,16 @@ import 'package:table_calendar/table_calendar.dart';
 import 'dart:math';
 import 'package:intl/intl.dart';
 
+import '../../models/client_summary_model.dart';
+import '../../widgets/side_search_grid.dart';
+
 class CalendarScheduleSummaryModel {
   final int id;
   final String scheduleDateTime;
   final String scheduleManage;
   final String scheduleClientName;
   final String scheduleType;
+  final String scheduleRemark;
 
   CalendarScheduleSummaryModel({
     required this.id,
@@ -20,6 +24,7 @@ class CalendarScheduleSummaryModel {
     required this.scheduleManage,
     required this.scheduleClientName,
     required this.scheduleType,
+    required this.scheduleRemark
   });
 }
 
@@ -33,10 +38,6 @@ class CalendarView extends StatefulWidget {
 class _CalendarViewState extends State<CalendarView> {
   DateTime _focusedDay = DateTime.now();
   DateTime _selectedDay = DateTime.now();
-
-  List<CalendarScheduleSummaryModel> schedules1 = [
-    CalendarScheduleSummaryModel(id: 1, scheduleDateTime: "2", scheduleManage: "담당 매니저", scheduleClientName: "고객1", scheduleType: "상담"),
-  ];
 
   // Example schedule data
   List<CalendarScheduleSummaryModel> schedules = List.generate(
@@ -53,6 +54,7 @@ class _CalendarViewState extends State<CalendarView> {
         scheduleManage: '관리자${index + 1}',
         scheduleClientName: '고객${index + 1}',
         scheduleType: ['상담', '계약', '입주', '입주완료'][random.nextInt(4)],
+        scheduleRemark: "특이사항입니다.",
       );
     },
   );
@@ -204,13 +206,116 @@ class _CalendarViewState extends State<CalendarView> {
                 // color: Colors.grey,
                 child: SubTitle(title: "${_selectedDay.year.toString()}년 ${_selectedDay.month}월 ${_selectedDay.day}일 일정"),
               ),
+              SizedBox(height: 32),
               SizedBox(
-
+                width: 680,
+                height: 640,
+                child: ListView.builder(
+                  itemCount: _getEventsForDay(_selectedDay).length,
+                  itemBuilder: (context, index) {
+                    return _buildClientItem(_getEventsForDay(_selectedDay)[index]);
+                  },
+                ),
               ),
             ],
           ),
         ],
       ),
     );
+  }
+
+  Widget _buildClientItem(CalendarScheduleSummaryModel schedule) {
+    return Container(
+      padding: EdgeInsets.all(8),
+      margin: EdgeInsets.symmetric(vertical: 4),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: Colors.grey.shade300),
+          color: Colors.white),
+      child: Row(
+        children: [
+          Checkbox(
+            value: schedule.id == 1,
+            onChanged: (_){},
+          ),
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  width: 88,
+                  height: 72,
+                  alignment: Alignment.center,
+                  // padding: const EdgeInsets.all(16),
+                  child: Text(
+                    DateFormat('HH 시 mm 분').format(DateTime.parse(schedule.scheduleDateTime)), // ✅ 날짜 변환 적용
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+                SizedBox(width: 24),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Column(
+                      children: [
+                        Text(
+                          schedule.scheduleType,
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: getScheduleColor(schedule.scheduleType)
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Row(
+                          children: [
+                            Text(
+                              schedule.scheduleManage,
+                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                            ),
+                            Text(
+                              "    -    ",
+                              style: TextStyle(
+                                  fontSize: 16
+                              ),
+                            ),
+                            Text(
+                              schedule.scheduleClientName,
+                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                SizedBox(width: 64),
+                Text(
+                  schedule.scheduleRemark,
+                  style: TextStyle(fontSize: 14, color: Colors.grey[800]),
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Color getScheduleColor(String scheduleType) {
+    switch (scheduleType) {
+      case "상담":
+        return Colors.green;
+      case "계약":
+        return Colors.red.shade500;
+      case "입주":
+        return Colors.blue;
+      case "입주완료":
+        return Colors.orange;
+      default:
+        return Colors.grey; // ✅ 기본값 추가
+    }
   }
 }
