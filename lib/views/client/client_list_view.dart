@@ -142,146 +142,179 @@ class _ClientListViewState extends State<ClientListView> {
               Row(
                 children: [
                   Container(
-                    width: 600,
+                    width: 1000,
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     child: Row(
                       children: [
-                        Text(
-                          "고객 성함",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
+                        SizedBox(
+                          width: 120,
+                          child: Row(
+                            children: [
+                              Text(
+                                "고객 성함",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              SizedBox(width: 8),
+                              Text(
+                                "홍길동",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        SizedBox(width: 8),
-                        Text(
-                          "홍길동",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
+                        SizedBox(width: 40),
+                        SizedBox(
+                          width: 240,
+                          child: Row(
+                            children: [
+                              Text(
+                                "고객 전화번호",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              SizedBox(width: 8),
+                              Text(
+                                "010 - 1234 - 1234",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        SizedBox(width: 64),
-                        Text(
-                          "고객 전화번호",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
+                        SizedBox(width: 40),
+                        SizedBox(
+                          width: 160,
+                          child: Row(
+                            children: [
+                              Text(
+                                "고객 상태",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              SizedBox(width: 8),
+                              Text(
+                                "입주 완료",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                        SizedBox(width: 8),
-                        Text(
-                          "010 - 1234 - 1234",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    width: 400,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          "고객 상태",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        SizedBox(width: 8),
-                        Text(
-                          "입주 완료",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        SizedBox(width: 80),
+                        )
                       ],
                     ),
                   ),
                 ],
               ),
               Container(
-                width: 800,
+                width: 1000,
                 padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Row(
                   children: [
-                    Text(
-                      "유입경로",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
+                    SizedBox(
+                      width: 120,
+                      child: Row(
+                        children: [
+                          Text(
+                            "유입 경로",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          SizedBox(width: 8),
+                          Text(
+                            "피터팬",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    SizedBox(width: 8),
-                    Text(
-                      "피터팬",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
+                    SizedBox(width: 40),
+                    SizedBox(
+                      width: 240,
+                      child: Row(
+                        children: [
+                          Text(
+                            "고객 성별",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          SizedBox(width: 8),
+                          Text(
+                            "남성",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    SizedBox(width: 64),
-                    Text(
-                      "고객 성별",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
+                    SizedBox(width: 40),
+                    SizedBox(
+                      width: 200,
+                      child: Row(
+                        children: [
+                          Text(
+                            "고객 유형",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          SizedBox(width: 8),
+                          Text(
+                            "직장인",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    SizedBox(width: 8),
-                    Text(
-                      "남성",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
+                    SizedBox(width: 40),
+                    SizedBox(
+                      width: 200,
+                      child: Row(
+                        children: [
+                          Text(
+                            "입주 예정일",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          SizedBox(width: 8),
+                          Text(
+                            "2025-01-01",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    SizedBox(width: 64),
-                    Text(
-                      "고객 유형",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    SizedBox(width: 8),
-                    Text(
-                      "직장인",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    SizedBox(width: 64),
-                    Text(
-                      "입주 예정일",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    SizedBox(width: 8),
-                    Text(
-                      "2025-01-01",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                width: 800,
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Row(
-                  children: [
+                    )
                   ],
                 ),
               ),
@@ -323,6 +356,7 @@ class _ClientListViewState extends State<ClientListView> {
                   onAddRemark: () {},
                   showLabel: true,
                   isColab: true,
+                  isClientWidget: true,
                 ),
               ),
             ],

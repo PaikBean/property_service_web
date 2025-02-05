@@ -30,7 +30,7 @@ class ClientScheduleGrid extends StatelessWidget {
             showLabel ? SizedBox(
                 width: 150,
                 child: Text(
-                  "일정 목록",
+                  "| 일정 목록",
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
@@ -69,7 +69,14 @@ class ClientScheduleGrid extends StatelessWidget {
         SizedBox(height: 4),
         Container(
           padding: EdgeInsets.symmetric(vertical: 8),
-          color: Colors.grey.shade300,
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                color: Colors.grey, // 선 색상
+                width: 1.0, // 선 두께
+              ),
+            ),
+          ),
           child: Row(
             children: [
               Expanded(
@@ -124,7 +131,7 @@ class ClientScheduleGrid extends StatelessWidget {
         // 스크롤 가능한 ListView
         Expanded(
           child: Container(
-            color: Colors.grey[200],
+            // color: Colors.grey[200],
             child: ListView.builder(
               itemCount: clientScheduleItemList.length,
               itemBuilder: (context, index) {
@@ -180,7 +187,7 @@ class _ScheduleRowState extends State<_ScheduleRow> {
         // padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8), // 줄 높이 조정
         decoration: BoxDecoration(
           border: Border(
-            bottom: BorderSide(color: Colors.grey.shade300),
+            // bottom: BorderSide(color: Colors.grey.shade300),
           ),
         ),
         child: Row(

@@ -9,6 +9,7 @@ class RemarkGrid extends StatefulWidget {
   final Function onAddRemark; // 특이사항 추가 콜백
   final bool showLabel;
   bool isColab;
+  bool isClientWidget;
 
   RemarkGrid({
     super.key,
@@ -17,6 +18,7 @@ class RemarkGrid extends StatefulWidget {
     required this.onAddRemark,
     this.showLabel = false,
     this.isColab = false,
+    this.isClientWidget = false,
   });
 
   @override
@@ -75,7 +77,15 @@ class _RemarkGridState extends State<RemarkGrid> {
         SizedBox(height: 4),
         Container(
           padding: EdgeInsets.symmetric(vertical: 8),
-          color: Colors.grey.shade300,
+          color: widget.isClientWidget ? null :  Colors.grey.shade300,
+          decoration: widget.isClientWidget ? BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  color: Colors.grey, // 선 색상
+                  width: 1.0, // 선 두께
+                ),
+              )
+          ) : null,
           child: Row(
             children: [
               Expanded(
@@ -114,21 +124,22 @@ class _RemarkGridState extends State<RemarkGrid> {
         Column(
           children: [
             Container(
-              color: Colors.grey[200],
-              child: _RemarkRow(
+                color: widget.isClientWidget ? Colors.transparent : Colors.grey[200],
+                child: _RemarkRow(
                 id: widget.remarkModel[0].id,
                 no: 1,
                 remark: widget.remarkModel[0].remark,
                 createdDate: widget.remarkModel[0].createdDate,
                 createdUserName: widget.remarkModel[0].createdUserName,
                 onDelete: widget.onDelete,
+                  isClientWidget: widget.isClientWidget,
               )
             ),
           ],
         ) :
         Expanded(
           child: Container(
-            color: Colors.grey[200],
+            color: widget.isClientWidget ? Colors.transparent : Colors.grey[200],
             child: ListView.builder(
               itemCount: widget.remarkModel.length,
               itemBuilder: (context, index) {
@@ -140,6 +151,7 @@ class _RemarkGridState extends State<RemarkGrid> {
                   createdDate: item.createdDate,
                   createdUserName: item.createdUserName,
                   onDelete: widget.onDelete,
+                  isClientWidget: widget.isClientWidget,
                 );
               },
             ),
@@ -193,6 +205,7 @@ class _RemarkRow extends StatefulWidget {
   final String createdDate;
   final String createdUserName;
   final Function(int id) onDelete;
+  final bool isClientWidget;
 
   const _RemarkRow({
     super.key,
@@ -202,6 +215,7 @@ class _RemarkRow extends StatefulWidget {
     required this.createdDate,
     required this.createdUserName,
     required this.onDelete,
+    this.isClientWidget = false,
   });
 
   @override
@@ -218,7 +232,7 @@ class _RemarkRowState extends State<_RemarkRow> {
       onExit: (_) => setState(() => _isHovered = false),
       child: Container(
         // padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8), // 줄 높이 조정
-        decoration: BoxDecoration(
+        decoration: widget.isClientWidget ? null : BoxDecoration(
           border: Border(
             bottom: BorderSide(color: Colors.grey.shade300),
           ),

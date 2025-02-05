@@ -31,7 +31,7 @@ class ClientShowingPropertyGrid extends StatelessWidget {
             showLabel ? SizedBox(
                 width: 150,
                 child: Text(
-                  "보여줄 매물 목록",
+                  "| 보여줄 매물 목록",
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
@@ -70,7 +70,15 @@ class ClientShowingPropertyGrid extends StatelessWidget {
         SizedBox(height: 4),
         Container(
           padding: EdgeInsets.symmetric(vertical: 8),
-          color: Colors.grey.shade300,
+          // color: Colors.grey.shade300,
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                color: Colors.grey, // 선 색상
+                width: 1.0, // 선 두께
+              ),
+            ),
+          ),
           child: Row(
             children: [
               Expanded(
@@ -116,7 +124,7 @@ class ClientShowingPropertyGrid extends StatelessWidget {
         // 스크롤 가능한 ListView
         Expanded(
           child: Container(
-            color: Colors.grey[200],
+            // color: Colors.grey[200],
             child: ListView.builder(
               itemCount: showingPropertyList.length,
               itemBuilder: (context, index) {
