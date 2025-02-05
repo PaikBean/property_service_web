@@ -9,12 +9,14 @@ class ClientShowingPropertyGrid extends StatelessWidget {
   final List<ClientShowingPropertyModel> showingPropertyList;
   final Function(int id) onDelete;
   final Function onAddRemark; // 특이사항 추가 콜백
+  final bool showLabel;
 
   const ClientShowingPropertyGrid({
     super.key,
     required this.showingPropertyList,
     required this.onDelete,
     required this.onAddRemark,
+    this.showLabel = false,
   });
 
   @override
@@ -24,8 +26,18 @@ class ClientShowingPropertyGrid extends StatelessWidget {
         // 헤더
         // 상단 추가 버튼
         Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            showLabel ? SizedBox(
+                width: 150,
+                child: Text(
+                  "보여줄 매물 목록",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                )
+            ) : SizedBox.shrink(),
             SizedBox(
               width: 40,
               height: 32, // 정사각형 버튼 크기

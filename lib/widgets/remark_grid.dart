@@ -3,18 +3,27 @@ import 'package:property_service_web/models/remark_model.dart';
 
 import '../core/constants/app_colors.dart';
 
-class RemarkGrid extends StatelessWidget {
+class RemarkGrid extends StatefulWidget {
   final List<RemarkModel> remarkModel;
   final Function(int id) onDelete;
   final Function onAddRemark; // 특이사항 추가 콜백
+  final bool showLabel;
+  bool isColab;
 
-  const RemarkGrid({
+  RemarkGrid({
     super.key,
     required this.remarkModel,
     required this.onDelete,
     required this.onAddRemark,
+    this.showLabel = false,
+    this.isColab = false,
   });
 
+  @override
+  State<RemarkGrid> createState() => _RemarkGridState();
+}
+
+class _RemarkGridState extends State<RemarkGrid> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -22,8 +31,18 @@ class RemarkGrid extends StatelessWidget {
         // 헤더
         // 상단 추가 버튼
         Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            widget.showLabel ? SizedBox(
+              width: 150,
+              child: Text(
+                "특이사항 목록",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              )
+            ) : SizedBox.shrink(),
             SizedBox(
               width: 40,
               height: 32, // 정사각형 버튼 크기
@@ -40,7 +59,7 @@ class RemarkGrid extends StatelessWidget {
                   ),
                   overlayColor: WidgetStateProperty.all(Colors.transparent), // hover 효과 제거
                 ),
-                onPressed: () => onAddRemark(),
+                onPressed: () => widget.onAddRemark(),
                 child: Text(
                   "추가",
                   style: TextStyle(
@@ -59,15 +78,6 @@ class RemarkGrid extends StatelessWidget {
           color: Colors.grey.shade300,
           child: Row(
             children: [
-              // Expanded(
-              //   flex: 1,
-              //   child: Center(
-              //     child: Text(
-              //       "No",
-              //       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-              //     ),
-              //   ),
-              // ),
               Expanded(
                 flex: 3,
                 child: Center(
@@ -100,23 +110,75 @@ class RemarkGrid extends StatelessWidget {
           ),
         ),
         // 스크롤 가능한 ListView
+        widget.isColab ?
+        Column(
+          children: [
+            Container(
+              color: Colors.grey[200],
+              child: _RemarkRow(
+                id: widget.remarkModel[0].id,
+                no: 1,
+                remark: widget.remarkModel[0].remark,
+                createdDate: widget.remarkModel[0].createdDate,
+                createdUserName: widget.remarkModel[0].createdUserName,
+                onDelete: widget.onDelete,
+              )
+            ),
+          ],
+        ) :
         Expanded(
           child: Container(
             color: Colors.grey[200],
             child: ListView.builder(
-              itemCount: remarkModel.length,
+              itemCount: widget.remarkModel.length,
               itemBuilder: (context, index) {
-                final item = remarkModel[index];
+                final item = widget.remarkModel[index];
                 return _RemarkRow(
                   id: item.id,
                   no: index + 1,
                   remark: item.remark,
                   createdDate: item.createdDate,
                   createdUserName: item.createdUserName,
-                  onDelete: onDelete,
+                  onDelete: widget.onDelete,
                 );
               },
             ),
+          ),
+        ),
+        Container(
+          height: 40,
+          alignment: Alignment.center,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    widget.isColab = !widget.isColab; // 상태 변경
+                  });
+                },
+                style: TextButton.styleFrom(
+                  overlayColor: AppColors.color4,
+                ),
+                child: Row(
+                  children: [
+                    Text(
+                      widget.isColab ? "특이사항 더보기" : "특이사항 접기",
+                      style: TextStyle(
+                          fontSize: 14, color: Colors.grey[800]),
+                    ),
+                    SizedBox(width: 4),
+                    Icon(
+                      widget.isColab
+                          ? Icons.expand_more
+                          : Icons.expand_less,
+                      color: Colors.grey[800],
+                      size: 20,
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
       ],

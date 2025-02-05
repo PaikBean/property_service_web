@@ -242,20 +242,48 @@ class _ClientListViewState extends State<ClientListView> {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
+                    SizedBox(width: 64),
+                    Text(
+                      "고객 유형",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      "직장인",
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    SizedBox(width: 64),
+                    Text(
+                      "입주 예정일",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      "2025-01-01",
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
                   ],
                 ),
               ),
               Container(
-                  width: 960,
-                  height: 256,
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  child: RemarkGrid(
-                    remarkModel: remarkModelList,
-                    onDelete: (id) {
-                      print(id);
-                    },
-                    onAddRemark: () {},
-                  ),
+                width: 800,
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Row(
+                  children: [
+                  ],
+                ),
               ),
               Container(
                 width: 960,
@@ -267,6 +295,7 @@ class _ClientListViewState extends State<ClientListView> {
                     print(id);
                   },
                   onAddRemark: () {},
+                  showLabel: true
                 ),
               ),
               Container(
@@ -279,6 +308,21 @@ class _ClientListViewState extends State<ClientListView> {
                     print(id);
                   },
                   onAddRemark: () {},
+                  showLabel: true,
+                ),
+              ),
+              Container(
+                width: 960,
+                height: 256,
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: RemarkGrid(
+                  remarkModel: remarkModelList,
+                  onDelete: (id) {
+                    print(id);
+                  },
+                  onAddRemark: () {},
+                  showLabel: true,
+                  isColab: true,
                 ),
               ),
             ],

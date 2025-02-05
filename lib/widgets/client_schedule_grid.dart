@@ -8,12 +8,14 @@ class ClientScheduleGrid extends StatelessWidget {
   final List<ClientScheduleItemModel> clientScheduleItemList;
   final Function(int id) onDelete;
   final Function onAddRemark; // 특이사항 추가 콜백
+  final bool showLabel;
 
   const ClientScheduleGrid({
     super.key,
     required this.clientScheduleItemList,
     required this.onDelete,
     required this.onAddRemark,
+    this.showLabel = false,
   });
 
   @override
@@ -23,8 +25,18 @@ class ClientScheduleGrid extends StatelessWidget {
         // 헤더
         // 상단 추가 버튼
         Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            showLabel ? SizedBox(
+                width: 150,
+                child: Text(
+                  "일정 목록",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                )
+            ) : SizedBox.shrink(),
             SizedBox(
               width: 40,
               height: 32, // 정사각형 버튼 크기
@@ -70,7 +82,7 @@ class ClientScheduleGrid extends StatelessWidget {
                 ),
               ),
               Expanded(
-                flex: 2,
+                flex: 1,
                 child: Center(
                   child: Text(
                     "일시",
@@ -92,6 +104,15 @@ class ClientScheduleGrid extends StatelessWidget {
                 child: Center(
                   child: Text(
                     "일정 유형",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: Center(
+                  child: Text(
+                    "특이사항",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                   ),
                 ),
@@ -175,7 +196,7 @@ class _ScheduleRowState extends State<_ScheduleRow> {
               ),
             ),
             Expanded(
-              flex: 2,
+              flex: 1,
               child: Center(
                 child: Text(
                   widget.scheduleDateTime,
@@ -197,6 +218,15 @@ class _ScheduleRowState extends State<_ScheduleRow> {
               child: Center(
                 child: Text(
                   widget.scheduleType,
+                  style: TextStyle(fontSize: 14),
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Center(
+                child: Text(
+                  "특이사항 123",
                   style: TextStyle(fontSize: 14),
                 ),
               ),
