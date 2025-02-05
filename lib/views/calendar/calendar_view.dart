@@ -239,66 +239,108 @@ class _CalendarViewState extends State<CalendarView> {
             onChanged: (_){},
           ),
           Expanded(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  width: 88,
-                  height: 72,
-                  alignment: Alignment.center,
-                  // padding: const EdgeInsets.all(16),
-                  child: Text(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
                     DateFormat('HH 시 mm 분').format(DateTime.parse(schedule.scheduleDateTime)), // ✅ 날짜 변환 적용
                     style: TextStyle(fontSize: 16),
                   ),
-                ),
-                SizedBox(width: 24),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Column(
-                      children: [
-                        Text(
-                          schedule.scheduleType,
-                          style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: getScheduleColor(schedule.scheduleType)
-                          ),
-                        ),
-                        SizedBox(height: 8),
-                        Row(
-                          children: [
-                            Text(
-                              schedule.scheduleManage,
-                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                            ),
-                            Text(
-                              "    -    ",
-                              style: TextStyle(
-                                  fontSize: 16
-                              ),
-                            ),
-                            Text(
-                              schedule.scheduleClientName,
-                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                              maxLines: 3,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
-                        ),
-                      ],
+                  SizedBox(width: 16,),
+                  Text(
+                    schedule.scheduleManage,
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                  ),
+                  Text(
+                    "    /    ",
+                    style: TextStyle(
+                        fontSize: 16
                     ),
-                  ],
-                ),
-                SizedBox(width: 64),
-                Text(
-                  schedule.scheduleRemark,
-                  style: TextStyle(fontSize: 14, color: Colors.grey[800]),
-                )
-              ],
-            ),
+                  ),
+                  Text(
+                    schedule.scheduleClientName,
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(width: 16,),
+                  Text(
+                    schedule.scheduleType,
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: getScheduleColor(schedule.scheduleType)
+                    ),
+                  ),
+                  SizedBox(width: 16,),
+                  Text(
+                    schedule.scheduleRemark,
+                    style: TextStyle(fontSize: 14, color: Colors.grey[800]),
+                  )
+                ],
+              )
           ),
+          // Expanded(
+          //   child: Row(
+          //     crossAxisAlignment: CrossAxisAlignment.center,
+          //     children: [
+          //       Container(
+          //         width: 88,
+          //         height: 72,
+          //         alignment: Alignment.center,
+          //         // padding: const EdgeInsets.all(16),
+          //         child: Text(
+          //           DateFormat('HH 시 mm 분').format(DateTime.parse(schedule.scheduleDateTime)), // ✅ 날짜 변환 적용
+          //           style: TextStyle(fontSize: 16),
+          //         ),
+          //       ),
+          //       SizedBox(width: 24),
+          //       Column(
+          //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          //         children: [
+          //           Column(
+          //             children: [
+          //               Text(
+          //                 schedule.scheduleType,
+          //                 style: TextStyle(
+          //                     fontSize: 16,
+          //                     fontWeight: FontWeight.w500,
+          //                     color: getScheduleColor(schedule.scheduleType)
+          //                 ),
+          //               ),
+          //               SizedBox(height: 8),
+          //               Row(
+          //                 children: [
+          //                   Text(
+          //                     schedule.scheduleManage,
+          //                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+          //                   ),
+          //                   Text(
+          //                     "    -    ",
+          //                     style: TextStyle(
+          //                         fontSize: 16
+          //                     ),
+          //                   ),
+          //                   Text(
+          //                     schedule.scheduleClientName,
+          //                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+          //                     maxLines: 3,
+          //                     overflow: TextOverflow.ellipsis,
+          //                   ),
+          //                 ],
+          //               ),
+          //             ],
+          //           ),
+          //         ],
+          //       ),
+          //       SizedBox(width: 64),
+          //       Text(
+          //         schedule.scheduleRemark,
+          //         style: TextStyle(fontSize: 14, color: Colors.grey[800]),
+          //       )
+          //     ],
+          //   ),
+          // ),
         ],
       ),
     );
