@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../../core/enums/button_type.dart';
+import '../../core/enums/datepicker_type.dart';
 import '../../core/enums/main_screen_type.dart';
+import '../../widgets/custom_datepicker.dart';
 import '../../widgets/custom_radio_group.dart';
 import '../../widgets/custom_text_field.dart';
 import '../../widgets/sub_layout.dart';
@@ -16,6 +18,7 @@ class ClientRegisterView extends StatefulWidget {
 class _ClientRegisterViewState extends State<ClientRegisterView> {
   String? clientGender;
   String? clientSource;
+  String? clientType;
 
 
   @override
@@ -60,6 +63,27 @@ class _ClientRegisterViewState extends State<ClientRegisterView> {
                 ),
               ],
             ),
+          ),
+          SizedBox(
+            width: 800,
+            child: Row(
+              children: [
+                CustomRadioGroup(
+                  title: "고객 유형",
+                  options: ["학생", "직장인", "외국인", "기타"],
+                  groupValue: clientType,
+                  onChanged: (value) => setState(() => clientType = value),
+                  otherInput: "기타",
+                  otherLabel: "고객 유형",
+                  otherInputTextController: TextEditingController(),
+                  otherInputBoxWidth: 240,
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            width: 400,
+            child: CustomDatePicker(datePickerType: DatePickerType.date, label: "입주 예정일", selectedDateTime: DateTime.now()),
           ),
           SizedBox(
             width: 800,
