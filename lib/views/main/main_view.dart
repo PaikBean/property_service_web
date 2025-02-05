@@ -10,7 +10,7 @@ class MainView extends StatefulWidget {
 
 class _MainViewState extends State<MainView> {
   // 현재 활성화된 화면의 상태를 저장
-  MainScreenType activeScreen = MainScreenType.ClientList;
+  MainScreenType activeScreen = MainScreenType.DashBoard;
 
   // 상태 변경을 관리하는 함수
   void updateActiveScreen(MainScreenType screen) {
@@ -81,12 +81,12 @@ class _MainViewState extends State<MainView> {
                           icon: Icons.person,
                           onTap: () => updateActiveScreen(MainScreenType.MyInfo),
                         ),
-                        _buildMenuItem(
-                          title: MainScreenType.CompanyInfo.name,
-                          depth: 0,
-                          icon: Icons.group,
-                          onTap: () => updateActiveScreen(MainScreenType.CompanyInfo),
-                        ),
+                        // _buildMenuItem(
+                        //   title: MainScreenType.CompanyInfo.name,
+                        //   depth: 0,
+                        //   icon: Icons.group,
+                        //   onTap: () => updateActiveScreen(MainScreenType.CompanyInfo),
+                        // ),
                         _buildExpansionMenu(
                           title: "매출 장부",
                           depth: 0,
