@@ -2,7 +2,7 @@ enum TransactionType {
   blank("", 40),
   monthly("월세", 41),
   jeonse("전세", 42),
-  sale("매매", 43),
+  // sale("매매", 43),
   shortTerm("단기", 44),
   ;
 

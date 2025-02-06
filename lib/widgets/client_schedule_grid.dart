@@ -30,7 +30,7 @@ class ClientScheduleGrid extends StatelessWidget {
             showLabel ? SizedBox(
                 width: 150,
                 child: Text(
-                  "| 일정 목록",
+                  "| 일정",
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,

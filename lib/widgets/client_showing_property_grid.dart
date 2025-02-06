@@ -31,7 +31,7 @@ class ClientShowingPropertyGrid extends StatelessWidget {
             showLabel ? SizedBox(
                 width: 150,
                 child: Text(
-                  "| 보여줄 매물 목록",
+                  "| 보여줄 매물",
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,

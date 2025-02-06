@@ -38,7 +38,7 @@ class _RemarkGridState extends State<RemarkGrid> {
             widget.showLabel ? SizedBox(
               width: 150,
               child: Text(
-                "| 특이사항 목록",
+                "| 특이사항",
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,

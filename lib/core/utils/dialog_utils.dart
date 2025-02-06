@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kpostal_web/kpostal_web.dart';
 import 'package:property_service_web/core/utils/custom_kakao_address_widget.dart';
+import 'package:property_service_web/widgets/rotating_house_indicator.dart';
 
 import '../constants/app_colors.dart';
 
@@ -188,7 +189,7 @@ class DialogUtils {
                   child: Stack(
                     children: [
                       Center(
-                        child: CircularProgressIndicator(),
+                        child: RotatingHouseIndicator(),
                       ),
                       SingleChildScrollView(
                         child: CustomKakaoAddressWidget(

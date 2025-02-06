@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:property_service_web/widgets/rotating_house_indicator.dart';
 
 import '../core/constants/app_colors.dart';
 import 'custom_dropdown.dart';
 
-class SideSearchGrid extends StatefulWidget {
+class SideSearchFutureGrid extends StatefulWidget {
   final List<String> searchConditionList;
   final TextEditingController searchWord;
-  final List<Widget> gridItemList;
+  final Future<List<Widget>> Function() fetchGridItems; // Future 함수 추가
   final Function(String) onSearchChanged;
   final VoidCallback onSearchPressed;
   final String? hintText;
   final double? searchConditionListWidth;
 
-  const SideSearchGrid({
+  const SideSearchFutureGrid({
     super.key,
     required this.searchWord,
-    required this.gridItemList,
+    required this.fetchGridItems, // Future 함수 전달
     required this.searchConditionList,
     required this.onSearchChanged,
     required this.onSearchPressed,
@@ -24,10 +25,17 @@ class SideSearchGrid extends StatefulWidget {
   });
 
   @override
-  State<SideSearchGrid> createState() => _SideSearchGridState();
+  State<SideSearchFutureGrid> createState() => _SideSearchFutureGridState();
 }
 
-class _SideSearchGridState extends State<SideSearchGrid> {
+class _SideSearchFutureGridState extends State<SideSearchFutureGrid> {
+  late Future<List<Widget>> _gridItemsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _gridItemsFuture = widget.fetchGridItems(); // 초기 로딩 시 데이터 가져오기
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +77,11 @@ class _SideSearchGridState extends State<SideSearchGrid> {
                     ),
                     suffixIcon: IconButton(
                       icon: Icon(Icons.search, color: Colors.black),
-                      onPressed: widget.onSearchPressed,
+                      onPressed: () {
+                        setState(() {
+                          _gridItemsFuture = widget.fetchGridItems(); // 검색 시 데이터 다시 불러오기
+                        });
+                      },
                     ),
                   ),
                 ),
@@ -78,10 +90,23 @@ class _SideSearchGridState extends State<SideSearchGrid> {
           ),
           SizedBox(height: 8),
           Expanded(
-            child: ListView.builder(
-              itemCount: widget.gridItemList.length,
-              itemBuilder: (context, index) {
-                return widget.gridItemList[index];
+            child: FutureBuilder<List<Widget>>(
+              future: _gridItemsFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: RotatingHouseIndicator()); // 로딩 UI
+                } else if (snapshot.hasError) {
+                  return Center(child: Text("데이터를 불러오는 중 오류 발생")); // 에러 UI
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return Center(child: Text("검색 결과 없음")); // 결과 없음 UI
+                } else {
+                  return ListView.builder(
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) {
+                      return snapshot.data![index];
+                    },
+                  );
+                }
               },
             ),
           ),
