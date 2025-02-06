@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:kpostal_web/kpostal_web.dart';
 import 'package:property_service_web/core/utils/custom_kakao_address_widget.dart';
 
+import '../constants/app_colors.dart';
+
 class DialogUtils {
   /// 경고 메시지를 보여주는 다이얼로그
   static Future<void> showAlertDialog({
@@ -16,12 +18,12 @@ class DialogUtils {
         return AlertDialog(
           backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8), // 테두리 둥근 정도
+            borderRadius: BorderRadius.circular(16), // 테두리 둥근 정도
           ),
           title: Text(
             title,
             style: TextStyle(
-              fontSize: 16, // 제목 글자 크기
+              fontSize: 20, // 제목 글자 크기
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -32,7 +34,7 @@ class DialogUtils {
               Text(
                 content,
                 style: const TextStyle(
-                  fontSize: 14, // 내용 글자 크기
+                  fontSize: 16, // 내용 글자 크기
                 ),
               ),
             ],
@@ -43,14 +45,14 @@ class DialogUtils {
                 Navigator.of(context).pop(); // 다이얼로그 닫기
               },
               style: ButtonStyle(
-                overlayColor: WidgetStateProperty.all(Colors.transparent), // hover 효과 제거
+                overlayColor: WidgetStateProperty.all(AppColors.color5.withAlpha(32)),
               ),
               child: Text(
                 confirmText,
                 style: const TextStyle(
-                  fontSize: 14, // 버튼 글자 크기
+                  fontSize: 16, // 버튼 글자 크기
                   fontWeight: FontWeight.w600,
-                  color: Colors.black
+                  color: AppColors.color5
                 ),
               ),
             ),
@@ -74,12 +76,12 @@ class DialogUtils {
         return AlertDialog(
           backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8), // 테두리 둥근 정도
+            borderRadius: BorderRadius.circular(16), // 테두리 둥근 정도
           ),
           title: Text(
             title,
             style: const TextStyle(
-              fontSize: 16, // 제목 글자 크기
+              fontSize: 20, // 제목 글자 크기
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -101,14 +103,14 @@ class DialogUtils {
                 Navigator.of(context).pop(false); // "취소" 선택 시 false 반환
               },
               style: ButtonStyle(
-                overlayColor: WidgetStateProperty.all(Colors.transparent), // hover 효과 제거
+                overlayColor: WidgetStateProperty.all(AppColors.color5.withAlpha(32)),
               ),
               child: Text(
                 cancelText,
                 style: const TextStyle(
-                  fontSize: 14, // 버튼 글자 크기
+                  fontSize: 16, // 버튼 글자 크기
                   fontWeight: FontWeight.w600,
-                  color: Colors.grey,
+                  color: AppColors.color5,
                 ),
               ),
             ),
@@ -117,14 +119,14 @@ class DialogUtils {
                 Navigator.of(context).pop(true); // "확인" 선택 시 true 반환
               },
               style: ButtonStyle(
-                overlayColor: WidgetStateProperty.all(Colors.transparent), // hover 효과 제거
+                overlayColor: WidgetStateProperty.all(AppColors.color5.withAlpha(32)),
               ),
               child: Text(
                 confirmText,
                 style: const TextStyle(
-                  fontSize: 14, // 버튼 글자 크기
+                  fontSize: 16, // 버튼 글자 크기
                   fontWeight: FontWeight.w600,
-                  color: Colors.black,
+                  color: AppColors.color5,
                 ),
               ),
             ),

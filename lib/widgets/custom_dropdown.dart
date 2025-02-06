@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
-
 import '../core/constants/app_colors.dart';
 
 class CustomDropdown extends StatefulWidget {
   final List<String> items;
   final Function(String) onChanged;
+  final double dropdownHeight;
 
-  const CustomDropdown({required this.items, required this.onChanged, Key? key}) : super(key: key);
+  const CustomDropdown({
+    required this.items,
+    required this.onChanged,
+    this.dropdownHeight = 100, // 드롭다운 최대 높이
+    Key? key,
+  }) : super(key: key);
 
   @override
   _CustomDropdownState createState() => _CustomDropdownState();
@@ -15,6 +20,7 @@ class CustomDropdown extends StatefulWidget {
 class _CustomDropdownState extends State<CustomDropdown> {
   OverlayEntry? _overlayEntry;
   final LayerLink _layerLink = LayerLink();
+  final FocusNode _focusNode = FocusNode(); // 포커스 감지를 위한 노드
   final TextEditingController _controller = TextEditingController();
   bool _isDropdownOpen = false;
   late String selectedItem;
@@ -22,8 +28,20 @@ class _CustomDropdownState extends State<CustomDropdown> {
   @override
   void initState() {
     super.initState();
-    selectedItem = widget.items[0];
+
+    // 오늘 날짜의 년도로 초기값 설정
+    final int currentYear = DateTime.now().year;
+    selectedItem = widget.items.contains(currentYear.toString())
+        ? currentYear.toString()
+        : widget.items[0]; // 현재 년도가 리스트에 있으면 설정, 없으면 첫 번째 값
     _controller.text = selectedItem;
+
+    // 포커스 해제 시 드롭다운 닫기
+    _focusNode.addListener(() {
+      if (!_focusNode.hasFocus && _isDropdownOpen) {
+        _removeDropdown();
+      }
+    });
   }
 
   void _toggleDropdown() {
@@ -55,25 +73,47 @@ class _CustomDropdownState extends State<CustomDropdown> {
     Size size = renderBox.size;
 
     return OverlayEntry(
-      builder: (context) => Positioned(
-        width: size.width,
-        child: CompositedTransformFollower(
-          link: _layerLink,
-          offset: Offset(0.0, size.height + 5),
-          child: Material(
-            color: Colors.transparent,
-            elevation: 4.0,
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: Colors.white,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: widget.items.map((item) => _buildDropdownItem(item)).toList(),
+      builder: (context) => GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          // 외부 클릭 시 드롭다운 닫기
+          _removeDropdown();
+        },
+        child: Stack(
+          children: [
+            Positioned(
+              width: size.width,
+              child: CompositedTransformFollower(
+                link: _layerLink,
+                offset: Offset(0.0, size.height + 5),
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque, // 내부 클릭 이벤트 전달
+                  onTap: () {}, // 내부 클릭은 이벤트를 차단하지 않음
+                  child: Material(
+                    color: Colors.transparent,
+                    elevation: 4.0,
+                    child: Container(
+                      height: widget.dropdownHeight, // 드롭다운 최대 높이 설정
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: Colors.white,
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: ListView.builder(
+                          padding: EdgeInsets.zero,
+                          itemCount: widget.items.length,
+                          itemBuilder: (context, index) {
+                            return _buildDropdownItem(widget.items[index]);
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ),
             ),
-          ),
+          ],
         ),
       ),
     );
@@ -112,6 +152,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
       link: _layerLink,
       child: TextField(
         controller: _controller,
+        focusNode: _focusNode,
         readOnly: true,
         onTap: _toggleDropdown,
         decoration: InputDecoration(
