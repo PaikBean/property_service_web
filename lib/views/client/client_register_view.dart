@@ -37,7 +37,7 @@
     List<TransactionType> clientExpectedTradeTypeList = [];
     TextEditingController clientRemark = TextEditingController();
 
-    void onSubmit() {
+    void onSubmit() async {
       validateInput();
       var request = ClientRegisterModel(
           clientName: clientName.text,
@@ -52,12 +52,41 @@
           clientExpectedTradeTypeList: clientExpectedTradeTypeList,
           clientRemark: clientRemark.text);
 
-      DialogUtils.showConfirmDialog(
+      if(await DialogUtils.showConfirmDialog(
           context: context,
           title: "고객 정보 등록",
-          content: "${request.clientName} 고객님을 등록하시겠습니까?");
+          content: "${request.clientName} 고객님을 등록하시겠습니까?")){
+        if(request.clientName.startsWith("TEMP")){
+          await DialogUtils.showAlertDialog(
+              context: context,
+              title: "샘플 데이터 저장 시도",
+              content: "샘플 데이터는 저장할 수 없습니다.");
+          clearAllData();
+          return;
+        }
 
-      // todo 고객 등록 api 연결
+        // todo 고객 등록 api 연결
+      }
+    }
+
+    void clearAllData() {
+      setState(() {
+        // TextEditingController 초기화
+        clientName.text = "";
+        clientPhoneNumber.text = "";
+        clientTypeOther.text = "";
+        clientSourceOther.text = "";
+        clientRemark.text = "";
+
+        // nullable 타입 초기화
+        clientGender = null;
+        clientType = null;
+        clientSource = null;
+        clientExpectedMoveInDate = null;
+
+        // 리스트 초기화
+        clientExpectedTradeTypeList.clear();
+      });
     }
 
     @override
@@ -158,6 +187,20 @@
                 maxLines: 4,
               ),
             ),
+            TextButton(onPressed: (){
+              setState(() {
+                clientName.text = "TEMP_홍길동";
+                clientPhoneNumber.text = "TEMP_010-1234-5678";
+                clientGender = GenderType.male;
+                clientType = ClientType.worker;
+                clientTypeOther.text = "TEMP_기타사유";
+                clientSource = ClientSource.walking;
+                clientSourceOther.text = "TEMP_기타경로";
+                clientExpectedMoveInDate = DateTime.now().add(const Duration(days: 30));
+                clientExpectedTradeTypeList = [TransactionType.monthly, TransactionType.jeonse];
+                clientRemark.text = "TEMP_테스트 데이터입니다.";
+              });
+            }, child: Text("생플 데이터 세팅")),
           ],
         ),
       );
