@@ -98,13 +98,13 @@ class _ClientListViewState extends State<ClientListView> {
   // 고객 요약 목록 호출
   Future<List<Widget>> fetchClientSummaryItemList() async {
     List<ClientSummaryItem> clients = mockClientSummaryItems; // todo 고객 요약 목록 조회 api 적용
-    await Future.delayed(Duration(seconds: 3));
+    await Future.delayed(Duration(seconds: 1));
     return clients.map((cli) => _buildClientItem(cli)).toList();
   }
 
   // 고객 상세 정보 호출
   Future<void> fetchClientDetail() async {
-    await Future.delayed(Duration(seconds: 3));
+    await Future.delayed(Duration(seconds: 1));
     clientDetailModel = ClientDetailModel.fromJson(mockClientDetail);
   }
 
@@ -112,7 +112,7 @@ class _ClientListViewState extends State<ClientListView> {
   void initState() {
     searchConditionList = [
       "담당자",
-      "고객 성함",
+      "고객",
       "고객 전화번호",
     ];
     clientSummaryModelList = [
@@ -155,8 +155,7 @@ class _ClientListViewState extends State<ClientListView> {
         SubLayout(
           mainScreenType: MainScreenType.ClientList,
           buttonTypeList: [ButtonType.update],
-          onUpdatePressed: () {
-          },
+          onUpdatePressed: () {},
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -452,12 +451,24 @@ class _ClientListViewState extends State<ClientListView> {
           children: [
             Padding(
               padding: EdgeInsets.all(16),
-                child: Text(
-                  clientSummaryItem.clientName,
-                  style: TextStyle(
-                      fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
+                child: Column(
+                  children: [
+                    Text(
+                      clientSummaryItem.clientName,
+                      style: TextStyle(
+                          fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      clientSummaryItem.clientStatus,
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
                 ),
             ),
             SizedBox(width: 12),
