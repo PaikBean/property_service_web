@@ -14,7 +14,8 @@
   import '../../widgets/custom_enum_radio_group.dart';
   import '../../widgets/custom_radio_group.dart';
   import '../../widgets/custom_text_field.dart';
-  import '../../widgets/sub_layout.dart';
+  import '../../widgets/rotating_house_indicator.dart';
+import '../../widgets/sub_layout.dart';
   import 'enums/client_source_type.dart';
   import 'enums/client_type_code.dart';
 
@@ -36,6 +37,8 @@
     DateTime? clientExpectedMoveInDate;
     List<TransactionType> clientExpectedTradeTypeList = [];
     TextEditingController clientRemark = TextEditingController();
+
+    bool _isLoading = false;
 
     void onSubmit() async {
       validateInput();
@@ -66,6 +69,15 @@
         }
 
         // todo 고객 등록 api 연결
+        setState(() {
+          _isLoading = true; // 로딩 시작
+        });
+
+        await Future.delayed(Duration(seconds: 3)); // todo 고객 등록 api 연결
+        clearAllData();
+        setState(() {
+          _isLoading = false; // 로딩 종료
+        });
       }
     }
 
@@ -91,118 +103,134 @@
 
     @override
     Widget build(BuildContext context) {
-      return SubLayout(
-        mainScreenType: MainScreenType.ClientRegister,
-        buttonTypeList: [ButtonType.submit],
-        onSubmitPressed: onSubmit,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              width: 200,
-              child: CustomTextField(label: "성함", controller: clientName),
-            ),
-            SizedBox(
-              width: 800,
-              child: CustomTextField(
-                  label: "전화번호", controller: clientPhoneNumber),
-            ),
-            SizedBox(
-              width: 1000,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  CustomEnumRadioGroup<GenderType>(
-                    title: "고객 성별",
-                    options: GenderType.values, // Enum 리스트를 전달
-                    groupValue: clientGender,
-                    onChanged: (value) =>
-                        setState(() {
-                          clientGender = value;
-                        }),
+      return Stack(
+        children: [
+          SubLayout(
+            mainScreenType: MainScreenType.ClientRegister,
+            buttonTypeList: [ButtonType.submit],
+            onSubmitPressed: onSubmit,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: 200,
+                  child: CustomTextField(label: "성함", controller: clientName),
+                ),
+                SizedBox(
+                  width: 800,
+                  child: CustomTextField(
+                      label: "전화번호", controller: clientPhoneNumber),
+                ),
+                SizedBox(
+                  width: 1000,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      CustomEnumRadioGroup<GenderType>(
+                        title: "고객 성별",
+                        options: GenderType.values, // Enum 리스트를 전달
+                        groupValue: clientGender,
+                        onChanged: (value) =>
+                            setState(() {
+                              clientGender = value;
+                            }),
+                      ),
+                      SizedBox(width: 32),
+                      CustomEnumRadioGroup<ClientType>(
+                        title: "고객 유형",
+                        options: ClientType.values,
+                        // Enum 리스트를 전달
+                        groupValue: clientType,
+                        onChanged: (value) =>
+                            setState(() {
+                              clientType = value;
+                            }),
+                        otherInput: ClientType.other,
+                        otherLabel: "기타",
+                        otherTextController: clientTypeOther,
+                      ),
+                    ],
                   ),
-                  SizedBox(width: 32),
-                  CustomEnumRadioGroup<ClientType>(
-                    title: "고객 유형",
-                    options: ClientType.values,
+                ),
+                SizedBox(
+                  width: 800,
+                  child: CustomEnumRadioGroup<ClientSource>(
+                    title: "유입 경로",
+                    options: ClientSource.values,
                     // Enum 리스트를 전달
-                    groupValue: clientType,
+                    groupValue: clientSource,
                     onChanged: (value) =>
                         setState(() {
-                          clientType = value;
+                          clientSource = value;
                         }),
-                    otherInput: ClientType.other,
+                    otherInput: ClientSource.other,
                     otherLabel: "기타",
-                    otherTextController: clientTypeOther,
+                    otherTextController: clientSourceOther,
                   ),
-                ],
-              ),
-            ),
-            SizedBox(
-              width: 800,
-              child: CustomEnumRadioGroup<ClientSource>(
-                title: "유입 경로",
-                options: ClientSource.values,
-                // Enum 리스트를 전달
-                groupValue: clientSource,
-                onChanged: (value) =>
-                    setState(() {
-                      clientSource = value;
-                    }),
-                otherInput: ClientSource.other,
-                otherLabel: "기타",
-                otherTextController: clientSourceOther,
-              ),
-            ),
-            SizedBox(
-              width: 800,
-              child: CustomEnumCheckboxGroup<TransactionType>(
-                title: "거래 유형",
-                options: TransactionType.values, // TransactionType Enum 사용
-                onChanged: (selected) {
+                ),
+                SizedBox(
+                  width: 800,
+                  child: CustomEnumCheckboxGroup<TransactionType>(
+                    title: "거래 유형",
+                    options: TransactionType.values, // TransactionType Enum 사용
+                    onChanged: (selected) {
+                      setState(() {
+                        clientExpectedTradeTypeList = selected; // 선택된 값으로 리스트 업데이트
+                      });
+                    },
+                  ),
+                ),
+                SizedBox(
+                  width: 400,
+                  child: CustomDatePicker(
+                    datePickerType: DatePickerType.date,
+                    label: "입주 예정일",
+                    selectedDateTime: clientExpectedMoveInDate,
+                    onChanged: (DateTime? date) {
+                      setState(() {
+                        clientExpectedMoveInDate = date;
+                      });
+                    },
+                  ),
+                ),
+                SizedBox(
+                  width: 800,
+                  child: CustomTextField(
+                    label: "특이사항",
+                    controller: TextEditingController(),
+                    maxLines: 4,
+                  ),
+                ),
+                TextButton(onPressed: (){
                   setState(() {
-                    clientExpectedTradeTypeList = selected; // 선택된 값으로 리스트 업데이트
+                    clientName.text = "TEMP_홍길동";
+                    clientPhoneNumber.text = "TEMP_010-1234-5678";
+                    clientGender = GenderType.male;
+                    clientType = ClientType.worker;
+                    clientTypeOther.text = "TEMP_기타사유";
+                    clientSource = ClientSource.walking;
+                    clientSourceOther.text = "TEMP_기타경로";
+                    clientExpectedMoveInDate = DateTime.now().add(const Duration(days: 30));
+                    clientExpectedTradeTypeList = [TransactionType.monthly, TransactionType.jeonse];
+                    clientRemark.text = "TEMP_테스트 데이터입니다.";
                   });
-                },
+                }, child: Text("생플 데이터 세팅")),
+              ],
+            ),
+          ),
+          if (_isLoading)
+            Positioned.fill(
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: Colors.black.withAlpha(1), // 반투명 배경
+                ),
+                child: Center(
+                  child: RotatingHouseIndicator(),
+                ),
               ),
             ),
-            SizedBox(
-              width: 400,
-              child: CustomDatePicker(
-                datePickerType: DatePickerType.date,
-                label: "입주 예정일",
-                selectedDateTime: clientExpectedMoveInDate,
-                onChanged: (DateTime? date) {
-                  setState(() {
-                    clientExpectedMoveInDate = date;
-                  });
-                },
-              ),
-            ),
-            SizedBox(
-              width: 800,
-              child: CustomTextField(
-                label: "특이사항",
-                controller: TextEditingController(),
-                maxLines: 4,
-              ),
-            ),
-            TextButton(onPressed: (){
-              setState(() {
-                clientName.text = "TEMP_홍길동";
-                clientPhoneNumber.text = "TEMP_010-1234-5678";
-                clientGender = GenderType.male;
-                clientType = ClientType.worker;
-                clientTypeOther.text = "TEMP_기타사유";
-                clientSource = ClientSource.walking;
-                clientSourceOther.text = "TEMP_기타경로";
-                clientExpectedMoveInDate = DateTime.now().add(const Duration(days: 30));
-                clientExpectedTradeTypeList = [TransactionType.monthly, TransactionType.jeonse];
-                clientRemark.text = "TEMP_테스트 데이터입니다.";
-              });
-            }, child: Text("생플 데이터 세팅")),
-          ],
-        ),
+        ],
       );
     }
 

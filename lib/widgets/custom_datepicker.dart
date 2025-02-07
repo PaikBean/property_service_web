@@ -31,31 +31,23 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
     _updateDateText();
   }
 
+  @override
+  void didUpdateWidget(covariant CustomDatePicker oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.selectedDateTime != widget.selectedDateTime) {
+      _updateDateText(); // 새로운 값으로 업데이트
+    }
+  }
+
   /// 날짜 형식 업데이트
   void _updateDateText() {
-    if (widget.selectedDateTime != null) {
-      switch (widget.datePickerType) {
-        case DatePickerType.year:
-          selectedDateText.text = "${widget.selectedDateTime!.year}";
-          break;
-        case DatePickerType.month:
-          selectedDateText.text =
-          "${widget.selectedDateTime!.year}-${widget.selectedDateTime!.month.toString().padLeft(2, '0')}";
-          break;
-        case DatePickerType.date:
-          selectedDateText.text =
-          "${widget.selectedDateTime!.year}-${widget.selectedDateTime!.month.toString().padLeft(2, '0')}-${widget.selectedDateTime!.day.toString().padLeft(2, '0')}";
-          break;
-        case DatePickerType.datetime:
-          selectedDateText.text =
-          "${widget.selectedDateTime!.year}-${widget.selectedDateTime!.month.toString().padLeft(2, '0')}-${widget.selectedDateTime!.day.toString().padLeft(2, '0')} ${widget.selectedDateTime!.hour.toString().padLeft(2, '0')}:${widget.selectedDateTime!.minute.toString().padLeft(2, '0')}";
-          break;
-        default:
-          selectedDateText.text = "";
+    setState(() { // UI 변경 반영
+      if (widget.selectedDateTime != null) {
+        selectedDateText.text = _formatDate(widget.selectedDateTime!);
+      } else {
+        selectedDateText.text = "";
       }
-    } else {
-      selectedDateText.text = "";
-    }
+    });
   }
 
   /// 날짜 선택 핸들러
@@ -68,7 +60,7 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
       case DatePickerType.month:
         selected = await DatePickerUtils.selectYearMonth(context, widget.selectedDateTime);
         break;
-      case DatePickerType.date:   // 완료
+      case DatePickerType.date:
         selected = await DatePickerUtils.selectDate(context, widget.selectedDateTime);
         break;
       case DatePickerType.datetime:
@@ -79,10 +71,9 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
     }
 
     if (selected != null) {
-      // 부모 위젯에 변경된 값을 알림
       widget.onChanged?.call(selected);
       setState(() {
-        selectedDateText.text = _formatDate(selected!); // 날짜 형식 업데이트
+        selectedDateText.text = _formatDate(selected!);
       });
     }
   }
@@ -110,19 +101,19 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
       child: TextField(
         controller: selectedDateText,
         readOnly: true,
-        onTap: _handleDateSelection, // 날짜 선택 핸들러
+        onTap: _handleDateSelection,
         decoration: InputDecoration(
           alignLabelWithHint: true,
           labelText: widget.label,
           border: const OutlineInputBorder(),
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
-              color: AppColors.color5, // 초록색 강조
+              color: AppColors.color5,
               width: 2.0,
             ),
           ),
           labelStyle: TextStyle(
-            color: AppColors.color5, // 라벨 텍스트 색상
+            color: AppColors.color5,
           ),
           suffixIcon: Icon(
             Icons.calendar_month,
@@ -133,3 +124,4 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
     );
   }
 }
+
