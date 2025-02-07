@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:property_service_web/core/enums/button_type.dart';
+import 'package:property_service_web/core/utils/dialog_utils.dart';
 import 'package:property_service_web/core/utils/format_utils.dart';
 import 'package:property_service_web/models/client_schedule_item_model.dart';
 import 'package:property_service_web/models/client_showing_property_model.dart';
 import 'package:property_service_web/models/client_summary_model.dart';
+import 'package:property_service_web/models/common/schedule_add_request.dart';
 import 'package:property_service_web/views/client/models/client_detail_model.dart';
 import 'package:property_service_web/views/client/models/client_schedule_model.dart';
 import 'package:property_service_web/views/client/models/showing_property_model.dart';
@@ -14,6 +16,8 @@ import 'package:property_service_web/widgets/sub_title.dart';
 
 import '../../core/enums/main_screen_type.dart';
 import 'package:property_service_web/views/client/models/remark_model.dart';
+import '../../core/utils/toast_manager.dart';
+import '../../models/common/remark_add_request.dart';
 import '../../widgets/grid/custom_grid.dart';
 import '../../widgets/rotating_house_indicator.dart';
 import 'models/client_summary_item.dart';
@@ -37,17 +41,56 @@ class _ClientListViewState extends State<ClientListView> {
 
   // 고객 일정 추가
   Future<void> fetchOnScheduleAdd() async {
-    print("스케쥴 등록 팝업");
+    ScheduleAddRequest? schedule = await DialogUtils.showAddScheduleDialog(context: context);
+    if(schedule != null) {
+      setState(() {
+        _isLoading = true; // 로딩 상태 활성화
+      });
+      print("일정 추가 : ${schedule.scheduleDateTime.toIso8601String()}");
+      await Future.delayed(Duration(seconds: 1)); // 예시를 위한 딜레이
+      setState(() {
+        _isLoading = false; // 로딩 상태 비활성화
+      });
+      ToastManager().showToast(context, "일정이 추가 되었습니다.");
+      // 데이터 재조회
+      onPressSideGridItem();
+    }
   }
 
   // 고객 보여줄 매물 추가
   Future<void> fetchOnShowingPropertyAdd() async {
-    print("고객 보여줄 매물 추가 팝업");
+    ScheduleAddRequest? schedule = await DialogUtils.showAddShowingPropertyDialog(context: context);
+    if(schedule != null) {
+      setState(() {
+        _isLoading = true; // 로딩 상태 활성화
+      });
+      await Future.delayed(Duration(seconds: 1)); // 예시를 위한 딜레이
+      setState(() {
+        _isLoading = false; // 로딩 상태 비활성화
+      });
+      ToastManager().showToast(context, "보여줄 매물이 추가 되었습니다.");
+      // 데이터 재조회
+      onPressSideGridItem();
+    }
   }
 
   // 고객 특이사항 추가
   Future<void> fetchRemarkAdd() async {
-    print("고객 특이사항 추가 팝업");
+    RemarkAddRequest? remark = await DialogUtils.showAddRemarkDialog(context: context);
+    if(remark != null) {
+      setState(() {
+        _isLoading = true; // 로딩 상태 활성화
+      });
+      print("특이사항 추가 : ${remark.remark}");
+      await Future.delayed(Duration(seconds: 1)); // 예시를 위한 딜레이
+      setState(() {
+        _isLoading = false; // 로딩 상태 비활성화
+      });
+
+      ToastManager().showToast(context, "특이사항이 추가 되었습니다.");
+      // 데이터 재조회
+      onPressSideGridItem();
+    }
   }
 
   // 고객 일정 삭제
@@ -64,7 +107,7 @@ class _ClientListViewState extends State<ClientListView> {
     setState(() {
       _isLoading = false; // 로딩 상태 비활성화
     });
-
+    ToastManager().showToast(context, "해당 일정이 삭제 되었습니다.");
     // 데이터 재조회
     onPressSideGridItem();
   }
@@ -74,13 +117,13 @@ class _ClientListViewState extends State<ClientListView> {
     setState(() {
       _isLoading = true; // 로딩 상태 활성화
     });
-    print("$showingPropertyId 삭제!");
 
     await Future.delayed(Duration(seconds: 1));     // todo 스케쥴 삭제 api 호출
 
     setState(() {
       _isLoading = false; // 로딩 상태 활성화
     });
+    ToastManager().showToast(context, "해당 보여줄 매물이 삭제 되었습니다.");
     onPressSideGridItem();    // 재조회
   }
 
@@ -89,13 +132,13 @@ class _ClientListViewState extends State<ClientListView> {
     setState(() {
       _isLoading = true; // 로딩 상태 활성화
     });
-
-    print("특이사항 $remarkId 삭제!");
+    
     await Future.delayed(Duration(seconds: 1));     // todo 스케쥴 삭제 api 호출
 
     setState(() {
       _isLoading = true; // 로딩 상태 활성화
     });
+    ToastManager().showToast(context, "해당 특이사항이 삭제 되었습니다.");
     onPressSideGridItem();    // 재조회
   }
 
@@ -111,9 +154,6 @@ class _ClientListViewState extends State<ClientListView> {
 
   // 고객 요약 목록 호출
   Future<List<Widget>> fetchClientSummaryItemList() async {
-    print("search : $searchConditionSelected");
-    print("search word : ${clientSearchWord.text}");
-
     List<ClientSummaryItem> clients = mockClientSummaryItems;     // todo 고객 요약 목록 조회 api 적용
 
     await Future.delayed(Duration(seconds: 1));
