@@ -15,7 +15,7 @@ class DialogUtils {
   }) async {
     await showDialog(
       context: context,
-      builder: (context) {
+      builder: (context)  {
         return AlertDialog(
           backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(

@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:property_service_web/core/enums/button_type.dart';
+import 'package:property_service_web/core/utils/format_utils.dart';
 import 'package:property_service_web/models/client_schedule_item_model.dart';
 import 'package:property_service_web/models/client_showing_property_model.dart';
 import 'package:property_service_web/models/client_summary_model.dart';
 import 'package:property_service_web/views/client/models/client_detail_model.dart';
-import 'package:property_service_web/widgets/client_schedule_grid.dart';
-import 'package:property_service_web/widgets/client_showing_property_grid.dart';
+import 'package:property_service_web/views/client/models/client_schedule_model.dart';
+import 'package:property_service_web/views/client/models/showing_property_model.dart';
+import 'package:property_service_web/widgets/grid/custom_grid_model.dart';
 import 'package:property_service_web/widgets/side_search_future_grid.dart';
 import 'package:property_service_web/widgets/sub_layout.dart';
 import 'package:property_service_web/widgets/sub_title.dart';
 
 import '../../core/enums/main_screen_type.dart';
-import '../../core/enums/transaction_type.dart';
-import '../../models/remark_model.dart';
+import 'package:property_service_web/views/client/models/remark_model.dart';
+import '../../widgets/grid/custom_grid.dart';
 import '../../widgets/remark_grid.dart';
 import '../../widgets/rotating_house_indicator.dart';
-import '../../widgets/side_search_grid.dart';
 import 'models/client_summary_item.dart';
 
 class ClientListView extends StatefulWidget {
@@ -37,44 +38,6 @@ class _ClientListViewState extends State<ClientListView> {
   late List<ClientSummaryModel> clientSummaryModelList;
   late List<Widget> gridItemList;
 
-  final List<RemarkModel> remarkModelList = [
-    RemarkModel(
-        id: 1,
-        remark: "특이사항1",
-        createdDate: "2024-01-01 13:00",
-        createdUserId: 1,
-        createdUserName: "김철수"),
-    RemarkModel(
-        id: 2,
-        remark: "특이사항2",
-        createdDate: "2024-01-01 13:00",
-        createdUserId: 1,
-        createdUserName: "홍길동"),
-    RemarkModel(
-        id: 3,
-        remark: "특이사항3",
-        createdDate: "2024-01-01 13:00",
-        createdUserId: 1,
-        createdUserName: "김미애"),
-    RemarkModel(
-        id: 4,
-        remark: "특이사항4",
-        createdDate: "2024-01-01 13:00",
-        createdUserId: 1,
-        createdUserName: "김군"),
-    RemarkModel(
-        id: 5,
-        remark: "특이사항5",
-        createdDate: "2024-01-01 13:00",
-        createdUserId: 1,
-        createdUserName: "임상"),
-    RemarkModel(
-        id: 6,
-        remark: "특이사항6",
-        createdDate: "2024-01-01 13:00",
-        createdUserId: 1,
-        createdUserName: "김철수"),
-  ];
   final List<ClientScheduleItemModel> clientScheduleModelList = [
     ClientScheduleItemModel(id: 1, scheduleManager: "김철수", scheduleDateTime: "2025.01.01 13:00", clientName: "홍길동", scheduleType: "상담"),
     ClientScheduleItemModel(id: 2, scheduleManager: "김철수", scheduleDateTime: "2025.01.02 13:00", clientName: "홍길동", scheduleType: "상담"),
@@ -106,6 +69,18 @@ class _ClientListViewState extends State<ClientListView> {
   Future<void> fetchClientDetail() async {
     await Future.delayed(Duration(seconds: 1));
     clientDetailModel = ClientDetailModel.fromJson(mockClientDetail);
+  }
+
+  // 고객 일정 삭제
+  Future<void> fetchOnScheduleDelete(int scheduleId) async {
+    print("$scheduleId 삭제!");
+    await Future.delayed(Duration(seconds: 1));     // todo 스케쥴 삭제 api 호출
+
+    onPressSideGridItem();    // 재조회
+  }
+
+  Future<void> fetchOnScheduleAdd() async {
+    print("스케쥴 등록 팝업");
   }
 
   @override
@@ -154,267 +129,287 @@ class _ClientListViewState extends State<ClientListView> {
       children: [
         SubLayout(
           mainScreenType: MainScreenType.ClientList,
-          buttonTypeList: [ButtonType.update],
+          buttonTypeList: clientDetailModel == null ? [] : [ButtonType.update],
           onUpdatePressed: () {},
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
                 width: 400,
-                height: 800,
+                height: 840,
                 child: SideSearchFutureGrid(
                   searchWord: clientSearchWord,
                   searchConditionList: searchConditionList,
+                  searchConditionListWidth: 152,
+                  hintText: "",
                   onSearchChanged: (value) {onSearchSideGrid();},
                   onSearchPressed: () {onSearchSideGrid();},
                   fetchGridItems: fetchClientSummaryItemList, // Future 함수 전달
                 ),
               ),
               SizedBox(width: 8),
-              Stack(
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SubTitle(title: "고객 정보"),
-                      SizedBox(height: 8),
-                      Container(
-                        width: 800,
-                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              width: 150,
-                              child: Row(
-                                children: [
-                                  Text(
-                                    "성함",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  SizedBox(width: 8),
-                                  Text(
-                                    "${clientDetailModel?.clientName} (${clientDetailModel?.genderType.label.substring(0,1)})" ?? "",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ],
+                  SubTitle(title: "고객 정보"),
+                  SizedBox(height: 8),
+                  Container(
+                    width: 800,
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 150,
+                          child: Row(
+                            children: [
+                              Text(
+                                "성함",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
-                            ),
-                            SizedBox(
-                              width: 200,
-                              child: Row(
-                                children: [
-                                  Text(
-                                    "전화번호",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  SizedBox(width: 8),
-                                  Text(
-                                    clientDetailModel?.clientPhoneNumber ?? "",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ],
+                              SizedBox(width: 8),
+                              Text(
+                                clientDetailModel != null && clientDetailModel?.clientName != null
+                                    ? "${clientDetailModel!.clientName}${clientDetailModel?.genderType != null ? " (${clientDetailModel!.genderType.label.substring(0,1)})" : ""}"
+                                    : "",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
-                            ),
-                            SizedBox(
-                              width: 150,
-                              child: Row(
-                                children: [
-                                  Text(
-                                    "담당자",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  SizedBox(width: 8),
-                                  Text(
-                                    clientDetailModel?.picManagerName ?? "",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(width: 40),
-                            SizedBox(
-                              width: 150,
-                              child: Row(
-                                children: [
-                                  Text(
-                                    "상태",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  SizedBox(width: 8),
-                                  Text(
-                                    clientDetailModel?.clientStatusType.label ?? "",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                      Container(
-                        width: 10000,
-                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              width: 150,
-                              child: Row(
-                                children: [
-                                  Text(
-                                    "유입경로",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  SizedBox(width: 8),
-                                  Text(
-                                    clientDetailModel?.clientSourceType.label ?? "",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ],
+                        SizedBox(
+                          width: 200,
+                          child: Row(
+                            children: [
+                              Text(
+                                "전화번호",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
-                            ),
-                            SizedBox(
-                              width: 150,
-                              child: Row(
-                                children: [
-                                  Text(
-                                    "고객 유형",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  SizedBox(width: 8),
-                                  Text(
-                                    clientDetailModel?.clientType.label ?? "",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ],
+                              SizedBox(width: 8),
+                              Text(
+                                clientDetailModel?.clientPhoneNumber ?? "",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
-                            ),
-                            SizedBox(width: 50),
-                            SizedBox(
-                              width: 150,
-                              child: Row(
-                                children: [
-                                  Text(
-                                    "거래유형",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  SizedBox(width: 8),
-                                  Text(
-                                    clientDetailModel?.clientExpectedTradeTypeList.first.label ?? "", // 쉼표로 연결
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ],
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          width: 150,
+                          child: Row(
+                            children: [
+                              Text(
+                                "담당자",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
-                            ),
-                            SizedBox(width: 40),
-                            SizedBox(
-                              width: 500,
-                              child: Row(
-                                children: [
-                                  Text(
-                                    "입주 예정일",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  SizedBox(width: 8),
-                                  Text(
-                                    clientDetailModel?.clientExpectedMoveInDate.toIso8601String() ?? "",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ],
+                              SizedBox(width: 8),
+                              Text(
+                                clientDetailModel?.picManagerName ?? "",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                      Container(
-                        width: 960,
-                        height: 256,
-                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        child: ClientScheduleGrid(
-                            clientScheduleItemList: clientScheduleModelList,
-                            onDelete: (id) {
-                              print(id);
-                            },
-                            onAddRemark: () {},
-                            showLabel: true
+                        SizedBox(width: 40),
+                        SizedBox(
+                          width: 150,
+                          child: Row(
+                            children: [
+                              Text(
+                                "상태",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              SizedBox(width: 8),
+                              Text(
+                                clientDetailModel?.clientStatusType.label ?? "",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Container(
+                    width: 1000,
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 150,
+                          child: Row(
+                            children: [
+                              Text(
+                                "유입경로",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              SizedBox(width: 8),
+                              Text(
+                                clientDetailModel?.clientSourceType.label ?? "",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      Container(
-                        width: 960,
-                        height: 256,
-                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        child: ClientShowingPropertyGrid(
-                          showingPropertyList: showingPropertyList,
-                          onDelete: (id) {
-                            print(id);
-                          },
-                          onAddRemark: () {},
-                          showLabel: true,
+                        SizedBox(
+                          width: 150,
+                          child: Row(
+                            children: [
+                              Text(
+                                "고객 유형",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              SizedBox(width: 8),
+                              Text(
+                                clientDetailModel?.clientType.label ?? "",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      Container(
-                        width: 960,
-                        height: 256,
-                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        child: RemarkGrid(
-                          remarkModel: remarkModelList,
-                          onDelete: (id) {
-                            print(id);
-                          },
-                          onAddRemark: () {},
-                          showLabel: true,
-                          isColab: true,
-                          isClientWidget: true,
+                        SizedBox(width: 50),
+                        SizedBox(
+                          width: 150,
+                          child: Row(
+                            children: [
+                              Text(
+                                "거래유형",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              SizedBox(width: 8),
+                              Text(
+                                clientDetailModel?.clientExpectedTradeTypeList.first.label ?? "", // 쉼표로 연결
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                        SizedBox(width: 40),
+                        SizedBox(
+                          width: 200,
+                          child: Row(
+                            children: [
+                              Text(
+                                "입주 예정일",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              SizedBox(width: 8),
+                              Text(
+                                clientDetailModel == null ? "" : FormatUtils.formatToYYYYMMDD(clientDetailModel!.clientExpectedMoveInDate),
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    width: 960,
+                    height: 248,
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: ReusableGrid(
+                      title: "일정",
+                      itemList: clientDetailModel == null
+                          ? []
+                          : clientDetailModel!.clientScheduleList.map((schedule)=> _buildClientScheduleItem(schedule)).toList(),
+                      columns: [
+                        CustomGridModel(header: "담당자", flex: 1),
+                        CustomGridModel(header: "일시", flex: 1),
+                        CustomGridModel(header: "일정 유형", flex: 1),
+                        CustomGridModel(header: "특이 사항", flex: 2),
+                      ],
+                      onPressAdd: clientDetailModel == null ? null : () => fetchOnScheduleAdd(),
+                      canDelete: true,
+                      contentGridHeight: 150,
+                      isToggle: false,
+                    ),
+                  ),
+                  Container(
+                    width: 960,
+                    height: 248,
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: ReusableGrid(
+                      title: "보여줄 매물",
+                      itemList: clientDetailModel == null
+                          ? []
+                          : clientDetailModel!.showingPropertyList.map((property)=> _buildClientShowingPropertyItem(property)).toList(),
+                      columns: [
+                        CustomGridModel(header: "거래 유형", flex: 1),
+                        CustomGridModel(header: "매물 가격", flex: 1),
+                        CustomGridModel(header: "매물 형태", flex: 1),
+                        CustomGridModel(header: "매물 주소", flex: 2),
+                      ],
+                      onPressAdd: clientDetailModel == null ? null : () => fetchOnScheduleAdd(),
+                      canDelete: true,
+                      contentGridHeight: 150,
+                      isToggle: false,
+                    ),
+                  ),
+                  Container(
+                    width: 960,
+                    height: 288,
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: ReusableGrid(
+                      title: "특이사항",
+                      itemList: clientDetailModel == null
+                          ? []
+                          : clientDetailModel!.clientRemarkList.map((remark)=> _buildClientRemarkItem(remark)).toList(),
+                      columns: [
+                        CustomGridModel(header: "특이사항", flex: 3),
+                        CustomGridModel(header: "작성자", flex: 1),
+                        CustomGridModel(header: "작성일자", flex: 1),],
+                      onPressAdd: clientDetailModel == null ? null : () => fetchOnScheduleAdd(),
+                      canDelete: true,
+                      contentGridHeight: 150,
+                      isToggle: true,
+                    ),
                   ),
                 ],
               )
@@ -436,6 +431,177 @@ class _ClientListViewState extends State<ClientListView> {
       ],
     );
   }
+
+  Widget _buildClientRemarkItem(RemarkModel remark){
+
+    bool isHovered = false;
+
+    return MouseRegion(
+      onEnter: (_) => setState(() => isHovered = true),
+      onExit: (_) => setState(() => isHovered = false),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 3,
+            child: Center(
+              child: Text(
+                remark.remark,
+                style: TextStyle(fontSize: 14),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Center(
+              child: Text(
+                remark.createByUserName,
+                style: TextStyle(fontSize: 14),
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Center(
+              child: Text(
+                FormatUtils.formatToYYYYmmDDHHMM(remark.createdAt),
+                style: TextStyle(fontSize: 14),
+              ),
+            ),
+          ),
+          AnimatedOpacity(
+            opacity: isHovered ? 1.0 : 0.0,
+            duration: Duration(milliseconds: 100),
+            child: IconButton(
+              icon: Icon(Icons.delete, color: Colors.grey),
+              iconSize: 16, // 삭제 버튼 크기 조정
+              onPressed: () => fetchOnScheduleDelete(remark.remarkId),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildClientShowingPropertyItem(ShowingPropertyModel property){
+
+    bool isHovered = false;
+
+    return MouseRegion(
+      onEnter: (_) => setState(() => isHovered = true),
+      onExit: (_) => setState(() => isHovered = false),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: Center(
+              child: Text(
+                property.propertySellType,
+                style: TextStyle(fontSize: 14),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Center(
+              child: Text(
+                property.propertyPrice,
+                style: TextStyle(fontSize: 14),
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Center(
+              child: Text(
+                property.propertyType,
+                style: TextStyle(fontSize: 14),
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: Center(
+              child: Text(
+                property.propertyAddress,
+                style: TextStyle(fontSize: 14),
+              ),
+            ),
+          ),
+          AnimatedOpacity(
+            opacity: isHovered ? 1.0 : 0.0,
+            duration: Duration(milliseconds: 100),
+            child: IconButton(
+              icon: Icon(Icons.delete, color: Colors.grey),
+              iconSize: 16, // 삭제 버튼 크기 조정
+              onPressed: () => fetchOnScheduleDelete(property.showingPropertyId),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildClientScheduleItem(ClientScheduleModel clientSchedule){
+    
+    bool isHovered = false;
+    
+    return MouseRegion(
+      onEnter: (_) => setState(() => isHovered = true),
+      onExit: (_) => setState(() => isHovered = false),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: Center(
+              child: Text(
+                clientSchedule.picManagerName,
+                style: TextStyle(fontSize: 14),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Center(
+              child: Text(
+                clientSchedule.clientScheduleDateTime,
+                style: TextStyle(fontSize: 14),
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Center(
+              child: Text(
+                clientSchedule.clientScheduleType,
+                style: TextStyle(fontSize: 14),
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: Center(
+              child: Text(
+                clientSchedule.clientScheduleRemark,
+                style: TextStyle(fontSize: 14),
+              ),
+            ),
+          ),
+          AnimatedOpacity(
+            opacity: isHovered ? 1.0 : 0.0,
+            duration: Duration(milliseconds: 100),
+            child: IconButton(
+              icon: Icon(Icons.delete, color: Colors.grey),
+              iconSize: 16, // 삭제 버튼 크기 조정
+              onPressed: () => fetchOnScheduleDelete(clientSchedule.clientScheduleId),
+            ),
+          ),
+        ],
+      ),
+    );
+  } 
 
   Widget _buildClientItem(ClientSummaryItem clientSummaryItem) {
     return GestureDetector(
