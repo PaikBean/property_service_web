@@ -64,7 +64,7 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
         selected = await DatePickerUtils.selectDate(context, widget.selectedDateTime);
         break;
       case DatePickerType.datetime:
-        selected = await DatePickerUtils.selectDate(context, widget.selectedDateTime);
+        selected = await DatePickerUtils.selectDateTime(context, widget.selectedDateTime);
         break;
       default:
         break;

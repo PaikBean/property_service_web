@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:property_service_web/widgets/custom_text_field.dart';
@@ -5,35 +6,6 @@ import '../../widgets/custom_dropdown.dart';
 import '../constants/app_colors.dart';
 
 class DatePickerUtils {
-
-  // static Future<DateTime?> selectYearMonth(BuildContext context, DateTime? initialDate) async {
-  //   DateTime? selectedDate = await showDatePicker(
-  //     context: context,
-  //     initialDate: initialDate ?? DateTime.now(),
-  //     firstDate: DateTime(1900),
-  //     lastDate: DateTime(2100),
-  //     locale: const Locale('ko', 'KR'),
-  //     initialEntryMode: DatePickerEntryMode.input, // 텍스트 입력 모드
-  //     fieldHintText: "YYYY-MM", // 연월 입력 힌트
-  //     builder: (BuildContext context, Widget? child) {
-  //       return Theme(
-  //         data: Theme.of(context).copyWith(
-  //           colorScheme: ColorScheme.light(
-  //             primary: AppColors.color5,
-  //             onPrimary: Colors.white,
-  //             onSurface: Colors.black,
-  //           ),
-  //         ),
-  //         child: child!,
-  //       );
-  //     },
-  //   );
-  //
-  //   if (selectedDate != null) {
-  //     return DateTime(selectedDate.year, selectedDate.month);
-  //   }
-  //   return null;
-  // }
 
   /// 날짜 선택기
   static Future<DateTime?> selectDate(BuildContext context, DateTime? initialDate) async {
@@ -240,6 +212,76 @@ class DatePickerUtils {
           },
         );
       },
+    );
+  }
+
+  /// 날짜 및 시간 선택기
+  static Future<DateTime?> selectDateTime(BuildContext context, DateTime? initialDateTime) async {
+    DateTime initialDate = initialDateTime ?? DateTime.now();
+
+    // 날짜 선택
+    DateTime? selectedDate = await showDatePicker(
+      context: context,
+      initialDate: initialDate,
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100),
+      locale: const Locale('ko', 'KR'),
+      initialEntryMode: DatePickerEntryMode.calendarOnly,
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: AppColors.color5, // 강조 색상
+              onPrimary: Colors.white, // 텍스트 색상
+              onSurface: Colors.black, // 텍스트 색상
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (selectedDate == null) return null; // 날짜를 선택하지 않으면 종료
+
+    // 시간 선택
+    TimeOfDay? selectedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(initialDate),
+      initialEntryMode: TimePickerEntryMode.inputOnly,
+      builder: (BuildContext context, Widget? child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+          child: Theme(
+            data: Theme.of(context).copyWith(
+              timePickerTheme: TimePickerThemeData(
+                // helpTextStyle: TextStyle(     // 시간 선택기 타이틀 속성 변경
+                //   fontSize: 24,
+                //   fontWeight: FontWeight.bold
+                // ),
+                timeSelectorSeparatorColor: WidgetStateProperty.all(Colors.white),    // 가운데 : 표시 흰색으로 없앰
+                // ),
+              ),
+              colorScheme: ColorScheme.light(
+                primary: AppColors.color5, // 강조 색상
+                onPrimary: Colors.white, // 텍스트 색상
+                onSurface: Colors.black, // 텍스트 색상
+              ),
+            ),
+            child: child!,
+          ),
+        );
+      },
+    );
+
+    if (selectedTime == null) return null; // 시간을 선택하지 않으면 종료
+
+    // 날짜와 시간을 합쳐서 반환
+    return DateTime(
+      selectedDate.year,
+      selectedDate.month,
+      selectedDate.day,
+      selectedTime.hour,
+      selectedTime.minute,
     );
   }
 }
