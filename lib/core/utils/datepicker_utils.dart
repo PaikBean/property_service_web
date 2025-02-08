@@ -284,4 +284,102 @@ class DatePickerUtils {
       selectedTime.minute,
     );
   }
+
+  /// 년도 선택기
+  static Future<int?> selectYear(BuildContext context, int? initialYear) async {
+    int selectedYear = initialYear ?? DateTime.now().year;
+    TextEditingController yearController = TextEditingController(text: selectedYear.toString());
+
+    return await showDialog<int>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Dialog(
+              backgroundColor: Colors.transparent,
+              child: Container(
+                width: 300,
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // 제목
+                    const Text(
+                      "년도 선택",
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                    ),
+                    const SizedBox(height: 12),
+
+                    // 연도 선택 영역
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              selectedYear--;
+                              yearController.text = selectedYear.toString();
+                            });
+                          },
+                          child: const Icon(Icons.arrow_left, size: 32),
+                        ),
+                        SizedBox(
+                          width: 80,
+                          child: TextField(
+                            controller: yearController,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                            textAlign: TextAlign.center,
+                            decoration: const InputDecoration(border: OutlineInputBorder()),
+                            onChanged: (value) {
+                              if (value.isNotEmpty) {
+                                setState(() {
+                                  selectedYear = int.tryParse(value) ?? selectedYear;
+                                });
+                              }
+                            },
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              selectedYear++;
+                              yearController.text = selectedYear.toString();
+                            });
+                          },
+                          child: const Icon(Icons.arrow_right, size: 32),
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    // 버튼 (취소 & 선택)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(null),
+                          child: Text("취소", style: TextStyle(color: AppColors.color5)),
+                        ),
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(selectedYear),
+                          child: Text("선택", style: TextStyle(color: AppColors.color5)),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
 }

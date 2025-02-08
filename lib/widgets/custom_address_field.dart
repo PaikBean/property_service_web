@@ -7,7 +7,8 @@ class CustomAddressField extends StatefulWidget {
   final String label;
   String? zipCode;
   String? address;
-  CustomAddressField({super.key, required this.label, required this.zipCode, required this.address});
+  final Function(String?, String?)? onChanged; // 추가
+  CustomAddressField({super.key, required this.label, required this.zipCode, required this.address, this.onChanged});
 
   @override
   State<CustomAddressField> createState() => _CustomAddressFieldState();
@@ -15,6 +16,25 @@ class CustomAddressField extends StatefulWidget {
 
 class _CustomAddressFieldState extends State<CustomAddressField> {
   late TextEditingController controller;
+
+  @override
+  void didUpdateWidget(covariant CustomAddressField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.zipCode != widget.zipCode || oldWidget.address != widget.address) {
+      controller.text = _buildAddressText(widget.zipCode, widget.address);
+    }
+  }
+
+  String _buildAddressText(String? zipCode, String? address) {
+    if ((zipCode == null || zipCode.isEmpty) && (address == null || address.isEmpty)) {
+      return ""; // zipCode와 address가 모두 비어있으면 빈 문자열 반환
+    } else if (zipCode != null && zipCode.isNotEmpty) {
+      return "($zipCode) ${address ?? ""}";
+    } else {
+      return address ?? "";
+    }
+  }
+
 
   @override
   void initState() {
@@ -25,6 +45,7 @@ class _CustomAddressFieldState extends State<CustomAddressField> {
     );
     super.initState();
   }
+
   void _selectAddress() async {
     KakaoAddress? result = await DialogUtils.showAddressSearchDialog(context: context);
     print('onComplete KakaoAddress: $result');
@@ -35,6 +56,7 @@ class _CustomAddressFieldState extends State<CustomAddressField> {
         widget.zipCode = result.postCode;
         widget.address = result.address;
         controller.text = "(${widget.zipCode}) ${widget.address}";
+        widget.onChanged?.call(widget.zipCode, widget.address);
       });
     } else {
       print('주소 선택이 취소되었습니다.');
