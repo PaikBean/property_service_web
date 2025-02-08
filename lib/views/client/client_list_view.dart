@@ -269,8 +269,6 @@ class _ClientListViewState extends State<ClientListView> {
 
         ToastManager().showToast(context, "상태가 변경되었습니다.");
 
-        // 입주 완료?
-
         // 데이터 재조회
         onPressSideGridItem();
       }
