@@ -26,6 +26,107 @@ import '../constants/app_colors.dart';
 import '../enums/transaction_type.dart';
 
 class DialogUtils {
+
+  static Future<T?> showCustomDialog<T>({
+    required BuildContext context,
+    required String title,
+    required Widget child,
+    double maxWidth = 400,
+    String confirmText = "저장",
+    String cancelText = "취소",
+    Future<T?> Function()? onConfirm, // ✅ Future<T?> 적용
+  }) async {
+    final result = await showDialog<T?>(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16), // 테두리 둥근 정도
+          ),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: maxWidth,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 20, // 제목 글자 크기
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                  child,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop(); // "취소" 선택 시 닫기
+                          },
+                          style: ButtonStyle(
+                            overlayColor: WidgetStateProperty.all(
+                              AppColors.color5.withAlpha(32),
+                            ),
+                          ),
+                          child: Text(
+                            cancelText,
+                            style: const TextStyle(
+                              fontSize: 16, // 버튼 글자 크기
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.color5,
+                            ),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            if (onConfirm != null) {
+                              final result = await onConfirm(); // ✅ await 추가
+                              Navigator.of(context).pop(result); // 결과 전달
+                            } else {
+                              Navigator.of(context).pop();
+                            }
+                          },
+                          style: ButtonStyle(
+                            overlayColor: WidgetStateProperty.all(
+                              AppColors.color5.withAlpha(32),
+                            ),
+                          ),
+                          child: Text(
+                            confirmText,
+                            style: const TextStyle(
+                              fontSize: 16, // 버튼 글자 크기
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.color5,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+    return result;
+  }
+
+
+
   /// 경고 메시지를 보여주는 다이얼로그
   static Future<void> showAlertDialog({
     required BuildContext context,
