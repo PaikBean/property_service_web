@@ -5,9 +5,11 @@ import 'package:property_service_web/core/utils/dialog_utils.dart';
 import 'package:property_service_web/core/utils/format_utils.dart';
 import 'package:property_service_web/models/common/schedule_add_request.dart';
 import 'package:property_service_web/views/client/enums/client_source_type.dart';
+import 'package:property_service_web/views/client/enums/client_status_type.dart';
 import 'package:property_service_web/views/client/enums/client_type_code.dart';
 import 'package:property_service_web/views/client/models/client_detail_model.dart';
 import 'package:property_service_web/views/client/models/client_schedule_model.dart';
+import 'package:property_service_web/views/client/models/revenue_register_model.dart';
 import 'package:property_service_web/views/client/models/showing_property_model.dart';
 import 'package:property_service_web/widgets/grid/custom_grid_model.dart';
 import 'package:property_service_web/widgets/side_search_future_grid.dart';
@@ -230,6 +232,51 @@ class _ClientListViewState extends State<ClientListView> {
     }
   }
 
+  // 고객 상태 업데이트
+  Future<void> fetchChangeClientStatus() async {
+    ClientStatusType? statusType = await DialogUtils.showChangeClientStatusDialog(context: context, clientStatusType: clientDetailModel!.clientStatusType);
+    if(statusType != null) {
+      if(statusType == ClientStatusType.contractCompleted){
+        // 계약 완료
+        RevenueRegisterModel? revenueRegisterData = await DialogUtils.showRevenueRegisterDialog(context: context, client: clientDetailModel!, showingPropertyList: clientDetailModel!.showingPropertyList);
+
+        if(revenueRegisterData != null) {
+          setState(() {
+            _isLoading = true; // 로딩 상태 활성화
+          });
+
+          await Future.delayed(Duration(seconds: 1)); // 예시를 위한 딜레이
+          setState(() {
+            _isLoading = false; // 로딩 상태 비활성화
+          });
+
+          ToastManager().showToast(context, "매출 등록되었습니다.");
+
+          // 입주 완료?
+
+          // 데이터 재조회
+          onPressSideGridItem();
+        }
+      } else {
+        setState(() {
+          _isLoading = true; // 로딩 상태 활성화
+        });
+
+        await Future.delayed(Duration(seconds: 1)); // 예시를 위한 딜레이
+        setState(() {
+          _isLoading = false; // 로딩 상태 비활성화
+        });
+
+        ToastManager().showToast(context, "상태가 변경되었습니다.");
+
+        // 입주 완료?
+
+        // 데이터 재조회
+        onPressSideGridItem();
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -348,11 +395,16 @@ class _ClientListViewState extends State<ClientListView> {
                                 ),
                               ),
                               SizedBox(width: 8),
-                              Text(
-                                clientDetailModel?.clientStatusType.label ?? "",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
+                              GestureDetector(
+                                onTap: () async {
+                                  fetchChangeClientStatus();
+                                },
+                                child: Text(
+                                  clientDetailModel?.clientStatusType.label ?? "",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                  ),
                                 ),
                               ),
                             ],
@@ -820,6 +872,70 @@ class _BuildClientShowingPropertyItemState extends State<BuildClientShowingPrope
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class BuildRevenueRegisterPropertyItem extends StatefulWidget {
+  final ShowingPropertyModel property;
+  final Future<void> Function(int id) onSelected;
+  final bool isSelected;
+  const BuildRevenueRegisterPropertyItem({super.key, required this.property, required this.onSelected, required this.isSelected});
+
+  @override
+  State<BuildRevenueRegisterPropertyItem> createState() => _BuildRevenueRegisterPropertyItemState();
+}
+
+class _BuildRevenueRegisterPropertyItemState extends State<BuildRevenueRegisterPropertyItem> {
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => widget.onSelected(widget.property.showingPropertyId),
+      child: Container(
+        height: 36,
+        color: widget.isSelected ? Colors.grey[200] : null,
+        child: Row(
+          children: [
+            Expanded(
+              flex: 1,
+              child: Center(
+                child: Text(
+                  widget.property.propertySellType,
+                  style: TextStyle(fontSize: 14),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Center(
+                child: Text(
+                  widget.property.propertyPrice,
+                  style: TextStyle(fontSize: 14),
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Center(
+                child: Text(
+                  widget.property.propertyType,
+                  style: TextStyle(fontSize: 14),
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Center(
+                child: Text(
+                  widget.property.propertyAddress,
+                  style: TextStyle(fontSize: 14),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
