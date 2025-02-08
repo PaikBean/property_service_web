@@ -4,6 +4,7 @@ import 'custom_text_field.dart';
 class CustomEnumCheckboxGroup<T> extends StatefulWidget {
   final String title;
   final List<T> options; // Enum 또는 String을 지원
+  final List<T>? selectedValues;
   final T? otherInput;
   final String? otherLabel;
   final double otherInputBoxWidth;
@@ -14,6 +15,7 @@ class CustomEnumCheckboxGroup<T> extends StatefulWidget {
     super.key,
     required this.title,
     required this.options,
+    this.selectedValues,
     required this.onChanged,
     this.otherInput,
     this.otherLabel,
@@ -27,6 +29,15 @@ class CustomEnumCheckboxGroup<T> extends StatefulWidget {
 
 class _CustomEnumCheckboxGroupState<T> extends State<CustomEnumCheckboxGroup<T>> {
   List<T> _selectedValues = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    if(widget.selectedValues != null){
+      _selectedValues = List.from(widget.selectedValues!);
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

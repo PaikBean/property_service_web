@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:property_service_web/core/enums/button_type.dart';
+import 'package:property_service_web/core/enums/transaction_type.dart';
 import 'package:property_service_web/core/utils/dialog_utils.dart';
 import 'package:property_service_web/core/utils/format_utils.dart';
-import 'package:property_service_web/models/client_schedule_item_model.dart';
-import 'package:property_service_web/models/client_showing_property_model.dart';
-import 'package:property_service_web/models/client_summary_model.dart';
 import 'package:property_service_web/models/common/schedule_add_request.dart';
+import 'package:property_service_web/views/client/enums/client_source_type.dart';
+import 'package:property_service_web/views/client/enums/client_type_code.dart';
 import 'package:property_service_web/views/client/models/client_detail_model.dart';
 import 'package:property_service_web/views/client/models/client_schedule_model.dart';
 import 'package:property_service_web/views/client/models/showing_property_model.dart';
@@ -21,6 +21,7 @@ import '../../models/common/remark_add_request.dart';
 import '../../widgets/grid/custom_grid.dart';
 import '../../widgets/rotating_house_indicator.dart';
 import 'models/client_summary_item.dart';
+import 'models/client_update_model.dart';
 
 class ClientListView extends StatefulWidget {
   const ClientListView({super.key});
@@ -179,6 +180,7 @@ class _ClientListViewState extends State<ClientListView> {
     clientDetailModel = ClientDetailModel.fromJson(mockClientDetail);
   }
 
+  // 고객 정보 업데이트
   Future<void> fetchUpdateClientDetail() async {
     bool clientUpdateNow = await DialogUtils.showConfirmDialog(context: context, title: "수정 진입", content: "고객 정보를 수정하시겠습니까?");
     if(clientUpdateNow){
@@ -194,15 +196,20 @@ class _ClientListViewState extends State<ClientListView> {
         setState(() {
           _isLoading = false; // 로딩 종료
         });
+
         DialogUtils.showAlertDialog(context: context, title: "수정 진입 실패", content: "다른 사용자가 수정 중 입니다.");
+
       } else{
-        ClientDetailModel client = clientDetailModel!;
         await Future.delayed(Duration(seconds: 1)); // 고객 정보 받아오기 api
+        ClientUpdateModel client = ClientUpdateModel(clientId: 1, clientName: "홍길동", clientPhoneNumber: "010-1234-1234", picManagerName: "김철수", clientType: ClientType.worker, clientSourceType: ClientSource.walking, clientExpectedMoveInDate: DateTime.now(), clientExpectedTradeTypeList: [TransactionType.monthly, TransactionType.jeonse]);
+
         setState(() {
           _isLoading = false; // 로딩 종료
         });
 
-        ClientDetailModel? updateClient = await DialogUtils.showUpdateClientDialog(context: context, client: client);
+        ClientUpdateModel? updateClient = await DialogUtils.showUpdateClientDialog(context: context, client: client);
+
+        print(updateClient == null);
 
         if(updateClient != null){
           setState(() {

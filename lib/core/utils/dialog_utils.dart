@@ -12,6 +12,7 @@ import 'package:property_service_web/widgets/rotating_house_indicator.dart';
 
 import '../../views/client/enums/client_source_type.dart';
 import '../../views/client/enums/client_type_code.dart';
+import '../../views/client/models/client_update_model.dart';
 import '../../widgets/custom_enum_check_box_group.dart';
 import '../../widgets/custom_enum_radio_group.dart';
 import '../constants/app_colors.dart';
@@ -578,9 +579,9 @@ class DialogUtils {
   }
 
   /// 고객 정보 수정 다이얼로그
-  static Future<ClientDetailModel?> showUpdateClientDialog({
+  static Future<ClientUpdateModel?> showUpdateClientDialog({
     required BuildContext context,
-    required ClientDetailModel client,
+    required ClientUpdateModel client,
     String confirmText = "저장",
     String cancelText = "취소",
   }) async {
@@ -589,15 +590,15 @@ class DialogUtils {
     TextEditingController clientPhoneNumber = TextEditingController(text: client.clientPhoneNumber);
 
     ClientType clientType = client.clientType;
-    TextEditingController clientTypeOther = TextEditingController(text: cli);
+    TextEditingController clientTypeOther = TextEditingController(text: client.clientTypeOther);
 
-    ClientSource? clientSource;
-    TextEditingController clientSourceOther = TextEditingController();
+    ClientSource clientSource = client.clientSourceType;
+    TextEditingController clientSourceOther = TextEditingController(text: client.clientSourceTypeOther);
 
-    DateTime? clientExpectedMoveInDate;
-    List<TransactionType> clientExpectedTradeTypeList = [];
+    DateTime clientExpectedMoveInDate = client.clientExpectedMoveInDate;
+    List<TransactionType> clientExpectedTradeTypeList = client.clientExpectedTradeTypeList;
 
-    ClientDetailModel? clientDetailModel = await showDialog<ClientDetailModel>(
+    ClientUpdateModel? clientUpdateModel = await showDialog<ClientUpdateModel>(
       context: context,
       builder: (context) {
         return Dialog(
@@ -649,7 +650,7 @@ class DialogUtils {
                               groupValue: clientType,
                               onChanged: (value) =>
                                   setState(() {
-                                    clientType = value;
+                                    clientType = value!;
                                   }),
                               otherInput: ClientType.other,
                               otherLabel: "기타",
@@ -667,7 +668,7 @@ class DialogUtils {
                           groupValue: clientSource,
                           onChanged: (value) =>
                               setState(() {
-                                clientSource = value;
+                                clientSource = value!;
                               }),
                           otherInput: ClientSource.other,
                           otherLabel: "기타",
@@ -679,6 +680,7 @@ class DialogUtils {
                         child: CustomEnumCheckboxGroup<TransactionType>(
                           title: "거래 유형",
                           options: TransactionType.values, // TransactionType Enum 사용
+                          selectedValues: clientExpectedTradeTypeList,
                           onChanged: (selected) {
                             setState(() {
                               clientExpectedTradeTypeList = selected; // 선택된 값으로 리스트 업데이트
@@ -694,7 +696,7 @@ class DialogUtils {
                           selectedDateTime: clientExpectedMoveInDate,
                           onChanged: (DateTime? date) {
                             setState(() {
-                              clientExpectedMoveInDate = date;
+                              clientExpectedMoveInDate = date!;
                             });
                           },
                         ),
@@ -725,8 +727,26 @@ class DialogUtils {
                             TextButton(
                               onPressed: () {
 
-                                Navigator.of(context).pop();
-
+                                if(clientName.text.isEmpty) {
+                                  DialogUtils.showAlertDialog(context: context, title: "입력 확인", content: "성함을 입력해주세요.");
+                                } else if(clientPhoneNumber.text.isEmpty){
+                                  DialogUtils.showAlertDialog(context: context, title: "입력 확인", content: "전화번호를 입력해주세요.");
+                                } else if(clientExpectedTradeTypeList.isEmpty){
+                                DialogUtils.showAlertDialog(context: context, title: "입력 확인", content: "거래 유형을 선택해 주세요.");
+                                } else{
+                                Navigator.of(context).pop(ClientUpdateModel(
+                                  clientId: client.clientId,
+                                  clientName: clientName.text,
+                                  clientPhoneNumber: clientPhoneNumber.text,
+                                  picManagerName: client.picManagerName,
+                                  clientType: clientType,
+                                  clientTypeOther: clientTypeOther.text,
+                                  clientSourceType: clientSource,
+                                  clientSourceTypeOther: clientSourceOther.text,
+                                  clientExpectedMoveInDate: clientExpectedMoveInDate,
+                                  clientExpectedTradeTypeList: clientExpectedTradeTypeList,
+                                  ));
+                                }
                               },
                               style: ButtonStyle(
                                 overlayColor: WidgetStateProperty.all(
@@ -755,7 +775,7 @@ class DialogUtils {
       },
     );
 
-    return clientDetailModel;
+    return clientUpdateModel;
   }
 
 }
