@@ -179,6 +179,49 @@ class _ClientListViewState extends State<ClientListView> {
     clientDetailModel = ClientDetailModel.fromJson(mockClientDetail);
   }
 
+  Future<void> fetchUpdateClientDetail() async {
+    bool clientUpdateNow = await DialogUtils.showConfirmDialog(context: context, title: "수정 진입", content: "고객 정보를 수정하시겠습니까?");
+    if(clientUpdateNow){
+
+      setState(() {
+        _isLoading = true; // 로딩 시작
+      });
+
+      await Future.delayed(Duration(seconds: 1)); // todo 수정 가능 여부 확인 및 락 api 호출
+
+
+      if(DateTime.now().second%2 == 0){
+        setState(() {
+          _isLoading = false; // 로딩 종료
+        });
+        DialogUtils.showAlertDialog(context: context, title: "수정 진입 실패", content: "다른 사용자가 수정 중 입니다.");
+      } else{
+        ClientDetailModel client = clientDetailModel!;
+        await Future.delayed(Duration(seconds: 1)); // 고객 정보 받아오기 api
+        setState(() {
+          _isLoading = false; // 로딩 종료
+        });
+
+        ClientDetailModel? updateClient = await DialogUtils.showUpdateClientDialog(context: context, client: client);
+
+        if(updateClient != null){
+          setState(() {
+            _isLoading = true; // 로딩 상태 활성화
+          });
+
+          await Future.delayed(Duration(seconds: 1)); // 고객 정보 업데이트 api
+
+          setState(() {
+            _isLoading = false; // 로딩 상태 비활성화
+          });
+
+          ToastManager().showToast(context, "고객정보가 수정 되었습니다.");
+          // 데이터 재조회
+          onPressSideGridItem();
+        }
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -187,7 +230,9 @@ class _ClientListViewState extends State<ClientListView> {
         SubLayout(
           mainScreenType: MainScreenType.ClientList,
           buttonTypeList: clientDetailModel == null ? [] : [ButtonType.update],
-          onUpdatePressed: () {},
+          onUpdatePressed: () async {
+            await fetchUpdateClientDetail();
+          },
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

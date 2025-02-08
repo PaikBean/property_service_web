@@ -5,12 +5,17 @@ import 'package:property_service_web/core/utils/custom_kakao_address_widget.dart
 import 'package:property_service_web/models/common/remark_add_request.dart';
 import 'package:property_service_web/models/common/schedule_add_request.dart';
 import 'package:property_service_web/views/client/enums/schedule_type.dart';
+import 'package:property_service_web/views/client/models/client_detail_model.dart';
 import 'package:property_service_web/widgets/custom_datepicker.dart';
 import 'package:property_service_web/widgets/custom_text_field.dart';
 import 'package:property_service_web/widgets/rotating_house_indicator.dart';
 
+import '../../views/client/enums/client_source_type.dart';
+import '../../views/client/enums/client_type_code.dart';
+import '../../widgets/custom_enum_check_box_group.dart';
 import '../../widgets/custom_enum_radio_group.dart';
 import '../constants/app_colors.dart';
+import '../enums/transaction_type.dart';
 
 class DialogUtils {
   /// 경고 메시지를 보여주는 다이얼로그
@@ -469,6 +474,7 @@ class DialogUtils {
     return scheduleAddRequest;
   }
 
+  /// 보여줄 매물 추가 다이얼로그
   static Future<ScheduleAddRequest?> showAddShowingPropertyDialog({
     required BuildContext context,
     String confirmText = "저장",
@@ -570,4 +576,186 @@ class DialogUtils {
 
     return scheduleAddRequest;
   }
+
+  /// 고객 정보 수정 다이얼로그
+  static Future<ClientDetailModel?> showUpdateClientDialog({
+    required BuildContext context,
+    required ClientDetailModel client,
+    String confirmText = "저장",
+    String cancelText = "취소",
+  }) async {
+
+    TextEditingController clientName = TextEditingController(text: client.clientName);
+    TextEditingController clientPhoneNumber = TextEditingController(text: client.clientPhoneNumber);
+
+    ClientType clientType = client.clientType;
+    TextEditingController clientTypeOther = TextEditingController(text: cli);
+
+    ClientSource? clientSource;
+    TextEditingController clientSourceOther = TextEditingController();
+
+    DateTime? clientExpectedMoveInDate;
+    List<TransactionType> clientExpectedTradeTypeList = [];
+
+    ClientDetailModel? clientDetailModel = await showDialog<ClientDetailModel>(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16), // 테두리 둥근 정도
+          ),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: 1000, // 다이얼로그 최대 너비
+            ),
+            child: StatefulBuilder(
+              builder: (context, setState) {
+                return Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "고객 정보 수정",
+                          style: const TextStyle(
+                            fontSize: 20, // 제목 글자 크기
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                      // 담당자는 일정 등록한 사람 그대로..
+                      SizedBox(
+                        width: 200,
+                        child: CustomTextField(label: "성함", controller: clientName),
+                      ),
+                      SizedBox(
+                        width: 800,
+                        child: CustomTextField(
+                            label: "전화번호", controller: clientPhoneNumber),
+                      ),
+                      SizedBox(
+                        width: 1000,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            CustomEnumRadioGroup<ClientType>(
+                              title: "고객 유형",
+                              options: ClientType.values,
+                              groupValue: clientType,
+                              onChanged: (value) =>
+                                  setState(() {
+                                    clientType = value;
+                                  }),
+                              otherInput: ClientType.other,
+                              otherLabel: "기타",
+                              otherTextController: clientTypeOther,
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        width: 800,
+                        child: CustomEnumRadioGroup<ClientSource>(
+                          title: "유입 경로",
+                          options: ClientSource.values,
+                          // Enum 리스트를 전달
+                          groupValue: clientSource,
+                          onChanged: (value) =>
+                              setState(() {
+                                clientSource = value;
+                              }),
+                          otherInput: ClientSource.other,
+                          otherLabel: "기타",
+                          otherTextController: clientSourceOther,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 800,
+                        child: CustomEnumCheckboxGroup<TransactionType>(
+                          title: "거래 유형",
+                          options: TransactionType.values, // TransactionType Enum 사용
+                          onChanged: (selected) {
+                            setState(() {
+                              clientExpectedTradeTypeList = selected; // 선택된 값으로 리스트 업데이트
+                            });
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        width: 400,
+                        child: CustomDatePicker(
+                          datePickerType: DatePickerType.date,
+                          label: "입주 예정일",
+                          selectedDateTime: clientExpectedMoveInDate,
+                          onChanged: (DateTime? date) {
+                            setState(() {
+                              clientExpectedMoveInDate = date;
+                            });
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(); // "취소" 선택 시 닫기
+                              },
+                              style: ButtonStyle(
+                                overlayColor: WidgetStateProperty.all(
+                                  AppColors.color5.withAlpha(32),
+                                ),
+                              ),
+                              child: Text(
+                                cancelText,
+                                style: const TextStyle(
+                                  fontSize: 16, // 버튼 글자 크기
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.color5,
+                                ),
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () {
+
+                                Navigator.of(context).pop();
+
+                              },
+                              style: ButtonStyle(
+                                overlayColor: WidgetStateProperty.all(
+                                  AppColors.color5.withAlpha(32),
+                                ),
+                              ),
+                              child: Text(
+                                confirmText,
+                                style: const TextStyle(
+                                  fontSize: 16, // 버튼 글자 크기
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.color5,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+      },
+    );
+
+    return clientDetailModel;
+  }
+
 }
