@@ -58,7 +58,7 @@ class RevenueGrid extends StatelessWidget {
                   ),
                   SizedBox(width: 8),
                   Text(
-                    "2,4400,000 ",
+                    "24,400,000 ",
                     style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w400

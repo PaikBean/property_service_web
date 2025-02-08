@@ -27,7 +27,7 @@ class _RevenueListViewState extends State<RevenueListView> {
   String clientSourceType = "전체";
   String commissionFeeCondition = "전체";
 
-  final List<String> searchConditionList = ["전체", "담당자", "고객", "주소",];
+  final List<String> searchConditionList = ["전체", "담당자", "고객", "주소", "임대인"];
   final List<RevenueItemModel> revenueList = [
     RevenueItemModel(id: 1, managerName: "김철수", clientName: "고객1", clientSource: "지인 추천", propertyOwnerName: "임대인1", propertyAddress: "서울특별시 강동구 풍성로99길 99 101호", propertySellType: "월세", propertySellPrice: "300/30 만 원", commissionFee: "15만원", moveInDate: "2024.01.01"),
     RevenueItemModel(id: 2, managerName: "이영희", clientName: "고객2", clientSource: "네이버 검색", propertyOwnerName: "임대인2", propertyAddress: "서울특별시 송파구 올림픽로 55", propertySellType: "전세", propertySellPrice: "2억 5000만원", commissionFee: "100만원", moveInDate: "2024.02.01"),
@@ -150,8 +150,8 @@ class _RevenueListViewState extends State<RevenueListView> {
                   SizedBox(
                     width: 440,
                     child: CustomRadioGroup(
-                      title: "매물 거래 유형",
-                      options: ["전체", "월세", "전세", "매매", "단기"],
+                      title: "거래 유형",
+                      options: ["전체", "월세", "전세", "단기"],
                       groupValue: propertyType,
                       onChanged: (value) =>
                           setState(() => propertyType = value!),
@@ -167,53 +167,6 @@ class _RevenueListViewState extends State<RevenueListView> {
                           setState(() => clientSourceType = value!),
                     ),
                   ),
-                  SizedBox(
-                    width: 440,
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          height: 80,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(left: 4),
-                                child: Text(
-                                  "중개 수수료",
-                                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-                                ),
-                              ),
-                              SizedBox(height: 8),
-                              Row(
-                                children: ["전체", "이상", "이하"].map((option) {
-                                  return Row(
-                                    children: [
-                                      Radio<String>(
-                                        value: option,
-                                        groupValue: commissionFeeCondition,
-                                        onChanged: (newValue) => setState(() {
-                                          commissionFeeCondition = newValue!;
-                                        }),
-                                        activeColor: Colors.grey[800],
-                                        overlayColor: WidgetStateProperty.all(Colors.transparent),
-                                      ),
-                                      Text(option),
-                                      SizedBox(width: 16),
-                                    ],
-                                  );
-                                }).toList(),
-                              ),
-                            ],
-                          ),
-                        ),
-                        if(commissionFeeCondition != "전체")
-                          SizedBox(
-                            width: 200,
-                            child: CustomTextField(label: "중개 수수료", controller: TextEditingController(), readOnly: commissionFeeCondition == "전체"),
-                          ),
-                      ],
-                    ),
-                  )
                 ],
               ),
             SizedBox(
