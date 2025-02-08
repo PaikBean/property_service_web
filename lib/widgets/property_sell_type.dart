@@ -69,7 +69,7 @@ class _PropertySellTypeState extends State<PropertySellType> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Text(
-                  "매물 판매 유형 및 가격",
+                  "거래 유형 및 가격",
                   style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                 ),
               ),
@@ -124,31 +124,31 @@ class _PropertySellTypeState extends State<PropertySellType> {
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 24, top: 4, bottom: 4),
-                  child: Row(
-                    children: [
-                      Text(
-                        "매매",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w700,
-                          color: widget.saleAmountController.text.isNotEmpty ? Colors.grey[800] : Colors.grey[400],
-                        ),
-                      ),
-                      SizedBox(width: 8),
-                      Text(
-                        widget.saleAmountController.text.isNotEmpty
-                        ? "${widget.saleAmountController.text} 원"
-                        : "",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.only(left: 24, top: 4, bottom: 4),
+                //   child: Row(
+                //     children: [
+                //       Text(
+                //         "매매",
+                //         style: TextStyle(
+                //           fontSize: 20,
+                //           fontWeight: FontWeight.w700,
+                //           color: widget.saleAmountController.text.isNotEmpty ? Colors.grey[800] : Colors.grey[400],
+                //         ),
+                //       ),
+                //       SizedBox(width: 8),
+                //       Text(
+                //         widget.saleAmountController.text.isNotEmpty
+                //         ? "${widget.saleAmountController.text} 원"
+                //         : "",
+                //         style: TextStyle(
+                //           fontSize: 16,
+                //           fontWeight: FontWeight.w400,
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
                 Padding(
                   padding: const EdgeInsets.only(left: 24, top: 4, bottom: 4),
                   child: Row(
@@ -184,8 +184,8 @@ class _PropertySellTypeState extends State<PropertySellType> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CustomRadioGroup(
-                title: "매물 판매 형태",
-                options: ["월세", "전세", "매매", "단기"],
+                title: "거래 유형",
+                options: ["월세", "전세", "단기"],
                 groupValue: selectedSellType,
                 onChanged: (value) {
                   setState(() {
@@ -209,11 +209,11 @@ class _PropertySellTypeState extends State<PropertySellType> {
                   width: 200,
                   child: CustomTextField(label: "전세금", controller: widget.jeonseAmountController),
                 ),
-              if (selectedSellType == "매매")
-                SizedBox(
-                  width: 200,
-                  child: CustomTextField(label: "매매금", controller: widget.saleAmountController),
-                ),
+              // if (selectedSellType == "매매")
+              //   SizedBox(
+              //     width: 200,
+              //     child: CustomTextField(label: "매매금", controller: widget.saleAmountController),
+              //   ),
               if(selectedSellType == "단기")
                 SizedBox(
                   width: 400,

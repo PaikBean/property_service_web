@@ -72,7 +72,7 @@ class _MaintenanceCostFormState extends State<MaintenanceCostForm> {
         ),
         SizedBox(width: 24),
         Column(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
@@ -117,34 +117,34 @@ class _MaintenanceCostFormState extends State<MaintenanceCostForm> {
                 ),
               ],
             ),
-            SizedBox(
-              height: 100,
-              child: Row(
-                children: [
-                  _checkboxWithLabel(
-                    "기타",
-                    isOthers,
-                        (newValue) {
-                      setState(() {
-                        isOthers = newValue!;
-                        if (!isOthers) {
-                          otherController.clear();
-                          widget.maintenanceFormModel.others = '';
-                        }
-                      });
-                    },
-                  ),
-                  if (isOthers)
-                    SizedBox(
-                      width: 240,
-                      child: CustomTextField(
-                        label: "기타 관리비 항목",
-                        controller: otherController,
-                      ),
-                    ),
-                ],
-              ),
-            ),
+            // SizedBox(
+            //   height: 100,
+            //   child: Row(
+            //     children: [
+            //       _checkboxWithLabel(
+            //         "기타",
+            //         isOthers,
+            //             (newValue) {
+            //           setState(() {
+            //             isOthers = newValue!;
+            //             if (!isOthers) {
+            //               otherController.clear();
+            //               widget.maintenanceFormModel.others = '';
+            //             }
+            //           });
+            //         },
+            //       ),
+            //       if (isOthers)
+            //         SizedBox(
+            //           width: 240,
+            //           child: CustomTextField(
+            //             label: "기타 관리비 항목",
+            //             controller: otherController,
+            //           ),
+            //         ),
+            //     ],
+            //   ),
+            // ),
           ],
         ),
       ],
@@ -156,17 +156,27 @@ class _MaintenanceCostFormState extends State<MaintenanceCostForm> {
       bool value,
       ValueChanged<bool?>? onChanged,
       ) {
-    return Row(
-      children: [
-        Checkbox(
-          value: value,
-          onChanged: onChanged,
-          activeColor: Colors.grey[800],
-          hoverColor: Colors.transparent,
-          overlayColor: WidgetStateProperty.all(Colors.transparent),
-        ),
-        Text(label),
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center, // 수직 중앙 정렬
+        children: [
+          Checkbox(
+            value: value,
+            onChanged: onChanged,
+            activeColor: Colors.grey[800],
+            hoverColor: Colors.transparent,
+            overlayColor: WidgetStateProperty.all(Colors.transparent),
+            visualDensity: VisualDensity.compact, // 여백 조정
+          ),
+          SizedBox(height: 24), // Checkbox와 Text 사이의 크기를 조정
+          Text(
+            label,
+            style: TextStyle(fontSize: 14), // 텍스트 크기 조정
+          ),
+        ],
+      ),
     );
   }
+
 }

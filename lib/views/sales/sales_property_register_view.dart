@@ -23,6 +23,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 
 import '../../core/enums/datepicker_type.dart';
 import '../../models/image_file_list_model.dart';
+import '../../widgets/custom_checkbox_group2.dart';
 import '../../widgets/custom_datepicker.dart';
 import '../../widgets/photo_upload.dart';
 
@@ -282,14 +283,6 @@ class _SalesPropertyRegisterViewState extends State<SalesPropertyRegisterView> {
           buildingName: "건물4",
           buildingAddress: "서울 특별시 강동구 둔촌동 123-1",
           buildingPostCode: '45645'),
-
-
-
-
-
-
-
-
     ];
     selectedSearchCondition = searchConditionList[0];
     super.initState();
@@ -665,11 +658,11 @@ class _SalesPropertyRegisterViewState extends State<SalesPropertyRegisterView> {
                 width: 600,
                 child: Row(
                   children: [
-                    Flexible(child: CustomTextField(label: "임대인 성함", controller: propertyOwnerName)),
+                    Flexible(child: CustomTextField(label: "성명", controller: propertyOwnerName)),
                     Flexible(
                       flex: 2,
                       child: CustomTextField(
-                          label: "임대인 전화번호", controller: propertyOwnerPhoneNumber),
+                          label: "전화번호", controller: propertyOwnerPhoneNumber),
                     ),
                   ],
                 ),
@@ -693,7 +686,7 @@ class _SalesPropertyRegisterViewState extends State<SalesPropertyRegisterView> {
                 width: 800,
                 child: Row(
                   children: [
-                    Flexible(child: CustomTextField(label: "호 수", controller: TextEditingController())),
+                    Flexible(child: CustomTextField(label: "상세 주소", controller: TextEditingController())),
                     SizedBox(
                       width: 600,
                       child: CustomRadioGroup(
@@ -712,12 +705,50 @@ class _SalesPropertyRegisterViewState extends State<SalesPropertyRegisterView> {
                 ),
               ),
               SizedBox(
-                width: 600,
+                width: 600, // 전체 Row의 최대 너비 제한
                 child: Row(
                   children: [
-                    Flexible(child: CustomTextField(label: "해당 층/전체 층", controller: TextEditingController())),
-                    Flexible(child: CustomTextField(label: "방 욕실 갯수", controller: TextEditingController())),
-                    Flexible(child: CustomTextField(label: "주 실 기준 방향", controller: TextEditingController())),
+                    // 첫 번째 TextField
+                    Flexible(
+                      flex: 1, // 비율 설정
+                      child: CustomTextField(
+                        label: "해당 층/전체 층",
+                        controller: TextEditingController(),
+                      ),
+                    ),
+                    const SizedBox(width: 16), // 간격 추가
+                    // 두 번째 TextField
+                    Flexible(
+                      flex: 1,
+                      child: CustomTextField(
+                        label: "방 욕실 갯수",
+                        controller: TextEditingController(),
+                      ),
+                    ),
+                    const SizedBox(width: 16), // 간격 추가
+                    // 세 번째 TextField와 Tooltip
+                    Flexible(
+                      flex: 1,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: CustomTextField(
+                              label: "거실 기준 방향",
+                              controller: TextEditingController(),
+                            ),
+                          ),
+                          Tooltip(
+                            message: "현관문 기준",
+                            child: Icon(
+                              Icons.info_outline,
+                              size: 20,
+                              color: Colors.grey[400],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -725,8 +756,34 @@ class _SalesPropertyRegisterViewState extends State<SalesPropertyRegisterView> {
                 width: 600,
                 child: Row(
                   children: [
-                    Flexible(child: CustomTextField(label: "전용/공급 면적", controller: TextEditingController())),
-                    Flexible(child: CustomDatePicker(datePickerType: DatePickerType.date, label: "사용 승인일", selectedDateTime: DateTime.now())),
+                    Flexible(flex: 1, child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(child: CustomTextField(label: "전용 면적", controller: TextEditingController())),
+                        Tooltip(
+                          message: "㎡ 기준",
+                          child: Icon(
+                            Icons.info_outline,
+                            size: 20,
+                            color: Colors.grey[400],
+                          ),
+                        ),
+                      ],
+                    )),
+                    Flexible(flex: 1, child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(child: CustomTextField(label: "공급 면적", controller: TextEditingController())),
+                        Tooltip(
+                          message: "㎡ 기준",
+                          child: Icon(
+                            Icons.info_outline,
+                            size: 20,
+                            color: Colors.grey[400],
+                          ),
+                        ),
+                      ],
+                    )),
                   ],
                 ),
               ),
@@ -734,6 +791,7 @@ class _SalesPropertyRegisterViewState extends State<SalesPropertyRegisterView> {
                 width: 600,
                 child: Row(
                   children: [
+                    Flexible(flex: 1, child: CustomDatePicker(datePickerType: DatePickerType.date, label: "사용 승인일", selectedDateTime: DateTime.now())),
                     Flexible(child: CustomDatePicker(datePickerType: DatePickerType.date, label: "입주 가능일", selectedDateTime: DateTime.now())),
                   ],
                 ),
@@ -762,29 +820,21 @@ class _SalesPropertyRegisterViewState extends State<SalesPropertyRegisterView> {
                     SizedBox(
                       width:400,
                       child: CustomRadioGroup(
-                        title: "주차 가능 대수",
-                        options: ["1대", "불가", "기타",],
+                        title: "주차 가능 여부",
+                        options: ["가능", "불가능",],
                         groupValue: propertyParkingCount,
                         onChanged: (value) =>
                             setState(() => propertyParkingCount = value),
-                        otherInput: "기타",
-                        otherLabel: "주차 대수",
-                        otherInputTextController: TextEditingController(),
-                        otherInputBoxWidth: 140,
                       ),
                     ),
                     SizedBox(
                       width:600,
                       child: CustomRadioGroup(
                         title: "난방 방식",
-                        options: ["개별", "중앙", "심야", "기타"],
+                        options: ["개별", "중앙", "심야"],
                         groupValue: propertyHeatingType,
                         onChanged: (value) =>
                             setState(() => propertyHeatingType = value),
-                        otherInput: "기타",
-                        otherLabel: "난방 방식",
-                        otherInputTextController: TextEditingController(),
-                        otherInputBoxWidth: 200,
                       ),
                     ),
                   ],
@@ -792,16 +842,15 @@ class _SalesPropertyRegisterViewState extends State<SalesPropertyRegisterView> {
               ),
               SizedBox(
                 width:1000,
-                child: CustomRadioGroup(
+                child:  CustomCheckboxGroup2(
                   title: "옵션",
-                  options: ["풀옵션", "기타"],
-                  groupValue: propertyOptionType,
-                  onChanged: (value) =>
-                      setState(() => propertyOptionType = value),
-                  otherInput: "기타",
-                  otherLabel: "옵션 항목",
-                  otherInputTextController: TextEditingController(),
-                  otherInputBoxWidth: 400,
+                  options: ["풀옵션", "에어컨", "세탁기", "냉장고", "가스레인지"],
+                  initialSelection: selectedOptions,
+                  onChanged: (selections) {
+                    setState(() {
+                      selectedOptions = selections;
+                    });
+                  },
                 ),
               ),
               SizedBox(
@@ -819,6 +868,8 @@ class _SalesPropertyRegisterViewState extends State<SalesPropertyRegisterView> {
       ),
     );
   }
+
+  List<bool> selectedOptions = [false, false, false, false, false, false];
 
   Widget _buildBuildingItem(BuildingSummary buildingSummary) {
     return Container(
