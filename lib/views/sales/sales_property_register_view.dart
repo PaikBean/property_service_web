@@ -343,7 +343,7 @@ class _SalesPropertyRegisterViewState extends State<SalesPropertyRegisterView> {
         children: [
           SizedBox(
             width: 400,
-            height: 800,
+            height: 1520,
             child: SideSearchGrid(
               searchWord: buildingSearchWord,
               gridItemList: buildingSummaryList
@@ -734,7 +734,7 @@ class _SalesPropertyRegisterViewState extends State<SalesPropertyRegisterView> {
                         children: [
                           Expanded(
                             child: CustomTextField(
-                              label: "거실 기준 방향",
+                              label: "기준 방향",
                               controller: TextEditingController(),
                             ),
                           ),
