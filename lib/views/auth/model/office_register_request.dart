@@ -2,21 +2,21 @@ class OfficeRegisterRequest {
   final String officeName;
   final String zoneCode;
   final String officeAddress;
-  final String? addressDetail;
-  final String? presidentName;
+  final String addressDetail;
+  final String presidentName;
   final String presidentEmail;
-  final String? mobileNumber;
-  final String? phoneNumber;
+  final String mobileNumber;
+  final String phoneNumber;
 
   OfficeRegisterRequest({
     required this.officeName,
     required this.zoneCode,
     required this.officeAddress,
-    this.addressDetail,
-    this.presidentName,
+    required this.addressDetail,
+    required this.presidentName,
     required this.presidentEmail,
-    this.mobileNumber,
-    this.phoneNumber,
+    required this.mobileNumber,
+    required this.phoneNumber,
   });
 
   /// JSON 데이터를 객체로 변환하는 factory 메서드

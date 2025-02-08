@@ -10,7 +10,6 @@ import 'package:property_service_web/views/client/models/client_detail_model.dar
 import 'package:property_service_web/views/client/models/revenue_register_model.dart';
 import 'package:property_service_web/views/client/models/showing_property_model.dart';
 import 'package:property_service_web/widgets/custom_datepicker.dart';
-import 'package:property_service_web/widgets/custom_dropdown.dart';
 import 'package:property_service_web/widgets/custom_text_field.dart';
 import 'package:property_service_web/widgets/rotating_house_indicator.dart';
 
@@ -34,7 +33,7 @@ class DialogUtils {
     double maxWidth = 400,
     String confirmText = "저장",
     String cancelText = "취소",
-    Future<T?> Function()? onConfirm, // ✅ Future<T?> 적용
+    required Future<T?> Function() onConfirm, // ✅ Future<T?> 적용
   }) async {
     final result = await showDialog<T?>(
       context: context,
@@ -91,12 +90,7 @@ class DialogUtils {
                         ),
                         TextButton(
                           onPressed: () async {
-                            if (onConfirm != null) {
-                              final result = await onConfirm(); // ✅ await 추가
-                              Navigator.of(context).pop(result); // 결과 전달
-                            } else {
-                              Navigator.of(context).pop();
-                            }
+                            onConfirm();
                           },
                           style: ButtonStyle(
                             overlayColor: WidgetStateProperty.all(
