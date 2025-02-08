@@ -81,16 +81,13 @@ class _SalesPropertyListViewState extends State<SalesPropertyListView> {
     PhotoItemModel(photo: Uint8List(23)),
   ];
 
-
-
-
   @override
   void initState() {
     // TODO: implement initState
     searchConditionList = [
       "매물 주소",
-      "담당자",
-      "임대인 성함",
+      "임대인",
+      "임대인 전화번호"
     ];
     propertySummaryList = [
       PropertySummary(
@@ -152,6 +149,8 @@ class _SalesPropertyListViewState extends State<SalesPropertyListView> {
                   .map((property) => _buildPropertyItem(property))
                   .toList(),
               searchConditionList: searchConditionList,
+              searchConditionListWidth: 168,
+              hintText: "",
               onSearchChanged: (_) {},
               onSearchPressed: () {},
             ),
@@ -463,7 +462,7 @@ class _SalesPropertyListViewState extends State<SalesPropertyListView> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        SubTitle(title: "임대인 정보"),
+                        SubTitle(title: "임대인"),
                         CRUDButton(buttonType: ButtonType.update, onPressed: (){})
                       ],
                     ),
@@ -472,7 +471,7 @@ class _SalesPropertyListViewState extends State<SalesPropertyListView> {
                         Padding(
                           padding: const EdgeInsets.all(16),
                           child: Text(
-                            "임대인1 사장님 ::  010 - 1234 - 1234",
+                            "임대인1 (사장님)  010 - 1234 - 1234",
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w700,
@@ -515,47 +514,6 @@ class _SalesPropertyListViewState extends State<SalesPropertyListView> {
                                       fontWeight: FontWeight.w400,
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              width: 400,
-                              padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Text(
-                                    "담당자",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  SizedBox(width: 8),
-                                  Text(
-                                    "담당자 1",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                  SizedBox(width: 64),
-                                  Text(
-                                    "상태",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  SizedBox(width: 8),
-                                  Text(
-                                    "상태 1",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                  SizedBox(width: 80),
                                 ],
                               ),
                             ),
@@ -635,66 +593,6 @@ class _SalesPropertyListViewState extends State<SalesPropertyListView> {
                                             SizedBox(width: 8),
                                             Text(
                                               "1000/50 만원",
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w400,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Container(
-                                    width: 200,
-                                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                                    child: Row(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Text(
-                                              "전세",
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w700,
-                                                color: Colors.grey[400],
-                                              ),
-                                            ),
-                                            SizedBox(width: 8),
-                                            Text(
-                                              "",
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w400,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                    width: 200,
-                                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                                    child: Row(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Text(
-                                              "매매",
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w700,
-                                                  color: Colors.grey[400]
-                                              ),
-                                            ),
-                                            SizedBox(width: 8),
-                                            Text(
-                                              "",
                                               style: TextStyle(
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.w400,
