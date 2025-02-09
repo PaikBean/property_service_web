@@ -588,7 +588,7 @@ class _SalesPropertyListViewState extends State<SalesPropertyListView> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SubTitle(title: "임대인"),
-                        CRUDButton(buttonType: ButtonType.update, onPressed: (){})
+                        // CRUDButton(buttonType: ButtonType.update, onPressed: (){})
                       ],
                     ),
                     Row(
