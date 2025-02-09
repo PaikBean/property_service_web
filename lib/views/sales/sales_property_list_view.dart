@@ -10,10 +10,18 @@ import 'package:property_service_web/widgets/sub_layout.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/enums/button_type.dart';
 import '../../core/enums/main_screen_type.dart';
+import '../../core/utils/dialog_utils.dart';
+import '../../core/utils/toast_manager.dart';
 import '../../models/photo_item_model.dart';
 import '../../models/property_summary.dart';
 import '../../models/remark_model.dart';
 import '../../widgets/crud_button.dart';
+import '../../widgets/custom_address_field.dart';
+import '../../widgets/custom_radio_group.dart';
+import '../../widgets/custom_text_field.dart';
+import '../../widgets/grid/custom_grid.dart';
+import '../../widgets/grid/custom_grid_model.dart';
+import '../../widgets/image_slider_dialog.dart';
 import '../../widgets/photo_list.dart';
 import '../../widgets/remark_grid.dart';
 import '../../widgets/side_search_grid.dart';
@@ -35,6 +43,7 @@ class _SalesPropertyListViewState extends State<SalesPropertyListView> {
   late List<PropertyItemModel> propertyItemList;
 
   bool _isExpanded = false; // 접기/펼치기 상태 변수
+  bool _isLoading = false;
 
   final List<RemarkModel> remarkModelList = [
     RemarkModel(
@@ -80,6 +89,15 @@ class _SalesPropertyListViewState extends State<SalesPropertyListView> {
     PhotoItemModel(photo: Uint8List(31)),
     PhotoItemModel(photo: Uint8List(23)),
   ];
+
+  void onSelectItemImageList(int id) async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return ImageSliderDialog();
+      },
+    );
+  }
 
   @override
   void initState() {
@@ -133,6 +151,103 @@ class _SalesPropertyListViewState extends State<SalesPropertyListView> {
     super.initState();
   }
 
+  void onUpdateBuildingInfo() async {
+
+    String? buildingUsage;
+    String? elevatorAvailable;
+    String? violationStatus;
+    String? mainPassword;
+
+    bool? result = await DialogUtils.showCustomDialog(
+        context: context,
+        maxWidth: 1000,
+        title: "건물 정보 수정",
+        child: Column(
+          children: [
+            CustomTextField(label: "건물 이름", controller: TextEditingController(text: "제일 긴 주소 건물 이름")),
+            CustomAddressField(label: "건물 주소", zipCode: "13494", address: "부산광역시 강서구 녹산단382로14번가길  10~29번지(송정동)"),
+            Row(
+              children: [
+                Expanded(child: CustomTextField(label: "주차 대수", controller: TextEditingController())),
+                Expanded(child: CustomTextField(label: "층 수", controller: TextEditingController())),
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(child: CustomTextField(label: "주 출입문 방향", controller: TextEditingController())),
+                Expanded(child: CustomTextField(label: "준공 연도", controller: TextEditingController())),
+              ],
+            ),
+            SizedBox(
+              width: 800,
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 240,
+                    child: CustomRadioGroup(
+                      title: "건물 용도",
+                      options: ["주거용", "비 주거용"],
+                      groupValue: buildingUsage,
+                      onChanged: (value) => setState(() => buildingUsage = value),
+                    ),
+                  ),
+                  CustomRadioGroup(
+                    title: "승강기 유무",
+                    options: ["있음", "없음"],
+                    groupValue: elevatorAvailable,
+                    onChanged: (value) => setState(() => elevatorAvailable = value),
+                    otherInput: "있음",
+                    otherLabel: "승강기 대수",
+                    otherInputTextController: TextEditingController(),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              width: 800,
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 240,
+                    child: CustomRadioGroup(
+                      title: "위반 건축물 여부",
+                      options: ["있음", "없음"],
+                      groupValue: violationStatus,
+                      onChanged: (value) => setState(() => violationStatus = value),
+                    ),
+                  ),
+                  CustomRadioGroup(
+                    title: "공동 현관문 비밀번호",
+                    options: ["있음", "없음"],
+                    groupValue: mainPassword,
+                    onChanged: (value) => setState(() => mainPassword = value),
+                    otherInput: "있음",
+                    otherLabel: "공동 현관문 비밀번호",
+                    otherInputTextController: TextEditingController(),
+                    otherInputBoxWidth: 300,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        onConfirm: () async {
+          Navigator.pop(context, true);
+          return null;
+        }
+    );
+
+    setState(() {
+      _isLoading = true; // 로딩 시작
+    });
+    await Future.delayed(Duration(seconds: 3)); // todo 고객 등록 api 연결
+    setState(() {
+      _isLoading = false; // 로딩 종료
+    });
+
+    ToastManager().showToast(context, "건물 정보를 수정 했습니다.");
+  }
+
   @override
   Widget build(BuildContext context) {
     return SubLayout(
@@ -170,7 +285,9 @@ class _SalesPropertyListViewState extends State<SalesPropertyListView> {
                       height: 32,
                       child: CRUDButton(
                           buttonType: ButtonType.update,
-                          onPressed: () {}),
+                          onPressed: () {
+                            onUpdateBuildingInfo();
+                          }),
                     )
                         : SizedBox.shrink()
                   ],
@@ -399,19 +516,27 @@ class _SalesPropertyListViewState extends State<SalesPropertyListView> {
                             ],
                           ),
                           SizedBox(
-                              width: 800,
-                              height: 240,
-                              child: RemarkGrid(
-                                remarkModel: remarkModelList,
-                                onDelete: (id) {
-                                  print(id);
-                                },
-                                onAddRemark: () {},
-                              )),
+                            width: 800,
+                            height: 240,
+                            child:  ReusableGrid(
+                              title: "특이사항",
+                              itemList: [],
+                              // ? []
+                              // : clientDetailModel!.clientRemarkList.map((remark)=> BuildClientRemarkItem(remark: remark, onDelete: fetchRemarkDelete)).toList(),
+                              columns: [
+                                CustomGridModel(header: "특이사항", flex: 3),
+                                CustomGridModel(header: "작성자", flex: 1),
+                                CustomGridModel(header: "작성일자", flex: 1),],
+                              onPressAdd: () {},
+                              canDelete: true,
+                              contentGridHeight: 120,
+                              isToggle: false,
+                            ),
+                          ),
                           SizedBox(height: 16),
                           SizedBox(
                             width: 800,
-                            height: 180,
+                            height: 120,
                             child: PhotoList(photoList: photoModelList),
                           ),
                         ],
@@ -885,22 +1010,29 @@ class _SalesPropertyListViewState extends State<SalesPropertyListView> {
                           ),
                         ),
                         Container(
-                            width: 800,
-                            height: 280,
-                            padding: EdgeInsets.all(16),
-                            child: RemarkGrid(
-                              remarkModel: remarkModelList,
-                              onDelete: (id) {
-                                print(id);
-                              },
-                              onAddRemark: () {},
-                            ),
-                        ),
-                        Container(
                           width: 800,
                           height: 216,
                           padding: EdgeInsets.all(16),
                           child: PhotoList(photoList: photoModelList),
+                        ),
+                        Container(
+                          width: 800,
+                          height: 280,
+                          padding: EdgeInsets.all(16),
+                          child: ReusableGrid(
+                            title: "특이사항",
+                            itemList: [],
+                            // ? []
+                            // : clientDetailModel!.clientRemarkList.map((remark)=> BuildClientRemarkItem(remark: remark, onDelete: fetchRemarkDelete)).toList(),
+                            columns: [
+                              CustomGridModel(header: "특이사항", flex: 3),
+                              CustomGridModel(header: "작성자", flex: 1),
+                              CustomGridModel(header: "작성일자", flex: 1),],
+                            onPressAdd: () {},
+                            canDelete: true,
+                            contentGridHeight: 120,
+                            isToggle: false,
+                          ),
                         ),
                       ],
                     ),
@@ -932,28 +1064,33 @@ class _SalesPropertyListViewState extends State<SalesPropertyListView> {
           color: Colors.white),
       child: Row(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: propertySummary.representativeImage != null &&
-                propertySummary.representativeImage!.isNotEmpty
-                ? ClipRRect(
+          GestureDetector(
+            onTap: (){
+              onSelectItemImageList(1);
+            },
+            child: ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: Image.memory(
-                propertySummary.representativeImage!,
+              child: propertySummary.representativeImage != null &&
+                  propertySummary.representativeImage!.isNotEmpty
+                  ? ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.memory(
+                  propertySummary.representativeImage!,
+                  width: 120,
+                  height: 120,
+                  fit: BoxFit.cover,
+                ),
+              )
+                  : Container(
                 width: 120,
                 height: 120,
-                fit: BoxFit.cover,
+                color: Colors.grey.shade300,
+                child: Center(
+                    child: Text(
+                      "No Image",
+                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                    )),
               ),
-            )
-                : Container(
-              width: 120,
-              height: 120,
-              color: Colors.grey.shade300,
-              child: Center(
-                  child: Text(
-                    "No Image",
-                    style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-                  )),
             ),
           ),
           SizedBox(width: 12),

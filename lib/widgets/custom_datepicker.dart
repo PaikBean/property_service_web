@@ -10,12 +10,15 @@ class CustomDatePicker extends StatefulWidget {
   DateTime? selectedDateTime;
   final ValueChanged<DateTime?>? onChanged; // 콜백 추가
 
+  DateTimeRange? range;
+
   CustomDatePicker({
     super.key,
     required this.datePickerType,
     required this.label,
     required this.selectedDateTime,
     this.onChanged,  // 콜백 매개변수 추가
+    this.range,
   });
 
   @override

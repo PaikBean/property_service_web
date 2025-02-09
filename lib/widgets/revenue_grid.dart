@@ -90,6 +90,7 @@ class RevenueGrid extends StatelessWidget {
                 Expanded(flex: 1, child: Center(child: Text("매물 가격", style: _headerStyle))),
                 Expanded(flex: 1, child: Center(child: Text("중개 수수료", style: _headerStyle))),
                 Expanded(flex: 1, child: Center(child: Text("입주 일자", style: _headerStyle))),
+                Expanded(flex: 1, child: Center(child: Text("퇴실 일자", style: _headerStyle))),
                 SizedBox(width: 40), // 삭제 버튼 영역
               ],
             ),
@@ -155,6 +156,7 @@ class _RevenueRowState extends State<_RevenueRow> {
             Expanded(flex: 1, child: Center(child: Text(widget.revenue.propertySellPrice))),
             Expanded(flex: 1, child: Center(child: Text(widget.revenue.commissionFee))),
             Expanded(flex: 1, child: Center(child: Text(widget.revenue.moveInDate))),
+            Expanded(flex: 1, child: Center(child: Text(""))),
             AnimatedOpacity(
               opacity: _isHovered ? 1.0 : 0.0,
               duration: Duration(milliseconds: 100),

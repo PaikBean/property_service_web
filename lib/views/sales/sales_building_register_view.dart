@@ -39,20 +39,23 @@ class _SalesBuildingRegisterViewState extends State<SalesBuildingRegisterView> {
 
   ImageFileListModel buildingImageList = ImageFileListModel(imageFileModelList: []);
 
+  // 빌딩 등록
   void _submitForm() async {
-    validateInput();
-    setState(() {
-      _isLoading = true; // 로딩 시작
-    });
-    await Future.delayed(Duration(seconds: 3)); // todo 고객 등록 api 연결
-    setState(() {
-      _isLoading = false; // 로딩 종료
-    });
+    if(validateInput()){
+      setState(() {
+        _isLoading = true; // 로딩 시작
+      });
+      await Future.delayed(Duration(seconds: 3)); // todo 고객 등록 api 연결
+      setState(() {
+        _isLoading = false; // 로딩 종료
+      });
 
-    ToastManager().showToast(context, "건물을 등록했습니다.");
-    clearAllData();
+      ToastManager().showToast(context, "건물을 등록했습니다.");
+      clearAllData();
+    }
   }
 
+  // 입력 데이터 초기화
   void clearAllData() {
     setState(() {
       // TextEditingController 초기화 방법 변경

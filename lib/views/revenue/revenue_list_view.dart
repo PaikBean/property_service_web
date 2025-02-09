@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:property_service_web/core/enums/datepicker_type.dart';
+import 'package:property_service_web/core/utils/datepicker_utils.dart';
 import 'package:property_service_web/models/revenue_item_model.dart';
 import 'package:property_service_web/widgets/custom_datepicker.dart';
 import 'package:property_service_web/widgets/revenue_grid.dart';
@@ -10,6 +11,7 @@ import '../../core/enums/main_screen_type.dart';
 import '../../widgets/custom_dropdown.dart';
 import '../../widgets/custom_radio_group.dart';
 import '../../widgets/custom_text_field.dart';
+import '../../widgets/rotating_house_indicator.dart';
 
 class RevenueListView extends StatefulWidget {
   const RevenueListView({super.key});
@@ -20,12 +22,30 @@ class RevenueListView extends StatefulWidget {
 
 class _RevenueListViewState extends State<RevenueListView> {
   TextEditingController searchWordController = TextEditingController();
+  TextEditingController rangeController = TextEditingController();
+  late DateTimeRange searchRange;
+
+  bool _isLoading = false;
+
+  @override
+  @override
+  void initState() {
+    super.initState();
+    DateTime now = DateTime.now();
+    DateTime startOfLastMonth = DateTime(now.year, now.month - 1, now.day); // 한 달 전 날짜
+    searchRange = DateTimeRange(
+      start: startOfLastMonth,
+      end: now,
+    );
+    rangeController.text = "${searchRange.start.toString().split(' ')[0]} ~ ${searchRange.end.toString().split(' ')[0]}";
+    searchWordController.text = "본인 이름";
+  }
+
 
   bool _isExpanded = false;
 
   String propertyType = "전체";
   String clientSourceType = "전체";
-  String commissionFeeCondition = "전체";
 
   final List<String> searchConditionList = ["전체", "담당자", "고객", "주소", "임대인"];
   final List<RevenueItemModel> revenueList = [
@@ -49,136 +69,203 @@ class _RevenueListViewState extends State<RevenueListView> {
     RevenueItemModel(id: 18, managerName: "박민수", clientName: "고객18", clientSource: "SNS 광고", propertyOwnerName: "임대인18", propertyAddress: "서울특별시 관악구 신림로 99", propertySellType: "매매", propertySellPrice: "5억 7000만원", commissionFee: "285만원", moveInDate: "2025.06.01"),
   ];
 
+  void onSearch() async {
+    setState(() {
+      _isLoading = true;
+    });
+    await Future.delayed(Duration(seconds: 1));
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
-    return SubLayout(
-        mainScreenType: MainScreenType.RevenueList,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              width: 900,
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 240,
-                    child: CustomDatePicker(datePickerType: DatePickerType.dateRange, label: "검색 기간", selectedDateTime: DateTime.now()),
-                  ),
-                  SizedBox(
-                    width: 144,
-                    child: CustomDropdown(
-                      items: searchConditionList,
-                      onChanged: (_){},
-                    ),
-                  ),
-                  Container(
-                    width : 248,
-                    padding: const EdgeInsets.all(16),
-                    child: TextField(
-                      controller: searchWordController,
-                      decoration: InputDecoration(
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: AppColors.color5,
-                            width: 2.0,
+    return Stack(
+      children: [
+        SubLayout(
+            mainScreenType: MainScreenType.RevenueList,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: 900,
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 280,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: TextField(
+                            controller: rangeController,
+                            readOnly: true,
+                            onTap: () async {
+                              final result = await DatePickerUtils.showDateRangePickerDialog2(
+                                  context: context,
+                                  initialRange: searchRange
+                              );
+
+                              if (result != null) {
+                                setState(() {
+                                  searchRange = result;
+                                  rangeController.text = "${result.start.toString().split(' ')[0]} ~ ${result.end.toString().split(' ')[0]}";
+                                  // 또는 더 보기 좋게 포맷팅:
+                                  // rangeController.text = "${DateFormat('yyyy.MM.dd').format(result.start)} - ${DateFormat('yyyy.MM.dd').format(result.end)}";
+                                });
+                              }
+                            },
+                            decoration: InputDecoration(
+                              alignLabelWithHint: true,
+                              labelText: "검색 기간",
+                              border: const OutlineInputBorder(),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: AppColors.color5,
+                                  width: 2.0,
+                                ),
+                              ),
+                              labelStyle: TextStyle(
+                                color: AppColors.color5,
+                              ),
+                              suffixIcon: Icon(
+                                Icons.calendar_month,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                        )
+                      ),
+                      SizedBox(
+                        width: 144,
+                        child: CustomDropdown(
+                          items: searchConditionList,
+                          onChanged: (_){},
+                        ),
+                      ),
+                      Container(
+                        width : 248,
+                        padding: const EdgeInsets.all(16),
+                        child: TextField(
+                          controller: searchWordController,
+                          decoration: InputDecoration(
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: AppColors.color5,
+                                width: 2.0,
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 80,
-                    height: 48,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.color5, // 버튼 배경색 초록색
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8), // 둥근 테두리
-                          side: BorderSide(color: AppColors.color5),
+                      SizedBox(
+                        width: 80,
+                        height: 48,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.color5, // 버튼 배경색 초록색
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8), // 둥근 테두리
+                              side: BorderSide(color: AppColors.color5),
+                            ),
+                          ),
+                          onPressed: (){
+                            onSearch();
+                          },
+                          child: Text(
+                            "조회",
+                            style: TextStyle(
+                              fontSize: 16, // 텍스트 크기 키우기
+                              fontWeight: FontWeight.w400, // 텍스트 두껍게
+                              color: Colors.white, // 텍스트 색상 흰색
+                            ),
+                          ),
                         ),
                       ),
-                      onPressed: (){},
-                      child: Text(
-                        "조회",
-                        style: TextStyle(
-                          fontSize: 16, // 텍스트 크기 키우기
-                          fontWeight: FontWeight.w400, // 텍스트 두껍게
-                          color: Colors.white, // 텍스트 색상 흰색
+                      SizedBox(width: 8),
+                      Container(
+                        height: 48,
+                        alignment: Alignment.bottomRight,
+                        child: TextButton(
+                            onPressed: () {
+                              setState(() {
+                                _isExpanded = !_isExpanded; // 상태 변경
+                              });
+                            },
+                            style: TextButton.styleFrom(
+                              overlayColor: AppColors.color4,
+                            ),
+                            child: Row(
+                              children: [
+                                Text(
+                                  _isExpanded ? "검색 상세 조건" : "검색 상세 조건",
+                                  style: TextStyle(
+                                      fontSize: 14, color: Colors.grey[800]),
+                                ),
+                                SizedBox(width: 4),
+                                Icon(
+                                  _isExpanded
+                                      ? Icons.expand_less
+                                      : Icons.expand_more,
+                                  color: Colors.grey[800],
+                                  size: 20,
+                                ),
+                              ],
+                            ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                  SizedBox(width: 8),
-                  Container(
-                    height: 48,
-                    alignment: Alignment.bottomRight,
-                    child: TextButton(
-                        onPressed: () {
-                          setState(() {
-                            _isExpanded = !_isExpanded; // 상태 변경
-                          });
-                        },
-                        style: TextButton.styleFrom(
-                          overlayColor: AppColors.color4,
+                ),
+                if(_isExpanded)
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 440,
+                        child: CustomRadioGroup(
+                          title: "거래 유형",
+                          options: ["전체", "월세", "전세", "단기"],
+                          groupValue: propertyType,
+                          onChanged: (value) =>
+                              setState(() => propertyType = value!),
                         ),
-                        child: Row(
-                          children: [
-                            Text(
-                              _isExpanded ? "검색 상세 조건" : "검색 상세 조건",
-                              style: TextStyle(
-                                  fontSize: 14, color: Colors.grey[800]),
-                            ),
-                            SizedBox(width: 4),
-                            Icon(
-                              _isExpanded
-                                  ? Icons.expand_less
-                                  : Icons.expand_more,
-                              color: Colors.grey[800],
-                              size: 20,
-                            ),
-                          ],
+                      ),
+                      SizedBox(
+                        width: 440,
+                        child: CustomRadioGroup(
+                          title: "고객 유입 경로",
+                          options: ["전체", "피터팬", "직방", "다방", "기타"],
+                          groupValue: clientSourceType,
+                          onChanged: (value) =>
+                              setState(() => clientSourceType = value!),
                         ),
-                    ),
+                      ),
+                    ],
                   ),
-                ],
+                SizedBox(
+                  height: 720,
+                  width: 1420,
+                  child: RevenueGrid(
+                      revenueList: revenueList,
+                      onDelete: (_){}
+                  ),
+                )
+              ],
+            )
+        ),
+        if (_isLoading)
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: Colors.black.withAlpha(1), // 반투명 배경
+              ),
+              child: Center(
+                child: RotatingHouseIndicator(),
               ),
             ),
-            if(_isExpanded)
-              Row(
-                children: [
-                  SizedBox(
-                    width: 440,
-                    child: CustomRadioGroup(
-                      title: "거래 유형",
-                      options: ["전체", "월세", "전세", "단기"],
-                      groupValue: propertyType,
-                      onChanged: (value) =>
-                          setState(() => propertyType = value!),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 440,
-                    child: CustomRadioGroup(
-                      title: "고객 유입 경로",
-                      options: ["전체", "피터팬", "직방", "다방", "기타"],
-                      groupValue: clientSourceType,
-                      onChanged: (value) =>
-                          setState(() => clientSourceType = value!),
-                    ),
-                  ),
-                ],
-              ),
-            SizedBox(
-              height: 720,
-              width: 1420,
-              child: RevenueGrid(
-                  revenueList: revenueList,
-                  onDelete: (_){}
-              ),
-            )
-          ],
-        )
+          ),
+      ],
     );
   }
 }

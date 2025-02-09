@@ -382,4 +382,92 @@ class DatePickerUtils {
       },
     );
   }
+
+  /// 날짜 범위 선택기
+  static Future<DateTimeRange?> selectDateRange(BuildContext context, DateTimeRange? initialRange) async {
+    DateTime today = DateTime.now();
+    DateTimeRange? selectedRange = await showDateRangePicker(
+      context: context,
+      initialEntryMode: DatePickerEntryMode.calendarOnly,
+      initialDateRange: initialRange ?? DateTimeRange(start: today, end: today.add(Duration(days: 7))),
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100),
+      locale: const Locale('ko', 'KR'),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: AppColors.color5, // 강조 색상
+              onPrimary: Colors.white, // 선택된 날짜 텍스트 색상
+              onSurface: Colors.black, // 기본 텍스트 색상
+            ),
+            datePickerTheme: DatePickerThemeData(
+              rangeSelectionBackgroundColor: AppColors.color2
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: ButtonStyle(
+                overlayColor: WidgetStateProperty.all(AppColors.color5.withAlpha(32)), // 버튼 클릭 효과
+                foregroundColor: WidgetStateProperty.all(AppColors.color5), // 버튼 색상
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    return selectedRange;
+  }
+  
+// 두 번째 방법: builder 속성에서 Dialog 반환
+  static Future<DateTimeRange?> showDateRangePickerDialog2({
+    required BuildContext context,
+    DateTimeRange? initialRange,
+  }) async {
+    final today = DateTime.now();
+
+    return await showDateRangePicker(
+      context: context,
+      initialEntryMode: DatePickerEntryMode.calendarOnly,
+      initialDateRange: initialRange ?? DateTimeRange(
+        start: today.subtract(Duration(days: 30)),
+        end: today,
+      ),
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100),
+      locale: const Locale('ko', 'KR'),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: AppColors.color5,
+              onPrimary: Colors.white,
+              onSurface: Colors.black,
+            ),
+            datePickerTheme: DatePickerThemeData(
+                rangeSelectionBackgroundColor: AppColors.color2
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: ButtonStyle(
+                overlayColor: WidgetStateProperty.all(AppColors.color5.withAlpha(32)),
+                foregroundColor: WidgetStateProperty.all(AppColors.color5),
+              ),
+            ),
+          ),
+          child: Dialog(
+            insetPadding: const EdgeInsets.all(16),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(32),
+            ),
+            child: Container(
+              constraints: const BoxConstraints(
+                maxWidth: 400,
+                maxHeight: 600,
+              ),
+              child: child!,
+            ),
+          ),
+        );
+      },
+    );
+  }
 }
