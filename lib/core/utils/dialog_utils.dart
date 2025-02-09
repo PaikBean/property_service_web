@@ -17,6 +17,7 @@ import '../../views/client/client_list_view.dart';
 import '../../views/client/enums/client_source_type.dart';
 import '../../views/client/enums/client_type_code.dart';
 import '../../views/client/models/client_update_model.dart';
+import '../../widgets/custom_dropdown.dart';
 import '../../widgets/custom_enum_check_box_group.dart';
 import '../../widgets/custom_enum_radio_group.dart';
 import '../../widgets/grid/custom_grid.dart';
@@ -598,7 +599,7 @@ class DialogUtils {
           ),
           child: ConstrainedBox(
             constraints: BoxConstraints(
-              maxWidth: 400, // 다이얼로그 최대 너비
+              maxWidth: 880, // 다이얼로그 최대 너비
             ),
             child: StatefulBuilder(
               builder: (context, setState) {
@@ -620,7 +621,72 @@ class DialogUtils {
                         ),
                       ),
                       // 담당자는 일정 등록한 사람 그대로..
-                      Text("구상 중"),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: 136,
+                                  child: CustomDropdown(
+                                    items: ["담당자", "임대인"],
+                                    onChanged: (_){},
+                                  ),
+                                ),
+                                SizedBox(width: 24),
+                                Expanded(
+                                  child: TextField(
+                                    controller: TextEditingController(),
+                                    decoration: InputDecoration(
+                                      // hintText: widget.hintText ?? "예) 판교역로 166, 분당 주공, 백현동 532",
+                                      hintStyle: TextStyle(
+                                        color: Colors.grey,
+                                      ),
+                                      focusedBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: AppColors.color5,
+                                          width: 2.0,
+                                        ),
+                                      ),
+                                      suffixIcon: IconButton(
+                                        icon: Icon(Icons.search, color: Colors.black),
+                                        onPressed: () {
+                                          setState(() {
+                                            // _gridItemsFuture = widget.fetchGridItems(); // 검색 시 데이터 다시 불러오기
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 8),
+                            Container(
+                              width: 960,
+                              height: 240,
+                              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                              child: ReusableGrid(
+                                title: "매물 선택",
+                                itemList: [],
+                                    // ? []
+                                    // : clientDetailModel!.showingPropertyList.map((property)=> BuildClientShowingPropertyItem(property: property, onDelete: fetchOnShowingPropertyDelete)).toList(),
+                                columns: [
+                                  CustomGridModel(header: "거래 유형", flex: 1),
+                                  CustomGridModel(header: "매물 가격", flex: 1),
+                                  CustomGridModel(header: "매물 형태", flex: 1),
+                                  CustomGridModel(header: "매물 주소", flex: 2),
+                                ],
+                                // onPressAdd: clientDetailModel == null ? null : () => fetchOnShowingPropertyAdd(),
+                                canDelete: true,
+                                contentGridHeight: 150,
+                                isToggle: false,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
