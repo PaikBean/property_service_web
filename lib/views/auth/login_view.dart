@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:property_service_web/core/utils/dialog_utils.dart';
 import 'package:property_service_web/views/auth/model/office_register_request.dart';
+import 'package:property_service_web/views/auth/model/office_user_request.dart';
 import 'package:property_service_web/views/main/main_view.dart';
 import 'package:property_service_web/widgets/custom_address_field.dart';
 import 'package:property_service_web/widgets/custom_text_field.dart';
@@ -203,6 +204,82 @@ class _LoginViewState extends State<LoginView> {
 
   }
 
+  // 회원가입
+  void signUp() async {
+    TextEditingController officeCode = TextEditingController();
+    TextEditingController name = TextEditingController();
+    TextEditingController email = TextEditingController();
+    TextEditingController password = TextEditingController();
+    TextEditingController passwordCheck = TextEditingController();
+    TextEditingController phoneNumber = TextEditingController();
+
+    OfficeUserRequest? officeUserRequest = await DialogUtils.showCustomDialog(
+        context: context,
+        title: "회원가입",
+        child: Column(
+          children: [
+            CustomTextField(label: "소속 중개 사무소 코드", controller: officeCode),
+            CustomTextField(label: "이름", controller: name),
+            CustomTextField(label: "이메일", controller: email),
+            CustomTextField(label: "비밀번호", controller: password, obscureText: true),
+            CustomTextField(label: "비밀번호 확인", controller: passwordCheck, obscureText: true),
+            CustomTextField(label: "핸드폰 번호", controller: phoneNumber),
+          ],
+        ),
+        onConfirm: () async {
+          String emailPattern = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
+
+          // 🚨 필수 필드 검증 (else if로 연결)
+          if (officeCode.text.isEmpty) {
+            await DialogUtils.showAlertDialog(
+              context: context,
+              title: "입력 오류",
+              content: "중개 사업소 코드를 확인해주세요.",
+            );
+          } else if (name.text.isEmpty) {
+            await DialogUtils.showAlertDialog(
+              context: context,
+              title: "입력 오류",
+              content: "이름을 입력해 주세요.",
+            );
+          } else if (email.text.isEmpty || !RegExp(emailPattern).hasMatch(email.text)) {
+            await DialogUtils.showAlertDialog(
+              context: context,
+              title: "입력 오류",
+              content: "이메일을 올바르게 입력해 주세요.",
+            );
+          } else if (password.text.isEmpty  || passwordCheck.text.isEmpty || passwordCheck.text == password.text) {
+            await DialogUtils.showAlertDialog(
+              context: context,
+              title: "입력 오류",
+              content: "비밀번호가 올바르게 입력되지 않았습니다.",
+            );
+          } else if (phoneNumber.text.isEmpty) {
+            await DialogUtils.showAlertDialog(
+              context: context,
+              title: "입력 오류",
+              content: "핸드폰번호를 입력해 주세요.",
+            );
+          }
+          Navigator.pop(context);
+        }
+    );
+
+    if(officeUserRequest != null){
+      setState(() {
+        _isLoading = true;
+      });
+      await Future.delayed(Duration(seconds: 1)); // 비밀번호 찾기 API 호출
+
+      setState(() {
+        _isLoading = false;
+      });
+
+      DialogUtils.showAlertDialog(context: context, title: "회원가입 완료", content: "회원가입이 완료되었습니다.\n로그인 해주세요.");
+    }
+
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -297,11 +374,13 @@ class _LoginViewState extends State<LoginView> {
                               onPressed: () {
                                 registerOffice();
                               },
-                              child: Text("조직 등록"),
+                              child: Text("중개 사무소 등록"),
                             ),
                             ElevatedButton(
-                              onPressed: () {},
-                              child: Text("조직원 등록"),
+                              onPressed: () {
+                                signUp();
+                              },
+                              child: Text("중개 사무원 등록"),
                             ),
                           ],
                         ),
