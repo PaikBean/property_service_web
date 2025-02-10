@@ -832,7 +832,7 @@ class _SalesPropertyRegisterViewState extends State<SalesPropertyRegisterView> {
                     width: 800,
                     child: Row(
                       children: [
-                        Flexible(child: CustomTextField(label: "상세 주소", controller: TextEditingController())),
+                        Flexible(child: CustomTextField(label: "호 실", controller: TextEditingController())),
                         SizedBox(
                           width: 600,
                           child: CustomRadioGroup(

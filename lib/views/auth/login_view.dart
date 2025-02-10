@@ -95,7 +95,7 @@ class _LoginViewState extends State<LoginView> {
     }
   }
 
-  // 사업소 등록
+  // 사무소 등록
   void registerOffice() async {
     TextEditingController officeName = TextEditingController();
     String? zoneCode;
@@ -109,12 +109,12 @@ class _LoginViewState extends State<LoginView> {
     OfficeRegisterRequest? officeRegisterRequest = await DialogUtils.showCustomDialog(
         context: context,
         maxWidth: 800,
-        title: "중개 사업소 가입",
+        title: "중개 사무소 가입",
         child: Column(
           children: [
-            CustomTextField(label: "중개 사업소 명", controller: officeName),
+            CustomTextField(label: "중개 사무소 명", controller: officeName),
             CustomAddressField(
-              label: "중개 사업소 주소",
+              label: "중개 사무소 주소",
               zipCode: zoneCode,
               address: officeAddress,
               onChanged: (newZoneCode, newOfficeAddress) {
@@ -122,9 +122,9 @@ class _LoginViewState extends State<LoginView> {
                 officeAddress = newOfficeAddress;
               },
             ),
-            CustomTextField(label: "중개 사업소 상세 주소", controller: addressDetail),
-            CustomTextField(label: "사업소 전화번호", controller: phoneNumber),
-            CustomTextField(label: "대표자 명", controller: presidentName),
+            CustomTextField(label: "중개 사무소 상세 주소", controller: addressDetail),
+            CustomTextField(label: "중개 사무소 전화번호", controller: phoneNumber),
+            CustomTextField(label: "대표자", controller: presidentName),
             CustomTextField(label: "대표자 이메일", controller: presidentEmail),
             CustomTextField(label: "대표자 전화번호", controller: mobileNumber),
           ],
@@ -138,19 +138,19 @@ class _LoginViewState extends State<LoginView> {
           await DialogUtils.showAlertDialog(
             context: context,
             title: "입력 오류",
-            content: "중개 사업소 명을 입력해주세요.",
+            content: "중개 사무소 명을 입력해주세요.",
           );
         } else if (zoneCode == null || officeAddress == null) {
           await DialogUtils.showAlertDialog(
             context: context,
             title: "입력 오류",
-            content: "중개 사업소 주소를 입력해주세요.",
+            content: "중개 사무소 주소를 입력해주세요.",
           );
         } else if (phoneNumber.text.isEmpty) {
           await DialogUtils.showAlertDialog(
             context: context,
             title: "입력 오류",
-            content: "유효한 사업소 전화번호를 입력해주세요. (9~11자리 숫자)",
+            content: "유효한 사무소 전화번호를 입력해주세요. (9~11자리 숫자)",
           );
         } else if (presidentName.text.isEmpty) {
           await DialogUtils.showAlertDialog(
@@ -199,12 +199,12 @@ class _LoginViewState extends State<LoginView> {
         _isLoading = false;
       });
 
-      DialogUtils.showAlertDialog(context: context, title: "중개 사업소 등록 완료", content: "등록하신 이메일로 코드를 발급해드렸습니다.\n회원가입을 진행해 주세요.");
+      DialogUtils.showAlertDialog(context: context, title: "중개 사무소 등록 완료", content: "등록하신 이메일로 코드를 발급해드렸습니다.\n중개 사무원 등록을 진행해 주세요.");
     }
 
   }
 
-  // 회원가입
+  // 중개 사무원 등록
   void signUp() async {
     TextEditingController officeCode = TextEditingController();
     TextEditingController name = TextEditingController();
@@ -215,7 +215,7 @@ class _LoginViewState extends State<LoginView> {
 
     OfficeUserRequest? officeUserRequest = await DialogUtils.showCustomDialog(
         context: context,
-        title: "회원가입",
+        title: "중개 사무원",
         child: Column(
           children: [
             CustomTextField(label: "소속 중개 사무소 코드", controller: officeCode),
@@ -234,7 +234,7 @@ class _LoginViewState extends State<LoginView> {
             await DialogUtils.showAlertDialog(
               context: context,
               title: "입력 오류",
-              content: "중개 사업소 코드를 확인해주세요.",
+              content: "중개 사무소 코드를 확인해주세요.",
             );
           } else if (name.text.isEmpty) {
             await DialogUtils.showAlertDialog(
@@ -275,7 +275,7 @@ class _LoginViewState extends State<LoginView> {
         _isLoading = false;
       });
 
-      DialogUtils.showAlertDialog(context: context, title: "회원가입 완료", content: "회원가입이 완료되었습니다.\n로그인 해주세요.");
+      DialogUtils.showAlertDialog(context: context, title: "중개 사무원 가입 완료", content: "가입이 완료되었습니다.\n로그인 해주세요.");
     }
 
   }

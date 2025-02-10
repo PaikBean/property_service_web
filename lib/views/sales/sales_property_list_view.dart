@@ -1011,12 +1011,6 @@ class _SalesPropertyListViewState extends State<SalesPropertyListView> {
                         ),
                         Container(
                           width: 800,
-                          height: 216,
-                          padding: EdgeInsets.all(16),
-                          child: PhotoList(photoList: photoModelList),
-                        ),
-                        Container(
-                          width: 800,
                           height: 280,
                           padding: EdgeInsets.all(16),
                           child: ReusableGrid(
@@ -1033,6 +1027,12 @@ class _SalesPropertyListViewState extends State<SalesPropertyListView> {
                             contentGridHeight: 120,
                             isToggle: false,
                           ),
+                        ),
+                        Container(
+                          width: 800,
+                          height: 216,
+                          padding: EdgeInsets.all(16),
+                          child: PhotoList(photoList: photoModelList),
                         ),
                       ],
                     ),

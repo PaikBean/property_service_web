@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:property_service_web/views/calendar/calendar_view.dart';
 import 'package:property_service_web/views/client/client_list_view.dart';
 import 'package:property_service_web/views/client/client_register_view.dart';
@@ -82,7 +83,39 @@ extension MainScreenTypeExtension on MainScreenType {
   Widget get screen {
     switch (this) {
       case MainScreenType.DashBoard:
-        return Container();
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Property Service",
+                style: TextStyle(
+                  fontSize: 36,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF728989),
+                ),
+              ),
+              SizedBox(height: 48),
+              Text(
+                "대시보드는 현재 개발 중 입니다.",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF9baaa6),
+                ),
+              ),
+              // SizedBox(height: 24),
+              // Text(
+              //   "기타 문의사항은 관리자에게 문의해 주세요.",
+              //   style: TextStyle(
+              //     fontSize: 16,
+              //     fontWeight: FontWeight.w700,
+              //     color: Color(0xFF9baaa6),
+              //   ),
+              // ),
+            ],
+          ),
+        );
       case MainScreenType.MyInfo:
         return MyInfoView();
       case MainScreenType.CompanyInfo:
