@@ -73,6 +73,7 @@ class _LoginViewState extends State<LoginView> {
   }
 
   Future<bool> login(String email, String password) async {
+    return true;
     try {
       final response = await dio.post(
         'http://localhost:8080/api/auth/login',

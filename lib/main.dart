@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:property_service_web/views/auth/mobile_view.dart';
-import 'package:property_service_web/views/client/client_register_view.dart';
-import 'package:property_service_web/views/client/models/temp.dart';
-import 'package:property_service_web/views/main/main_view.dart';
 import 'package:provider/provider.dart';
 import 'viewmodels/login_view_model.dart';
 import 'views/auth/login_view.dart';
