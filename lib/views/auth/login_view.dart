@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:property_service_web/core/utils/dialog_utils.dart';
 import 'package:property_service_web/views/auth/model/office_register_request.dart';
@@ -6,8 +7,14 @@ import 'package:property_service_web/views/main/main_view.dart';
 import 'package:property_service_web/widgets/custom_address_field.dart';
 import 'package:property_service_web/widgets/custom_text_field.dart';
 import 'package:provider/provider.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../viewmodels/login_view_model.dart';
 import '../../widgets/rotating_house_indicator.dart';
+
+final Dio dio = Dio();
+final storage = FlutterSecureStorage();
 
 class LoginView extends StatefulWidget {
   @override
@@ -65,35 +72,70 @@ class _LoginViewState extends State<LoginView> {
     }
   }
 
+  Future<bool> login(String email, String password) async {
+    try {
+      final response = await dio.post(
+        'http://localhost:8080/api/auth/login',
+        options: Options(
+          headers: {'Content-Type': 'application/json'},
+        ),
+        data: jsonEncode({'email': email, 'password': password}),
+      );
+
+      if (response.statusCode == 200) {
+        final token = response.headers['authorization']?.first;
+        print(token);
+
+        if (token != null) {
+          await storage.write(key: 'jwt', value: token);
+          return true;
+        }
+      }
+
+      return false;
+
+    } catch (e) {
+      print('로그인 요청 중 오류 발생: $e');
+      return false;
+    }
+  }
+
+
   // 로그인
   void signIn() async {
     setState(() {
       _isLoading = true;
     });
-    await Future.delayed(Duration(seconds: 1)); // 비밀번호 찾기 API 호출
 
-    setState(() {
-      _isLoading = false;
-    });
-    if(DateTime.now().second % 2 == 0){
-      Navigator.pushReplacement(
-        context,
-        PageRouteBuilder(
-          pageBuilder: (
-              BuildContext context,
-              Animation<double> animation1,
-              Animation<double> animation2,
-              ) {
-            return MainView(); // 변경 필요
-          },
-          transitionDuration: Duration.zero,
-          reverseTransitionDuration: Duration.zero,
-        ),
-      );
-    } else{
-      DialogUtils.showAlertDialog(context: context, title: "로그인 오류", content: "로그인 정보가 틀렸습니다.");
+    try {
+      bool result = await login(_emailController.text, _passwordController.text);
+      if (result) {
+        Navigator.pushReplacement(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (
+                BuildContext context,
+                Animation<double> animation1,
+                Animation<double> animation2,
+                ) {
+              return MainView(); // 변경 필요
+            },
+            transitionDuration: Duration.zero,
+            reverseTransitionDuration: Duration.zero,
+          ),
+        );
+      } else {
+        DialogUtils.showAlertDialog(context: context, title: "로그인 오류", content: "로그인 정보가 틀렸습니다.");
+      }
+    } catch (e) {
+      print('signIn 중 오류 발생: $e');
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
+
 
   // 사무소 등록
   void registerOffice() async {
