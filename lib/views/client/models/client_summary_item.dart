@@ -39,7 +39,7 @@ List<ClientSummaryItem> mockClientSummaryItems = [
     clientStatus: "상담중",
     clientPhoneNumber: "010-1234-5670",
     clientSourceLabel: "피터팬",
-    clientExpectedMoveInDate: "2025-03-10T12:00:00Z",
+    clientExpectedMoveInDate: "2025-03-10",
   ),
   ClientSummaryItem(
     clientId: 2,
@@ -48,7 +48,7 @@ List<ClientSummaryItem> mockClientSummaryItems = [
     clientStatus: "계약 예정",
     clientPhoneNumber: "010-1234-5671",
     clientSourceLabel: "직방",
-    clientExpectedMoveInDate: "2025-03-11T12:00:00Z",
+    clientExpectedMoveInDate: "2025-03-10",
   ),
   ClientSummaryItem(
     clientId: 3,
@@ -57,7 +57,7 @@ List<ClientSummaryItem> mockClientSummaryItems = [
     clientStatus: "계약 완료",
     clientPhoneNumber: "010-1234-5672",
     clientSourceLabel: "다방",
-    clientExpectedMoveInDate: "2025-03-12T12:00:00Z",
+    clientExpectedMoveInDate: "2025-03-10",
   ),
   ClientSummaryItem(
     clientId: 4,
@@ -66,7 +66,7 @@ List<ClientSummaryItem> mockClientSummaryItems = [
     clientStatus: "계약 완료",
     clientPhoneNumber: "010-1234-5673",
     clientSourceLabel: "다방",
-    clientExpectedMoveInDate: "2025-03-13T12:00:00Z",
+    clientExpectedMoveInDate: "2025-03-10",
   ),
   ClientSummaryItem(
     clientId: 5,
@@ -75,7 +75,7 @@ List<ClientSummaryItem> mockClientSummaryItems = [
     clientStatus: "입주 예정",
     clientPhoneNumber: "010-1234-5674",
     clientSourceLabel: "다방",
-    clientExpectedMoveInDate: "2025-03-14T12:00:00Z",
+    clientExpectedMoveInDate: "2025-03-10",
   ),
   ClientSummaryItem(
     clientId: 6,
@@ -84,7 +84,7 @@ List<ClientSummaryItem> mockClientSummaryItems = [
     clientStatus: "계약 완료",
     clientPhoneNumber: "010-1234-5675",
     clientSourceLabel: "다방",
-    clientExpectedMoveInDate: "2025-03-15T12:00:00Z",
+    clientExpectedMoveInDate: "2025-03-10",
   ),
   ClientSummaryItem(
     clientId: 7,
@@ -93,7 +93,7 @@ List<ClientSummaryItem> mockClientSummaryItems = [
     clientStatus: "상담중",
     clientPhoneNumber: "010-1234-5676",
     clientSourceLabel: "다방",
-    clientExpectedMoveInDate: "2025-03-16T12:00:00Z",
+    clientExpectedMoveInDate: "2025-03-10",
   ),
   ClientSummaryItem(
     clientId: 8,
@@ -102,7 +102,7 @@ List<ClientSummaryItem> mockClientSummaryItems = [
     clientStatus: "상담중",
     clientPhoneNumber: "010-1234-5677",
     clientSourceLabel: "다방",
-    clientExpectedMoveInDate: "2025-03-17T12:00:00Z",
+    clientExpectedMoveInDate: "2025-03-10",
   ),
   ClientSummaryItem(
     clientId: 9,
@@ -111,7 +111,7 @@ List<ClientSummaryItem> mockClientSummaryItems = [
     clientStatus: "계약 완료",
     clientPhoneNumber: "010-1234-5678",
     clientSourceLabel: "다방",
-    clientExpectedMoveInDate: "2025-03-18T12:00:00Z",
+    clientExpectedMoveInDate: "2025-03-10",
   ),
   ClientSummaryItem(
     clientId: 10,
@@ -120,6 +120,6 @@ List<ClientSummaryItem> mockClientSummaryItems = [
     clientStatus: "상담중",
     clientPhoneNumber: "010-1234-5679",
     clientSourceLabel: "다방",
-    clientExpectedMoveInDate: "2025-03-19T12:00:00Z",
+    clientExpectedMoveInDate: "2025-03-10",
   ),
 ];

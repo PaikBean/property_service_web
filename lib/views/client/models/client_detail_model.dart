@@ -82,165 +82,106 @@ Map<String, dynamic> mockClientDetail = {
   "genderType": 21, // 남성
   "clientType": 11, // 예: 특정 고객 타입 코드
   "clientSourceType": 31, // 예: 고객 소스 코드
-  "clientExpectedMoveInDate": "2025-03-01T12:00:00Z",
+  "clientExpectedMoveInDate": "2025-03-01 12:00",
   "clientExpectedTradeTypeList": [41, 42], // 매매, 전세
 
-  // ShowingPropertyModel 임시 데이터
+  // ShowingPropertyModel 데이터
   "showingPropertyList": [
     {
-      "showingPropertyId" : 1,
-      "propertySellType" : "임시데이터",
-      "propertyPrice" : "임시데이터",
-      "propertyType" : "임시데이터",
-      "propertyAddress" : "임시데이터",
+      "showingPropertyId": 1,
+      "propertySellType": "매매",
+      "propertyPrice": "5억 2000만 원",
+      "propertyType": "아파트",
+      "propertyAddress": "서울특별시 강남구 테헤란로 123",
     },
     {
-      "showingPropertyId" : 2,
-      "propertySellType" : "임시데이터",
-      "propertyPrice" : "임시데이터",
-      "propertyType" : "임시데이터",
-      "propertyAddress" : "임시데이터",
+      "showingPropertyId": 2,
+      "propertySellType": "전세",
+      "propertyPrice": "3억 원",
+      "propertyType": "오피스텔",
+      "propertyAddress": "경기도 성남시 분당구 판교로 45",
     },
     {
-      "showingPropertyId" : 3,
-      "propertySellType" : "임시데이터",
-      "propertyPrice" : "임시데이터",
-      "propertyType" : "임시데이터",
-      "propertyAddress" : "임시데이터",
+      "showingPropertyId": 3,
+      "propertySellType": "월세",
+      "propertyPrice": "5000만 / 100만 원",
+      "propertyType": "빌라",
+      "propertyAddress": "서울특별시 마포구 서교동 89-12",
     },
     {
-      "showingPropertyId" : 4,
-      "propertySellType" : "임시데이터",
-      "propertyPrice" : "임시데이터",
-      "propertyType" : "임시데이터",
-      "propertyAddress" : "임시데이터",
+      "showingPropertyId": 4,
+      "propertySellType": "매매",
+      "propertyPrice": "7억 원",
+      "propertyType": "단독주택",
+      "propertyAddress": "서울특별시 용산구 이태원로 77",
     },
     {
-      "showingPropertyId" : 5,
-      "propertySellType" : "임시데이터",
-      "propertyPrice" : "임시데이터",
-      "propertyType" : "임시데이터",
-      "propertyAddress" : "임시데이터",
-    },
-    {
-      "showingPropertyId" : 6,
-      "propertySellType" : "임시데이터",
-      "propertyPrice" : "임시데이터",
-      "propertyType" : "임시데이터",
-      "propertyAddress" : "임시데이터",
-    },
-    {
-      "showingPropertyId" : 8,
-      "propertySellType" : "임시데이터",
-      "propertyPrice" : "임시데이터",
-      "propertyType" : "임시데이터",
-      "propertyAddress" : "임시데이터",
-    },
-    {
-      "showingPropertyId" : 9,
-      "propertySellType" : "임시데이터",
-      "propertyPrice" : "임시데이터",
-      "propertyType" : "임시데이터",
-      "propertyAddress" : "임시데이터",
-    },
-    {
-      "showingPropertyId" : 10,
-      "propertySellType" : "임시데이터",
-      "propertyPrice" : "임시데이터",
-      "propertyType" : "임시데이터",
-      "propertyAddress" : "임시데이터",
-    },
-    {
-      "showingPropertyId" : 11,
-      "propertySellType" : "임시데이터",
-      "propertyPrice" : "임시데이터",
-      "propertyType" : "임시데이터",
-      "propertyAddress" : "임시데이터",
-    },
-  ],
-
-  // ClientScheduleModel 임시 데이터
-  "clientScheduleList": [
-    {
-      "clientScheduleId": 1,
-      "picManagerName": "임시 데이터",
-      "clientScheduleDateTime": "임시 데이터",
-      "clientScheduleType": "임시 데이터",
-      "clientScheduleRemark": "임시 데이터",
-    },
-    {
-      "clientScheduleId": 2,
-      "picManagerName": "임시 데이터",
-      "clientScheduleDateTime": "임시 데이터",
-      "clientScheduleType": "임시 데이터",
-      "clientScheduleRemark": "임시 데이터",
-    },
-    {
-      "clientScheduleId": 3,
-      "picManagerName": "임시 데이터",
-      "clientScheduleDateTime": "임시 데이터",
-      "clientScheduleType": "임시 데이터",
-      "clientScheduleRemark": "임시 데이터",
+      "showingPropertyId": 5,
+      "propertySellType": "전세",
+      "propertyPrice": "2억 5000만 원",
+      "propertyType": "아파트",
+      "propertyAddress": "경기도 고양시 일산서구 대화동 202",
     }
   ],
 
-  // RemarkModel 임시 데이터
+  // ClientScheduleModel 데이터
+  "clientScheduleList": [
+    {
+      "clientScheduleId": 1,
+      "picManagerName": "이상훈",
+      "clientScheduleDateTime": "2025-02-20 14:00",
+      "clientScheduleType": "부동산 방문 상담",
+      "clientScheduleRemark": "고객이 직접 방문하여 상담 진행 예정",
+    },
+    {
+      "clientScheduleId": 2,
+      "picManagerName": "박지연",
+      "clientScheduleDateTime": "2025-02-22 10:30",
+      "clientScheduleType": "매물 투어",
+      "clientScheduleRemark": "강남구 지역 아파트 3곳 투어 일정",
+    },
+    {
+      "clientScheduleId": 3,
+      "picManagerName": "김민수",
+      "clientScheduleDateTime": "2025-02-25 16:00",
+      "clientScheduleType": "계약 상담",
+      "clientScheduleRemark": "계약 조건 조율 및 계약서 검토 예정",
+    }
+  ],
+
+  // RemarkModel 데이터
   "clientRemarkList": [
     {
       "remarkId": 1,
-      "remark": "임시 데이터",
+      "remark": "고객이 3월 중순까지 입주를 희망함.",
       "createdByUserId": 1,
-      "createByUserName": "임시 데이터",
-      "createdBy": "임시 데이터",
+      "createByUserName": "박성우",
+      "createdBy": "부동산 매니저",
       "createdAt": DateTime.now(),
     },
     {
       "remarkId": 2,
-      "remark": "임시 데이터",
-      "createdByUserId": 1,
-      "createByUserName": "임시 데이터",
-      "createdBy": "임시 데이터",
+      "remark": "예산 5억 원 이내로 매물을 찾고 있음.",
+      "createdByUserId": 2,
+      "createByUserName": "이현지",
+      "createdBy": "부동산 컨설턴트",
       "createdAt": DateTime.now(),
     },
     {
       "remarkId": 3,
-      "remark": "임시 데이터",
-      "createdByUserId": 1,
-      "createByUserName": "임시 데이터",
-      "createdBy": "임시 데이터",
+      "remark": "거래 방식은 전세 또는 매매를 고려 중.",
+      "createdByUserId": 3,
+      "createByUserName": "김재현",
+      "createdBy": "팀장",
       "createdAt": DateTime.now(),
     },
     {
       "remarkId": 4,
-      "remark": "임시 데이터",
-      "createdByUserId": 1,
-      "createByUserName": "임시 데이터",
-      "createdBy": "임시 데이터",
+      "remark": "교통이 편리한 지역을 선호함.",
+      "createdByUserId": 4,
+      "createByUserName": "송미나",
+      "createdBy": "부동산 컨설턴트",
       "createdAt": DateTime.now(),
-    },
-    {
-      "remarkId": 5,
-      "remark": "임시 데이터",
-      "createdByUserId": 1,
-      "createByUserName": "임시 데이터",
-      "createdBy": "임시 데이터",
-      "createdAt": DateTime.now(),
-    },{
-      "remarkId": 6,
-      "remark": "임시 데이터",
-      "createdByUserId": 1,
-      "createByUserName": "임시 데이터",
-      "createdBy": "임시 데이터",
-      "createdAt": DateTime.now(),
-    },
-    {
-      "remarkId": 7,
-      "remark": "임시 데이터",
-      "createdByUserId": 1,
-      "createByUserName": "임시 데이터",
-      "createdBy": "임시 데이터",
-      "createdAt": DateTime.now(),
-    },
-
+    }
   ]
 };

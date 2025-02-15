@@ -159,7 +159,7 @@ class _ClientListViewState extends State<ClientListView> {
   Future<List<Widget>> fetchClientSummaryItemList() async {
     List<ClientSummaryItem> clients = mockClientSummaryItems;     // todo 고객 요약 목록 조회 api 적용
 
-    await Future.delayed(Duration(seconds: 1));
+    // await Future.delayed(Duration(seconds: 1));
     return clients.map((cli) => _buildClientItem(cli)).toList();
   }
 
@@ -178,7 +178,7 @@ class _ClientListViewState extends State<ClientListView> {
 
   // 고객 상세 정보 호출
   Future<void> fetchClientDetail() async {
-    await Future.delayed(Duration(seconds: 1));
+    // await Future.delayed(Duration(seconds: 1));
     clientDetailModel = ClientDetailModel.fromJson(mockClientDetail);
   }
 

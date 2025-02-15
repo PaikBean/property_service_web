@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:property_service_web/core/enums/main_screen_type.dart';
+import 'package:property_service_web/views/auth/login_view.dart';
 
 class MainView extends StatefulWidget {
   const MainView({super.key});
@@ -50,7 +51,9 @@ class _MainViewState extends State<MainView> {
                       ),
                     ),
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginView()));
+                      },
                       icon: Icon(Icons.logout),
                       color: Colors.white,
                     ),

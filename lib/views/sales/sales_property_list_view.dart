@@ -750,7 +750,7 @@ class _SalesPropertyListViewState extends State<SalesPropertyListView> {
                                   ),
                                   SizedBox(width: 8),
                                   Text(
-                                    "100,000 만원",
+                                    "10 만원",
                                     style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w400,
@@ -762,7 +762,7 @@ class _SalesPropertyListViewState extends State<SalesPropertyListView> {
                               Padding(
                                 padding: const EdgeInsets.all(8),
                                 child: Text(
-                                  "수도, 전기, 인터넷, 난방, 조식, 룸 서비스",
+                                  "수도, 전기, 인터넷, 난방",
                                   style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w400,
@@ -869,7 +869,7 @@ class _SalesPropertyListViewState extends State<SalesPropertyListView> {
                                     ),
                                     SizedBox(width: 8),
                                     Text(
-                                      "모르겠어요오...",
+                                      "105/84 ㎡",
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,

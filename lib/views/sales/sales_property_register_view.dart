@@ -67,7 +67,8 @@ class _SalesPropertyRegisterViewState extends State<SalesPropertyRegisterView> {
   ImageFileListModel buildingImageList = ImageFileListModel(imageFileModelList: []);
 
   MaintenanceFormModel maintenanceFormModel = MaintenanceFormModel(maintenanceFee: 0, isWaterSelected: false, isElectricitySelected: false, isInternetSelected: false, isHeatingSelected: false, others: "");
-
+  DateTime? datetime1;
+  DateTime? datetime2;
   late List<String> searchConditionList;
   late List<Widget> gridItemList;
   late String selectedSearchCondition;
@@ -937,8 +938,8 @@ class _SalesPropertyRegisterViewState extends State<SalesPropertyRegisterView> {
                     width: 600,
                     child: Row(
                       children: [
-                        Flexible(flex: 1, child: CustomDatePicker(datePickerType: DatePickerType.date, label: "사용 승인일", selectedDateTime: DateTime.now())),
-                        Flexible(child: CustomDatePicker(datePickerType: DatePickerType.date, label: "입주 가능일", selectedDateTime: DateTime.now())),
+                        Flexible(flex: 1, child: CustomDatePicker(datePickerType: DatePickerType.date, label: "사용 승인일", selectedDateTime: datetime1)),
+                        Flexible(child: CustomDatePicker(datePickerType: DatePickerType.date, label: "입주 가능일", selectedDateTime: datetime2)),
                       ],
                     ),
                   ),
