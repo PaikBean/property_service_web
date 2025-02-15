@@ -1,4 +1,7 @@
-  import 'package:flutter/material.dart';
+  import 'dart:convert';
+
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
   import 'package:property_service_web/core/enums/gender_type.dart';
   import 'package:property_service_web/core/utils/dialog_utils.dart';
   import 'package:property_service_web/core/utils/format_utils.dart';
@@ -8,13 +11,16 @@
   import '../../core/enums/datepicker_type.dart';
   import '../../core/enums/main_screen_type.dart';
   import '../../core/enums/transaction_type.dart';
-  import '../../widgets/custom_datepicker.dart';
+  import '../../widgets/custom_check_box_group.dart';
+import '../../widgets/custom_datepicker.dart';
   import '../../widgets/custom_enum_check_box_group.dart';
   import '../../widgets/custom_enum_radio_group.dart';
-  import '../../widgets/custom_text_field.dart';
+  import '../../widgets/custom_radio_group.dart';
+import '../../widgets/custom_text_field.dart';
   import '../../widgets/rotating_house_indicator.dart';
 import '../../widgets/sub_layout.dart';
-  import 'enums/client_source_type.dart';
+  import '../auth/login_view.dart';
+import 'enums/client_source_type.dart';
   import 'enums/client_type_code.dart';
 
   class ClientRegisterView extends StatefulWidget {
@@ -24,55 +30,82 @@ import '../../widgets/sub_layout.dart';
     State<ClientRegisterView> createState() => _ClientRegisterViewState();
   }
 
-  class _ClientRegisterViewState extends State<ClientRegisterView> {
-    TextEditingController clientName = TextEditingController();
-    TextEditingController clientPhoneNumber = TextEditingController();
-    GenderType? clientGender;
-    ClientType? clientType;
-    TextEditingController clientTypeOther = TextEditingController();
-    ClientSource? clientSource;
-    TextEditingController clientSourceOther = TextEditingController();
-    DateTime? clientExpectedMoveInDate;
-    List<TransactionType> clientExpectedTradeTypeList = [];
-    TextEditingController clientRemark = TextEditingController();
-
+  class _ClientRegisterViewState extends State<ClientRegisterView>  {
     bool _isLoading = false;
 
-    void onSubmit() async {
-      validateInput();
-      var request = ClientRegisterModel(
-          clientName: clientName.text,
-          clientPhoneNumber: FormatUtils.formatPhoneNumber(
-              clientPhoneNumber.text),
-          clientGender: clientGender!,
-          clientType: clientType!,
-          clientTypeOther: clientTypeOther.text,
-          clientSource: clientSource!,
-          clientSourceOther: clientSourceOther.text,
-          clientExpectedMoveInDate: clientExpectedMoveInDate!,
-          clientExpectedTradeTypeList: clientExpectedTradeTypeList,
-          clientRemark: clientRemark.text);
+    TextEditingController name = TextEditingController();
+    TextEditingController phoneNumber = TextEditingController();
+    String? gender;
+    String? type;
+    TextEditingController typeTextController = TextEditingController();
+    String? source;
+    TextEditingController sourceTextController = TextEditingController();
+    List<String> transactionTypeList = [];
+    DateTime? clientExpectedMoveInDate;
+    TextEditingController remark = TextEditingController();
 
-      if(await DialogUtils.showConfirmDialog(
-          context: context,
-          title: "고객 정보 등록",
-          content: "${request.clientName} 고객님을 등록하시겠습니까?")){
-        if(request.clientName.startsWith("TEMP")){
+    void onSubmit() async {
+      setState(() {
+        _isLoading = true; // 로딩 시작
+      });
+
+      try{
+        // JWT 토큰 가져오기
+        String? token = await storage.read(key: 'jwt');
+
+        // 거래 유형을 숫자로 변환하는 매핑
+        List<int> transactionTypeCodeList = transactionTypeList.map((type) {
+          switch (type) {
+            case "월세":
+              return 61;
+            case "전세":
+              return 62;
+            case "단기":
+              return 64;
+            default:
+              return -1; // 혹시 모를 예외 처리용 (사용하지 않을 값)
+          }
+        }).where((code) => code != -1).toList(); // -1 제외
+
+
+        // Dio를 사용한 POST 요청
+        final response = await dio.post(
+          'http://localhost:8080/api/client/', // 여기에 서버의 실제 URL 입력
+          options: Options(
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': '$token', // JWT 토큰 포함
+            },
+          ),
+          data: jsonEncode({
+            'name': name.text,
+            'phoneNumber': phoneNumber.text,
+            'genderCode': gender == "남성" ? 31 : 32,
+            'source': source == "기타" ? sourceTextController.text : source,
+            'type': type == "기타" ? typeTextController : type,
+            'moveInDate':  clientExpectedMoveInDate!.toIso8601String(),
+            'expectedTransactionTypeCodeList': transactionTypeCodeList,
+            'remark': remark.text,
+          }),
+        );
+
+        if (response.statusCode == 200 || response.statusCode == 201) {
           await DialogUtils.showAlertDialog(
               context: context,
-              title: "샘플 데이터 저장 시도",
-              content: "샘플 데이터는 저장할 수 없습니다.");
+              title: "등록 성공",
+              content: "${name.text} 고객님이 성공적으로 등록되었습니다.");
           clearAllData();
-          return;
+        } else {
+          await DialogUtils.showAlertDialog(
+              context: context,
+              title: "등록 실패",
+              content: "오류 코드: ${response.statusCode}");
         }
 
-        // todo 고객 등록 api 연결
-        setState(() {
-          _isLoading = true; // 로딩 시작
-        });
-
-        await Future.delayed(Duration(seconds: 3)); // todo 고객 등록 api 연결
-        clearAllData();
+      } catch (e) {
+        print("고객 등록 실패: $e");
+        DialogUtils.showAlertDialog(context: context, title: "고객 등록 실패", content: "고객 등록에 실패했습니다.");
+      } finally{
         setState(() {
           _isLoading = false; // 로딩 종료
         });
@@ -82,20 +115,20 @@ import '../../widgets/sub_layout.dart';
     void clearAllData() {
       setState(() {
         // TextEditingController 초기화
-        clientName.text = "";
-        clientPhoneNumber.text = "";
-        clientTypeOther.text = "";
-        clientSourceOther.text = "";
-        clientRemark.text = "";
+        name.text = "";
+        phoneNumber.text = "";
+        typeTextController.text = "";
+        sourceTextController.text = "";
+        remark.text = "";
 
         // nullable 타입 초기화
-        clientGender = null;
-        clientType = null;
-        clientSource = null;
+        gender = null;
+        type = null;
+        source = null;
         clientExpectedMoveInDate = null;
 
         // 리스트 초기화
-        clientExpectedTradeTypeList.clear();
+        transactionTypeList.clear();
       });
     }
 
@@ -104,117 +137,110 @@ import '../../widgets/sub_layout.dart';
       return Stack(
         children: [
           SubLayout(
-            mainScreenType: MainScreenType.ClientRegister,
-            buttonTypeList: [ButtonType.submit],
-            onSubmitPressed: onSubmit,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  width: 200,
-                  child: CustomTextField(label: "성함", controller: clientName),
-                ),
-                SizedBox(
-                  width: 800,
-                  child: CustomTextField(
-                      label: "전화번호", controller: clientPhoneNumber),
-                ),
-                SizedBox(
-                  width: 1000,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+              mainScreenType: MainScreenType.ClientRegister,
+              buttonTypeList: [ButtonType.submit],
+              onSubmitPressed: onSubmit,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
                     children: [
-                      CustomEnumRadioGroup<GenderType>(
-                        title: "고객 성별",
-                        options: GenderType.values, // Enum 리스트를 전달
-                        groupValue: clientGender,
-                        onChanged: (value) =>
-                            setState(() {
-                              clientGender = value;
-                            }),
+                      SizedBox(
+                        width: 200,
+                        child: CustomTextField(label: "성함", controller: name),
                       ),
-                      SizedBox(width: 32),
-                      CustomEnumRadioGroup<ClientType>(
-                        title: "고객 유형",
-                        options: ClientType.values,
-                        // Enum 리스트를 전달
-                        groupValue: clientType,
-                        onChanged: (value) =>
-                            setState(() {
-                              clientType = value;
-                            }),
-                        otherInput: ClientType.other,
-                        otherLabel: "기타",
-                        otherTextController: clientTypeOther,
+                      SizedBox(
+                        width: 400,
+                        child: CustomTextField(
+                            label: "전화번호", controller: phoneNumber),
+
                       ),
                     ],
                   ),
-                ),
-                SizedBox(
-                  width: 800,
-                  child: CustomEnumRadioGroup<ClientSource>(
-                    title: "유입 경로",
-                    options: ClientSource.values,
-                    // Enum 리스트를 전달
-                    groupValue: clientSource,
-                    onChanged: (value) =>
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 200,
+                        child: CustomRadioGroup(
+                          title: "성별",
+                          options: ["남성", "여성",],
+                          groupValue: gender,
+                          onChanged: (value) {
+                            setState(() {
+                              gender = value;
+                            });
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        width: 600,
+                        child: CustomRadioGroup(
+                          title: "고객 유형",
+                          options: ["학생", "직장인", "외국인", "기타"],
+                          groupValue: type,
+                          onChanged: (value) {
+                            setState(() {
+                              type = value;
+                            });
+                          },
+                          otherInput: "기타", // "기타" 선택 시 입력 필드 표시
+                          otherLabel: "기타 입력",
+                          otherInputTextController: typeTextController,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    width: 800,
+                    child: CustomRadioGroup(
+                      title: "유입 경로",
+                      options: ["직방", "다방", "피터팬", "워킹", "기타"],
+                      groupValue: source,
+                      onChanged: (value) {
                         setState(() {
-                          clientSource = value;
-                        }),
-                    otherInput: ClientSource.other,
-                    otherLabel: "기타",
-                    otherTextController: clientSourceOther,
+                          source = value;
+                        });
+                      },
+                      otherInput: "기타", // "기타" 선택 시 입력 필드 표시
+                      otherLabel: "기타 입력",
+                      otherInputTextController: sourceTextController,
+                    ),
                   ),
-                ),
-                SizedBox(
-                  width: 800,
-                  child: CustomEnumCheckboxGroup<TransactionType>(
-                    title: "거래 유형",
-                    options: TransactionType.values, // TransactionType Enum 사용
-                    onChanged: (selected) {
-                      setState(() {
-                        clientExpectedTradeTypeList = selected; // 선택된 값으로 리스트 업데이트
-                      });
-                    },
+                  SizedBox(
+                    width: 800,
+                    child: CustomCheckboxGroup(
+                      title: "거래 유형",
+                      options: ["월세", "전세", "단기"],
+                      onChanged: (values) {
+                        setState(() {
+                          transactionTypeList = values;
+                        });
+                      },
+                    ),
                   ),
-                ),
-                SizedBox(
-                  width: 400,
-                  child: CustomDatePicker(
-                    datePickerType: DatePickerType.date,
-                    label: "입주 예정일",
-                    selectedDateTime: clientExpectedMoveInDate,
-                    onChanged: (DateTime? date) {
-                      setState(() {
-                        clientExpectedMoveInDate = date;
-                      });
-                    },
+                  SizedBox(
+                    width: 400,
+                    child: CustomDatePicker(
+                      datePickerType: DatePickerType.date,
+                      label: "입주 예정일",
+                      selectedDateTime: clientExpectedMoveInDate,
+                      onChanged: (DateTime? date) {
+                        setState(() {
+                          clientExpectedMoveInDate = date;
+                        });
+                      },
+                    ),
                   ),
-                ),
-                SizedBox(
-                  width: 800,
-                  child: CustomTextField(
-                    label: "특이사항",
-                    controller: TextEditingController(),
-                    maxLines: 4,
+                  SizedBox(
+                    width: 800,
+                    child: CustomTextField(
+                      label: "특이사항",
+                      controller: remark,
+                      maxLines: 4,
+                    ),
                   ),
-                ),
-                TextButton(onPressed: (){
-                  setState(() {
-                    clientName.text = "TEMP_홍길동";
-                    clientPhoneNumber.text = "TEMP_010-1234-5678";
-                    clientGender = GenderType.male;
-                    clientType = ClientType.worker;
-                    clientTypeOther.text = "TEMP_기타사유";
-                    clientSource = ClientSource.walking;
-                    clientSourceOther.text = "TEMP_기타경로";
-                    clientExpectedMoveInDate = DateTime.now().add(const Duration(days: 30));
-                    clientExpectedTradeTypeList = [TransactionType.monthly, TransactionType.jeonse];
-                    clientRemark.text = "TEMP_테스트 데이터입니다.";
-                  });
-                }, child: Text("생플 데이터 세팅")),
-              ],
-            ),
+                ],
+              )
           ),
           if (_isLoading)
             Positioned.fill(
@@ -229,66 +255,6 @@ import '../../widgets/sub_layout.dart';
               ),
             ),
         ],
-      );
-    }
-
-    bool validateInput() {
-      if (clientName.text.trim().isEmpty) {
-        DialogUtils.showAlertDialog(context: context, title: "입력 확인", content: "고객 성함을 입력해주세요.");
-        return false;
-      }
-
-      if (clientPhoneNumber.text
-          .trim()
-          .isEmpty) {
-        DialogUtils.showAlertDialog(context: context, title: "입력 확인", content: "고객 전화번호를 입력해주세요.");
-        return false;
-      }
-
-      if (clientGender == null) {
-        DialogUtils.showAlertDialog(context: context, title: "입력 확인", content: "고객 성별을 선택해주세요.");
-        return false;
-      }
-
-      if (clientType == null) {
-        DialogUtils.showAlertDialog(context: context, title: "입력 확인", content: "고객유형을 선택해주세요.");
-        return false;
-      }
-
-      if (clientSource == null) {
-        DialogUtils.showAlertDialog(context: context, title: "입력 확인", content: "고객 유입 경로를 선택해주세요.");
-        return false;
-      }
-
-      if (clientExpectedTradeTypeList.isEmpty) {
-        DialogUtils.showAlertDialog(context: context, title: "입력 확인", content: "거래 유형을 최소 하나 이상 선택해주세요.");
-        return false;
-      }
-
-      if (clientExpectedMoveInDate == null) {
-        DialogUtils.showAlertDialog(context: context, title: "입력 확인", content: "입주 예정일을 선택해주세요.");
-        return false;
-      }
-
-      // 특이사항은 빈 값 허용이므로 검증하지 않음
-      return true;
-    }
-
-    void showValidationError(String message) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            content: Text(message),
-            backgroundColor: Colors.white,
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: const Text('확인'),
-              ),
-            ],
-          );
-        },
       );
     }
   }

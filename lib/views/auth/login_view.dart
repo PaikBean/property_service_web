@@ -84,7 +84,7 @@ class _LoginViewState extends State<LoginView> {
 
       if (response.statusCode == 200) {
         final token = response.headers['authorization']?.first;
-
+        print(token);
         if (token != null) {
           await storage.write(key: 'jwt', value: token);
           return true;
