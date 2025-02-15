@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:property_service_web/core/utils/format_utils.dart';
 import 'package:property_service_web/models/revenue_item_model.dart';
 
 class RevenueGrid extends StatelessWidget {
@@ -156,7 +157,7 @@ class _RevenueRowState extends State<_RevenueRow> {
             Expanded(flex: 1, child: Center(child: Text(widget.revenue.propertySellPrice))),
             Expanded(flex: 1, child: Center(child: Text(widget.revenue.commissionFee))),
             Expanded(flex: 1, child: Center(child: Text(widget.revenue.moveInDate))),
-            Expanded(flex: 1, child: Center(child: Text(""))),
+            Expanded(flex: 1, child: Center(child: Text(FormatUtils.formatToYYYYMMDD(DateTime(2025))))),
             AnimatedOpacity(
               opacity: _isHovered ? 1.0 : 0.0,
               duration: Duration(milliseconds: 100),
